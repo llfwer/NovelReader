@@ -6,7 +6,6 @@
     <string-array name="nb_fragment_title">
         <item>@string/nb.fragment.title.bookshelf</item>
         <item>@string/nb.fragment.title.community</item>
-        <item>@string/nb.fragment.title.find</item>
     </string-array>
 
     <string-array name="nb_fragment_section">
@@ -17,13 +16,6 @@
         <item>@string/nb.fragment.community.compose</item>
     </string-array>
 
-    <!--榜单分类-->
-    <string-array name="nb_fragment_bill_book">
-        <item>周榜</item>
-        <item>月榜</item>
-        <item>总榜</item>
-    </string-array>
-    
     <!--CollBook的长按点击-->
     <string-array name="nb_menu_net_book">
         <item>@string/nb.menu.action.top</item>
@@ -50,7 +42,6 @@
     <!--fragment_title:主页的名字-->
     <string name="nb.fragment.title.bookshelf">书架</string>
     <string name="nb.fragment.title.community">社区</string>
-    <string name="nb.fragment.title.find">发现</string>
 
     <!--fragment-->
     <string name="nb.fragment.community.comment">综合讨论区</string>
@@ -84,9 +75,6 @@
     <string name="nb.review.master_score">楼主打分：</string>
     
     
-    <!--find-->
-    <string name="nb.fragment.find.top">排行榜</string>
-
     <!--menu-->
     <string name="nb.menu.action.search">搜索</string>
     <string name="nb.menu.action.login">请登录</string>
@@ -112,7 +100,6 @@
     <!--book:书籍的信息-->
     <string name="nb.book.type">[%1$s]</string>
     <string name="nb.book.recommend">%1$d 人推荐</string>
-    <string name="nb.book.message">%1$d人在追 |&#160; %2$s%%读者留存</string>
     <string name="nb.book.word">|&#160;%1$d&#160;万字</string>
 
     <!--tag: 标签-->

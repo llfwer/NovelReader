@@ -19,7 +19,6 @@ import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.ui.base.BaseTabActivity;
 import com.example.newbiechen.ireader.ui.fragment.BookShelfFragment;
 import com.example.newbiechen.ireader.ui.fragment.CommunityFragment;
-import com.example.newbiechen.ireader.ui.fragment.FindFragment;
 import com.example.newbiechen.ireader.utils.PermissionsChecker;
 import com.example.newbiechen.ireader.utils.ToastUtils;
 
@@ -66,10 +65,8 @@ public class MainActivity extends BaseTabActivity {
     private void initFragment() {
         Fragment bookShelfFragment = new BookShelfFragment();
         Fragment communityFragment = new CommunityFragment();
-        Fragment discoveryFragment = new FindFragment();
         mFragmentList.add(bookShelfFragment);
         mFragmentList.add(communityFragment);
-        mFragmentList.add(discoveryFragment);
     }
 
     @Override
