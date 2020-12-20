@@ -1,6 +1,5 @@
 package com.example.newbiechen.ireader.ui.activity;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -90,10 +89,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     /*************top_menu_view*******************/
     @BindView(R.id.read_abl_top_menu)
     AppBarLayout mAblTopMenu;
-    @BindView(R.id.read_tv_community)
-    TextView mTvCommunity;
-    @BindView(R.id.read_tv_brief)
-    TextView mTvBrief;
     /***************content_view******************/
     @BindView(R.id.read_pv_page)
     PageView mPvPage;
@@ -400,8 +395,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                         if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING
                                 || mPageLoader.getPageStatus() == PageLoader.STATUS_ERROR) {
                             mSbChapterProgress.setEnabled(false);
-                        }
-                        else {
+                        } else {
                             mSbChapterProgress.setEnabled(true);
                         }
                     }
@@ -518,17 +512,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     }
                     mPageLoader.setNightMode(isNightMode);
                     toggleNightMode();
-                }
-        );
-
-        mTvBrief.setOnClickListener(
-                (v) -> BookDetailActivity.startActivity(this, mBookId)
-        );
-
-        mTvCommunity.setOnClickListener(
-                (v) -> {
-                    Intent intent = new Intent(this, CommunityActivity.class);
-                    startActivity(intent);
                 }
         );
 
@@ -722,10 +705,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     // 退出
     private void exit() {
-        // 返回给BookDetail。
-        Intent result = new Intent();
-        result.putExtra(BookDetailActivity.RESULT_IS_COLLECTED, isCollected);
-        setResult(Activity.RESULT_OK, result);
         // 退出
         super.onBackPressed();
     }
