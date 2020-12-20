@@ -340,7 +340,6 @@ public class MainActivity extends BaseMVPActivity<BookShelfContract.Presenter>
                 } else {
                     ToastUtils.show("用户拒绝开启读写权限");
                 }
-                return;
             }
         }
     }

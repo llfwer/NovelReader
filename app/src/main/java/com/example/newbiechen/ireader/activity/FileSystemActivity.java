@@ -28,10 +28,6 @@ import java.util.List;
 
 import butterknife.BindView;
 
-/**
- * Created by newbiechen on 17-5-27.
- */
-
 public class FileSystemActivity extends BaseTabActivity {
     private static final String TAG = "FileSystemActivity";
 

@@ -14,7 +14,7 @@ import android.text.TextPaint;
 import com.example.newbiechen.ireader.model.bean.BookRecordBean;
 import com.example.newbiechen.ireader.model.bean.CollBookBean;
 import com.example.newbiechen.ireader.model.local.BookRepository;
-import com.example.newbiechen.ireader.model.local.ReadSettingManager;
+import com.example.newbiechen.ireader.other.UPSettingManager;
 import com.example.newbiechen.ireader.utils.Constant;
 import com.example.newbiechen.ireader.utils.IOUtils;
 import com.example.newbiechen.ireader.utils.RxUtils;
@@ -24,7 +24,6 @@ import com.example.newbiechen.ireader.utils.StringUtils;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +84,7 @@ public abstract class PageLoader {
     // 绘制小说内容的画笔
     private TextPaint mTextPaint;
     // 阅读器的配置选项
-    private ReadSettingManager mSettingManager;
+    private UPSettingManager mSettingManager;
     // 被遮盖的页，或者认为被取消显示的页
     private TxtPage mCancelPage;
     // 存储阅读记录类
@@ -160,7 +159,7 @@ public abstract class PageLoader {
 
     private void initData() {
         // 获取配置管理器
-        mSettingManager = ReadSettingManager.getInstance();
+        mSettingManager = UPSettingManager.getInstance();
         // 获取配置参数
         mPageMode = mSettingManager.getPageMode();
         mPageStyle = mSettingManager.getPageStyle();

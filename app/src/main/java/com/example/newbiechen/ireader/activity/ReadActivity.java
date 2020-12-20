@@ -35,7 +35,7 @@ import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.model.bean.BookChapterBean;
 import com.example.newbiechen.ireader.model.bean.CollBookBean;
 import com.example.newbiechen.ireader.model.local.BookRepository;
-import com.example.newbiechen.ireader.model.local.ReadSettingManager;
+import com.example.newbiechen.ireader.other.UPSettingManager;
 import com.example.newbiechen.ireader.presenter.ReadPresenter;
 import com.example.newbiechen.ireader.presenter.contract.ReadContract;
 import com.example.newbiechen.ireader.ui.adapter.CategoryAdapter;
@@ -215,8 +215,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         super.initData(savedInstanceState);
         mCollBook = getIntent().getParcelableExtra(EXTRA_COLL_BOOK);
         isCollected = getIntent().getBooleanExtra(EXTRA_IS_COLLECTED, false);
-        isNightMode = ReadSettingManager.getInstance().isNightMode();
-        isFullScreen = ReadSettingManager.getInstance().isFullScreen();
+        isNightMode = UPSettingManager.getInstance().isNightMode();
+        isFullScreen = UPSettingManager.getInstance().isFullScreen();
 
         mBookId = mCollBook.get_id();
     }
@@ -260,10 +260,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         registerReceiver(mReceiver, intentFilter);
 
         //设置当前Activity的Brightness
-        if (ReadSettingManager.getInstance().isBrightnessAuto()) {
+        if (UPSettingManager.getInstance().isBrightnessAuto()) {
             BrightnessUtils.setDefaultBrightness(this);
         } else {
-            BrightnessUtils.setBrightness(this, ReadSettingManager.getInstance().getBrightness());
+            BrightnessUtils.setBrightness(this, UPSettingManager.getInstance().getBrightness());
         }
 
         //初始化屏幕常亮类
@@ -290,7 +290,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     private void initBottomMenu() {
         //判断是否全屏
-        if (ReadSettingManager.getInstance().isFullScreen()) {
+        if (UPSettingManager.getInstance().isFullScreen()) {
             //还需要设置mBottomMenu的底部高度
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mLlBottomMenu.getLayoutParams();
             params.bottomMargin = ScreenUtils.getNavigationBarHeight();
@@ -665,7 +665,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     public void onBackPressed() {
         if (mAblTopMenu.getVisibility() == View.VISIBLE) {
             // 非全屏下才收缩，全屏下直接退出
-            if (!ReadSettingManager.getInstance().isFullScreen()) {
+            if (!UPSettingManager.getInstance().isFullScreen()) {
                 toggleMenu(true);
                 return;
             }
@@ -750,7 +750,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        boolean isVolumeTurnPage = ReadSettingManager
+        boolean isVolumeTurnPage = UPSettingManager
                 .getInstance().isVolumeTurnPage();
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
@@ -772,7 +772,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         super.onActivityResult(requestCode, resultCode, data);
         SystemBarUtils.hideStableStatusBar(this);
         if (requestCode == REQUEST_MORE_SETTING) {
-            boolean fullScreen = ReadSettingManager.getInstance().isFullScreen();
+            boolean fullScreen = UPSettingManager.getInstance().isFullScreen();
             if (isFullScreen != fullScreen) {
                 isFullScreen = fullScreen;
                 // 刷新BottomMenu

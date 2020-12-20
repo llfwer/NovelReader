@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.newbiechen.ireader.R;
-import com.example.newbiechen.ireader.model.local.ReadSettingManager;
+import com.example.newbiechen.ireader.other.UPSettingManager;
 
 public class UPSettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -21,7 +21,7 @@ public class UPSettingsActivity extends AppCompatActivity implements View.OnClic
     private SwitchCompat mSwitchScreen;
     private Spinner mConvertTypeView;
 
-    private ReadSettingManager mSettingManager;
+    private UPSettingManager mSettingManager;
     private boolean mVolumeChecked;
     private boolean mFullScreenChecked;
     private int mConvertType;
@@ -34,7 +34,7 @@ public class UPSettingsActivity extends AppCompatActivity implements View.OnClic
         mToolbar = findViewById(R.id.up_settings_toolbar);
         initToolBar();
 
-        mSettingManager = ReadSettingManager.getInstance();
+        mSettingManager = UPSettingManager.getInstance();
 
         mVolumeChecked = mSettingManager.isVolumeTurnPage();
         mFullScreenChecked = mSettingManager.isFullScreen();

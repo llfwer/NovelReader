@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.activity.ReadActivity;
 import com.example.newbiechen.ireader.activity.UPSettingsActivity;
-import com.example.newbiechen.ireader.model.local.ReadSettingManager;
+import com.example.newbiechen.ireader.other.UPSettingManager;
 import com.example.newbiechen.ireader.ui.adapter.PageStyleAdapter;
 import com.example.newbiechen.ireader.utils.BrightnessUtils;
 import com.example.newbiechen.ireader.utils.ScreenUtils;
@@ -78,7 +78,7 @@ public class ReadSettingDialog extends Dialog {
     TextView mTvMore;
     /************************************/
     private PageStyleAdapter mPageStyleAdapter;
-    private ReadSettingManager mSettingManager;
+    private UPSettingManager mSettingManager;
     private PageLoader mPageLoader;
     private Activity mActivity;
 
@@ -120,7 +120,7 @@ public class ReadSettingDialog extends Dialog {
     }
 
     private void initData() {
-        mSettingManager = ReadSettingManager.getInstance();
+        mSettingManager = UPSettingManager.getInstance();
 
         isBrightnessAuto = mSettingManager.isBrightnessAuto();
         mBrightness = mSettingManager.getBrightness();
@@ -204,7 +204,7 @@ public class ReadSettingDialog extends Dialog {
                     mSbBrightness.setProgress(progress);
                     BrightnessUtils.setBrightness(mActivity, progress);
                     //设置进度
-                    ReadSettingManager.getInstance().setBrightness(progress);
+                    UPSettingManager.getInstance().setBrightness(progress);
                 }
         );
 
@@ -228,7 +228,7 @@ public class ReadSettingDialog extends Dialog {
                 //设置当前 Activity 的亮度
                 BrightnessUtils.setBrightness(mActivity, progress);
                 //存储亮度的进度条
-                ReadSettingManager.getInstance().setBrightness(progress);
+                UPSettingManager.getInstance().setBrightness(progress);
             }
         });
 
@@ -241,7 +241,7 @@ public class ReadSettingDialog extends Dialog {
                         //获取进度条的亮度
                         BrightnessUtils.setBrightness(mActivity, mSbBrightness.getProgress());
                     }
-                    ReadSettingManager.getInstance().setAutoBrightness(isChecked);
+                    UPSettingManager.getInstance().setAutoBrightness(isChecked);
                 }
         );
 
