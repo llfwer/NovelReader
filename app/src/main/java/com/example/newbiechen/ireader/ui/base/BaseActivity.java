@@ -1,8 +1,6 @@
 package com.example.newbiechen.ireader.ui.base;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -10,11 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.example.newbiechen.ireader.BuildConfig;
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.utils.StatusBarCompat;
 
@@ -34,14 +28,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private Unbinder unbinder;
+
     /****************************abstract area*************************************/
 
     @LayoutRes
     protected abstract int getContentId();
 
     /************************init area************************************/
-    protected void addDisposable(Disposable d){
-        if (mDisposable == null){
+    protected void addDisposable(Disposable d) {
+        if (mDisposable == null) {
             mDisposable = new CompositeDisposable();
         }
         mDisposable.add(d);
@@ -49,28 +44,32 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 配置Toolbar
+     *
      * @param toolbar
      */
-    protected void setUpToolbar(Toolbar toolbar){
+    protected void setUpToolbar(Toolbar toolbar) {
     }
 
-    protected void initData(Bundle savedInstanceState){
+    protected void initData(Bundle savedInstanceState) {
     }
+
     /**
      * 初始化零件
      */
     protected void initWidget() {
 
     }
+
     /**
      * 初始化点击事件
      */
-    protected void initClick(){
+    protected void initClick() {
     }
+
     /**
      * 逻辑使用区
      */
-    protected void processLogic(){
+    protected void processLogic() {
     }
 
     /*************************lifecycle area*****************************************************/
@@ -88,10 +87,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         //更严谨是通过反射判断是否存在Toolbar
         mToolbar = ButterKnife.findById(this, R.id.toolbar);
-        if (mToolbar != null){
+        if (mToolbar != null) {
             supportActionBar(mToolbar);
             setUpToolbar(mToolbar);
         }
@@ -102,22 +101,22 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        if (mDisposable != null){
+        if (mDisposable != null) {
             mDisposable.dispose();
         }
     }
 
     /**************************used method area*******************************************/
 
-    protected void startActivity(Class<? extends AppCompatActivity> activity){
-        Intent intent = new Intent(this,activity);
+    protected void startActivity(Class<? extends AppCompatActivity> activity) {
+        Intent intent = new Intent(this, activity);
         startActivity(intent);
     }
 
-    protected ActionBar supportActionBar(Toolbar toolbar){
+    protected ActionBar supportActionBar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
@@ -127,7 +126,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return actionBar;
     }
 
-    protected void setStatusBarColor(int statusColor){
+    protected void setStatusBarColor(int statusColor) {
         StatusBarCompat.compat(this, ContextCompat.getColor(this, statusColor));
     }
 }

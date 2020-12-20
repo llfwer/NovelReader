@@ -1,4 +1,4 @@
-package com.example.newbiechen.ireader.ui.activity;
+package com.example.newbiechen.ireader.activity;
 
 import static com.example.newbiechen.ireader.ui.fragment.BaseFileFragment.*;
 import android.content.DialogInterface;

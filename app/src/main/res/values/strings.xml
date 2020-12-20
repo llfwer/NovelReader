@@ -8,18 +8,18 @@
         <item>@string/nb.menu.action.delete</item>
         <item>@string/nb.menu.action.batch_manage</item>
     </string-array>
-    
+
     <string-array name="nb_menu_local_book">
         <item>@string/nb.menu.action.top</item>
         <item>@string/nb.menu.action.delete</item>
         <item>@string/nb.menu.action.batch_manage</item>
     </string-array>
-    
+
     <!--常用-->
     <string name="nb.common.tip">提示</string>
     <string name="nb.common.sure">确定</string>
     <string name="nb.common.cancel">取消</string>
-    
+
     <!--网络相关-->
 
     <!--fragment 主题书单-->
@@ -36,7 +36,7 @@
     <string name="nb.menu.action.cache">缓存</string>
     <string name="nb.menu.action.delete">删除</string>
     <string name="nb.menu.action.batch_manage">批量管理</string>
-    
+
     <!--user:用户的信息-->
     <!--book:书籍的信息-->
 
@@ -48,7 +48,7 @@
     <!--mode-->
     <string name="nb.mode.night">夜间</string>
     <string name="nb.mode.morning">日间</string>
-    
+
     <!--read-->
     <string name="nb.read.community">社区</string>
     <string name="nb.read.brief">简介</string>
@@ -62,7 +62,7 @@
     <string name="nb.file.add_shelf">加入书架</string>
     <string name="nb.file.add_shelves">加入书架(%1$d)</string>
     <string name="nb.file.add_succeed">成功添加%1$d本书</string>
-    
+
     <!--search-->
 
     <!--BookShelf-->

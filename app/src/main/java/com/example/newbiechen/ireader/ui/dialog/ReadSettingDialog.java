@@ -20,9 +20,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.newbiechen.ireader.R;
+import com.example.newbiechen.ireader.activity.ReadActivity;
+import com.example.newbiechen.ireader.activity.UPSettingsActivity;
 import com.example.newbiechen.ireader.model.local.ReadSettingManager;
-import com.example.newbiechen.ireader.ui.activity.MoreSettingActivity;
-import com.example.newbiechen.ireader.ui.activity.ReadActivity;
 import com.example.newbiechen.ireader.ui.adapter.PageStyleAdapter;
 import com.example.newbiechen.ireader.utils.BrightnessUtils;
 import com.example.newbiechen.ireader.utils.ScreenUtils;
@@ -315,7 +315,7 @@ public class ReadSettingDialog extends Dialog {
         //更多设置
         mTvMore.setOnClickListener(
                 (v) -> {
-                    Intent intent = new Intent(getContext(), MoreSettingActivity.class);
+                    Intent intent = new Intent(getContext(), UPSettingsActivity.class);
                     mActivity.startActivityForResult(intent, ReadActivity.REQUEST_MORE_SETTING);
                     //关闭当前设置
                     dismiss();

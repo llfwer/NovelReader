@@ -1,4 +1,4 @@
-package com.example.newbiechen.ireader.ui.activity;
+package com.example.newbiechen.ireader.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;

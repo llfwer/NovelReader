@@ -1,4 +1,4 @@
-package com.example.newbiechen.ireader.ui.activity;
+package com.example.newbiechen.ireader.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
