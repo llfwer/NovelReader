@@ -25,7 +25,6 @@ import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.RxBus;
 import com.example.newbiechen.ireader.event.DeleteResponseEvent;
 import com.example.newbiechen.ireader.event.DeleteTaskEvent;
-import com.example.newbiechen.ireader.event.DownloadMessage;
 import com.example.newbiechen.ireader.model.bean.CollBookBean;
 import com.example.newbiechen.ireader.model.local.BookRepository;
 import com.example.newbiechen.ireader.presenter.BookShelfPresenter;
@@ -102,17 +101,6 @@ public class MainActivity extends BaseMVPActivity<BookShelfContract.Presenter>
     @Override
     protected void initClick() {
         super.initClick();
-
-        Disposable donwloadDisp = RxBus.getInstance()
-                .toObservable(DownloadMessage.class)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        event -> {
-                            //使用Toast提示
-                            ToastUtils.show(event.message);
-                        }
-                );
-        addDisposable(donwloadDisp);
 
         //删除书籍 (写的丑了点)
         Disposable deleteDisp = RxBus.getInstance()
@@ -307,9 +295,6 @@ public class MainActivity extends BaseMVPActivity<BookShelfContract.Presenter>
         switch (id) {
             case R.id.action_search:
                 activityCls = SearchActivity.class;
-                break;
-            case R.id.action_download:
-                activityCls = DownloadActivity.class;
                 break;
             case R.id.action_scan_local_book:
 

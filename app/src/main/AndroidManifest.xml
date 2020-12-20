@@ -19,14 +19,12 @@
         <activity android:name=".ui.activity.SearchActivity">
         </activity>
         <activity android:name=".ui.activity.BookDetailActivity"/>
-        <activity android:name=".ui.activity.DownloadActivity"/>
         <activity android:name=".ui.activity.ReadActivity">
         </activity>
         <activity android:name=".ui.activity.FileSystemActivity"/>
         <activity android:name=".ui.activity.CommunityActivity" />
         <activity android:name=".ui.activity.MoreSettingActivity" />
     
-        <service android:name=".service.DownloadService" />
     </application>
     
     

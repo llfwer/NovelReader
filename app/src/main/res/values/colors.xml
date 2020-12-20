@@ -60,7 +60,6 @@
     <color name="nb.scroll_refresh.tip">#88303F9F</color>
     <!--downlaod-->
     <color name="nb.download.loading">#8bd715</color>
-    <color name="nb.download.pause">#f3aa41</color>
     <color name="nb.download.wait">#afafad</color>
     <color name="nb.download.error">#e33a35</color>
     <color name="nb.download.finish">#8bd715</color>
