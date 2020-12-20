@@ -23,8 +23,6 @@
         <activity android:name=".ui.activity.DiscDetailActivity"/>
         <activity android:name=".ui.activity.BillboardActivity">
         </activity>
-        <activity android:name=".ui.activity.BookSortActivity">
-        </activity>
         <activity android:name=".ui.activity.SearchActivity">
         </activity>
         <activity android:name=".ui.activity.BillBookActivity"/>

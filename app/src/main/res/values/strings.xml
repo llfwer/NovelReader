@@ -86,7 +86,6 @@
     
     <!--find-->
     <string name="nb.fragment.find.top">排行榜</string>
-    <string name="nb.fragment.find.sort">分类</string>
 
     <!--menu-->
     <string name="nb.menu.action.search">搜索</string>
@@ -115,9 +114,7 @@
     <string name="nb.book.recommend">%1$d 人推荐</string>
     <string name="nb.book.message">%1$d人在追 |&#160; %2$s%%读者留存</string>
     <string name="nb.book.word">|&#160;%1$d&#160;万字</string>
-    <!--sort:每类的书-->
-    <string name="nb.sort.book_count">%1$d 本</string>
-    
+
     <!--tag: 标签-->
     <string name="nb.tag.all">全部</string>
 

@@ -9,7 +9,6 @@ import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.model.bean.SectionBean;
 import com.example.newbiechen.ireader.model.flag.FindType;
 import com.example.newbiechen.ireader.ui.activity.BillboardActivity;
-import com.example.newbiechen.ireader.ui.activity.BookSortActivity;
 import com.example.newbiechen.ireader.ui.adapter.SectionAdapter;
 import com.example.newbiechen.ireader.ui.base.BaseFragment;
 import com.example.newbiechen.ireader.widget.itemdecoration.DividerItemDecoration;
@@ -64,10 +63,6 @@ public class FindFragment extends BaseFragment {
                     switch (type){
                         case TOP:
                             intent = new Intent(getContext(),BillboardActivity.class);
-                            startActivity(intent);
-                            break;
-                        case SORT:
-                            intent = new Intent(getContext(), BookSortActivity.class);
                             startActivity(intent);
                             break;
                     }

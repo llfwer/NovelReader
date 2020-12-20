@@ -12,7 +12,6 @@ import com.example.newbiechen.ireader.R;
 
 public enum FindType {
     TOP(R.string.nb_fragment_find_top,R.drawable.ic_section_top),
-    SORT(R.string.nb_fragment_find_sort,R.drawable.ic_section_sort),
     ;
     private String typeName;
     private int iconId;
