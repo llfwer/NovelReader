@@ -5,15 +5,6 @@
     <!--string_array-->
     <string-array name="nb_fragment_title">
         <item>@string/nb.fragment.title.bookshelf</item>
-        <item>@string/nb.fragment.title.community</item>
-    </string-array>
-
-    <string-array name="nb_fragment_section">
-        <item>@string/nb.fragment.community.comment</item>
-        <item>@string/nb.fragment.community.discussion</item>
-        <item>@string/nb.fragment.community.help</item>
-        <item>@string/nb.fragment.community.girl</item>
-        <item>@string/nb.fragment.community.compose</item>
     </string-array>
 
     <!--CollBook的长按点击-->
@@ -41,15 +32,7 @@
     
     <!--fragment_title:主页的名字-->
     <string name="nb.fragment.title.bookshelf">书架</string>
-    <string name="nb.fragment.title.community">社区</string>
 
-    <!--fragment-->
-    <string name="nb.fragment.community.comment">综合讨论区</string>
-    <string name="nb.fragment.community.discussion">书评区</string>
-    <string name="nb.fragment.community.help">书荒帮助区</string>
-    <string name="nb.fragment.community.girl">女生区</string>
-    <string name="nb.fragment.community.compose">原创区</string>
-    
     <!--fragment 主题书单-->
     <string name="nb.fragment.book_list.hot">本周最热</string>
     <string name="nb.fragment.book_list.newest">最新发布</string>

@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.ui.base.BaseTabActivity;
 import com.example.newbiechen.ireader.ui.fragment.BookShelfFragment;
-import com.example.newbiechen.ireader.ui.fragment.CommunityFragment;
 import com.example.newbiechen.ireader.utils.PermissionsChecker;
 import com.example.newbiechen.ireader.utils.ToastUtils;
 
@@ -64,9 +63,7 @@ public class MainActivity extends BaseTabActivity {
 
     private void initFragment() {
         Fragment bookShelfFragment = new BookShelfFragment();
-        Fragment communityFragment = new CommunityFragment();
         mFragmentList.add(bookShelfFragment);
-        mFragmentList.add(communityFragment);
     }
 
     @Override
