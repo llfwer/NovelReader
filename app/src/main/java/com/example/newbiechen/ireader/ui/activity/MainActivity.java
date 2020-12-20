@@ -293,9 +293,6 @@ public class MainActivity extends BaseMVPActivity<BookShelfContract.Presenter>
         int id = item.getItemId();
         Class<?> activityCls = null;
         switch (id) {
-            case R.id.action_search:
-                activityCls = SearchActivity.class;
-                break;
             case R.id.action_scan_local_book:
 
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {

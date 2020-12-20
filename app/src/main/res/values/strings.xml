@@ -51,7 +51,6 @@
     
     
     <!--menu-->
-    <string name="nb.menu.action.search">搜索</string>
     <string name="nb.menu.action.scan">扫描本地书籍</string>
 
     <string name="nb.menu.action.top">置顶</string>
