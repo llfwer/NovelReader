@@ -122,10 +122,7 @@
     
     <!--tag: 标签-->
     <string name="nb.tag.all">全部</string>
-    <string name="nb.tag.sex">性别</string>
-    <string name="nb.tag.boy">男生</string>
-    <string name="nb.tag.girl">女生</string>
-    
+
     
     <!--book_detail : -->
     <string name="nb.book_detail.hot_comment">热门书评</string>
