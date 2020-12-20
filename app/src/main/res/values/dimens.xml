@@ -16,7 +16,6 @@
     <dimen name="nb.padding.xlarge">24dp</dimen>
 
     <dimen name="nb.margin.small">4dp</dimen>
-    <dimen name="nb.margin.normal">8dp</dimen>
     <dimen name="nb.margin.large">16dp</dimen>
     <dimen name="nb.margin.xlarge">24dp</dimen>
     

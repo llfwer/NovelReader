@@ -16,7 +16,6 @@ import com.example.newbiechen.ireader.RxBus;
 import com.example.newbiechen.ireader.event.DeleteResponseEvent;
 import com.example.newbiechen.ireader.event.DeleteTaskEvent;
 import com.example.newbiechen.ireader.event.DownloadMessage;
-import com.example.newbiechen.ireader.event.RecommendBookEvent;
 import com.example.newbiechen.ireader.model.bean.CollBookBean;
 import com.example.newbiechen.ireader.model.local.BookRepository;
 import com.example.newbiechen.ireader.presenter.BookShelfPresenter;
@@ -81,16 +80,6 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     @Override
     protected void initClick() {
         super.initClick();
-        //推荐书籍
-        Disposable recommendDisp = RxBus.getInstance()
-                .toObservable(RecommendBookEvent.class)
-                .subscribe(
-                        event -> {
-                            mRvContent.startRefresh();
-                            mPresenter.loadRecommendBooks(event.sex);
-                        }
-                );
-        addDisposable(recommendDisp);
 
         Disposable donwloadDisp = RxBus.getInstance()
                 .toObservable(DownloadMessage.class)

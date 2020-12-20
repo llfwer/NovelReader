@@ -90,12 +90,6 @@
     <string name="nb.fragment.find.sort">分类</string>
     <string name="nb.fragment.find.listen">有声小说</string>
 
-    <!--dialog-->
-    <string name="nb.dialog.text.introduce">我们会根据您的喜好\n推荐相对应的小说</string>
-    <string name="nb.dialog.text.choose_tip">--请选择你的喜好--</string>
-    <string name="nb.dialog.text.boy_story">男生小说</string>
-    <string name="nb.dialog.text.girl_story">女生小说</string>
-    
     <!--menu-->
     <string name="nb.menu.action.search">搜索</string>
     <string name="nb.menu.action.login">请登录</string>
