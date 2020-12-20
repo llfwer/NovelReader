@@ -248,7 +248,7 @@ public class SearchActivity extends BaseMVPActivity<SearchContract.Presenter>
         int last = mTagStart + TAG_LIMIT;
         if (mHotTagList.size() <= last){
             mTagStart = 0;
-            last = TAG_LIMIT;
+            last = mHotTagList.size();
         }
         List<String> tags = mHotTagList.subList(mTagStart, last);
         mTgHot.setTags(tags);

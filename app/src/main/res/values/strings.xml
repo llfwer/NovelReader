@@ -77,16 +77,9 @@
     
     <!--menu-->
     <string name="nb.menu.action.search">搜索</string>
-    <string name="nb.menu.action.login">请登录</string>
-    <string name="nb.menu.action.message">我的消息</string>
     <string name="nb.menu.action.download">下载列表</string>
-    <string name="nb.menu.action.sync">同步书架</string>
     <string name="nb.menu.action.scan">扫描本地书籍</string>
-    <string name="nb.menu.action.transfer">WIFI传书</string>
-    <string name="nb.menu.action.feedback">意见反馈</string>
-    <string name="nb.menu.action.night_mode">夜间模式</string>
-    <string name="nb.menu.action.setting">设置</string>
-    
+
     <string name="nb.menu.action.top">置顶</string>
     <string name="nb.menu.action.cache">缓存</string>
     <string name="nb.menu.action.delete">删除</string>
