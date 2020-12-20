@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.RxBus;
 import com.example.newbiechen.ireader.event.DeleteResponseEvent;
-import com.example.newbiechen.ireader.event.DeleteTaskEvent;
 import com.example.newbiechen.ireader.model.bean.CollBookBean;
 import com.example.newbiechen.ireader.model.local.BookRepository;
 import com.example.newbiechen.ireader.presenter.BookShelfPresenter;
@@ -268,8 +267,6 @@ public class MainActivity extends BaseMVPActivity<BookShelfContract.Presenter>
                     })
                     .setNegativeButton(getResources().getString(R.string.nb_common_cancel), null)
                     .show();
-        } else {
-            RxBus.getInstance().post(new DeleteTaskEvent(collBook));
         }
     }
 
