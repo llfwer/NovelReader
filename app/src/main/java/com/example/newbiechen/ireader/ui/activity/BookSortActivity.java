@@ -6,7 +6,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.model.bean.packages.BookSortPackage;
-import com.example.newbiechen.ireader.model.bean.BookSubSortBean;
 import com.example.newbiechen.ireader.model.bean.packages.BookSubSortPackage;
 import com.example.newbiechen.ireader.presenter.BookSortPresenter;
 import com.example.newbiechen.ireader.presenter.contract.BookSortContract;
@@ -20,10 +19,9 @@ import butterknife.BindView;
 /**
  * Created by newbiechen on 17-4-23.
  * 分类选择
- *
  */
 
-public class BookSortActivity extends BaseMVPActivity<BookSortContract.Presenter> implements BookSortContract.View{
+public class BookSortActivity extends BaseMVPActivity<BookSortContract.Presenter> implements BookSortContract.View {
     /*******************Constant*********************/
     private static final String TAG = "SortActivity";
     private static final int SPAN_COUNT = 3;
@@ -39,6 +37,7 @@ public class BookSortActivity extends BaseMVPActivity<BookSortContract.Presenter
     private BookSortAdapter mGirlAdapter;
 
     private BookSubSortPackage mSubSortPackage;
+
     /**********************init***********************************/
     @Override
     protected int getContentId() {
@@ -58,17 +57,17 @@ public class BookSortActivity extends BaseMVPActivity<BookSortContract.Presenter
         setUpAdapter();
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         mBoyAdapter = new BookSortAdapter();
         mGirlAdapter = new BookSortAdapter();
 
-        RecyclerView.ItemDecoration itemDecoration = new DividerGridItemDecoration(this,R.drawable.shape_divider_row,R.drawable.shape_divider_col);
+        RecyclerView.ItemDecoration itemDecoration = new DividerGridItemDecoration(this, R.drawable.shape_divider_row, R.drawable.shape_divider_col);
 
-        mRvBoy.setLayoutManager(new GridLayoutManager(this,SPAN_COUNT));
+        mRvBoy.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT));
         mRvBoy.addItemDecoration(itemDecoration);
         mRvBoy.setAdapter(mBoyAdapter);
 
-        mRvGirl.setLayoutManager(new GridLayoutManager(this,SPAN_COUNT));
+        mRvGirl.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT));
         mRvGirl.addItemDecoration(itemDecoration);
         mRvGirl.setAdapter(mGirlAdapter);
     }
@@ -82,17 +81,13 @@ public class BookSortActivity extends BaseMVPActivity<BookSortContract.Presenter
     protected void initClick() {
         super.initClick();
         mBoyAdapter.setOnItemClickListener(
-                (view,pos) -> {
-                    BookSubSortBean subSortBean = mSubSortPackage.getMale().get(pos);
-                    //上传
-                    BookSortListActivity.startActivity(this,"male",subSortBean);
+                (view, pos) -> {
+
                 }
         );
         mGirlAdapter.setOnItemClickListener(
-                (view,pos) -> {
-                    BookSubSortBean subSortBean = mSubSortPackage.getFemale().get(pos);
-                    //上传
-                    BookSortListActivity.startActivity(this,"female",subSortBean);
+                (view, pos) -> {
+
                 }
         );
     }
@@ -110,10 +105,9 @@ public class BookSortActivity extends BaseMVPActivity<BookSortContract.Presenter
     /***********************rewrite**********************************/
     @Override
     public void finishRefresh(BookSortPackage sortPackage, BookSubSortPackage subSortPackage) {
-        if (sortPackage == null || sortPackage.getMale().size() == 0 || sortPackage.getFemale().size() == 0){
+        if (sortPackage == null || sortPackage.getMale().size() == 0 || sortPackage.getFemale().size() == 0) {
             mRlRefresh.showEmpty();
-        }
-        else {
+        } else {
             mBoyAdapter.refreshItems(sortPackage.getMale());
             mGirlAdapter.refreshItems(sortPackage.getFemale());
         }
