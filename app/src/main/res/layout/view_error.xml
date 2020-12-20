@@ -23,6 +23,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="网络错误,点击重试"
-        android:id="@+id/textView"/>
+        android:text="网络错误,点击重试" />
 </LinearLayout>

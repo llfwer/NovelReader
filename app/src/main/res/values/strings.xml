@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">IReader</string>
-    <string name="nb.title.app">iReader</string>
 
     <!--CollBook的长按点击-->
     <string-array name="nb_menu_net_book">
@@ -22,34 +21,14 @@
     <string name="nb.common.cancel">取消</string>
     
     <!--网络相关-->
-    
-    <string name="nb.net.error_tip">似乎没有网络哦</string>
-    
+
     <!--fragment 主题书单-->
-    <string name="nb.fragment.book_list.hot">本周最热</string>
-    <string name="nb.fragment.book_list.newest">最新发布</string>
-    <string name="nb.fragment.book_list.collect">最多收藏</string>
-    
-    <string name="nb.fragment.book_list.message">共%1$d本书 |&#160; %2$d人收藏</string>
-    
+
     <!--评论相关-->
-    <string name="nb.comment.floor">%1$d楼&#160;</string>
-    <string name="nb.comment.like_count">❤%1$d次同感</string>
-    <string name="nb.comment.best_comment">仰望神评论</string>
-    <string name="nb.comment.comment_count">共%1$d条评论</string>
-    <string name="nb.comment.reply_floor">(%1$d楼)</string>
-    <string name="nb.comment.reply_nickname">回复 %1$s</string>
-    <string name="nb.comment.empty_comment">暂无评论</string>
-    
+
     <!--书评区相关-->
-    <string name="nb.review.book_type">[%1$s]</string>
-    <string name="nb.review.recommend">%1$d 人推荐</string>
-    <string name="nb.review.helpful">有用</string>
-    <string name="nb.review.unhelpful">无用</string>
-    <string name="nb.review.book_score">给书评打分</string>
-    <string name="nb.review.master_score">楼主打分：</string>
-    
-    
+
+
     <!--menu-->
     <string name="nb.menu.action.scan">扫描本地书籍</string>
 
@@ -59,25 +38,13 @@
     <string name="nb.menu.action.batch_manage">批量管理</string>
     
     <!--user:用户的信息-->
-    <string name="nb.user.lv">&#160;lv.%1$d</string>
     <!--book:书籍的信息-->
-    <string name="nb.book.type">[%1$s]</string>
-    <string name="nb.book.recommend">%1$d 人推荐</string>
-    <string name="nb.book.word">|&#160;%1$d&#160;万字</string>
 
     <!--tag: 标签-->
-    <string name="nb.tag.all">全部</string>
 
-    
+
     <!--book_detail : -->
-    <string name="nb.book_detail.hot_comment">热门书评</string>
-    <string name="nb.book_detail.community">%1$s的社区</string>
-    <string name="nb.book_detail.posts_count">共有%1$d个帖子</string>
-    <string name="nb.book_detail.recommend_book_list">推荐书单</string>
-    <string name="nb.book_detail.chase_update">追更</string>
-    <string name="nb.book_detail.give_up">放弃</string>
-    <string name="nb.book_detail.start_read">开始阅读</string>
-    
+
     <!--mode-->
     <string name="nb.mode.night">夜间</string>
     <string name="nb.mode.morning">日间</string>
@@ -86,10 +53,9 @@
     <string name="nb.read.community">社区</string>
     <string name="nb.read.brief">简介</string>
     <string name="nb.read.setting">设置</string>
-    <string name="nb.read.download">缓存</string>'
+    '
     <string name="nb.read.category">目录</string>
-    <string name="nb.read.no_chapter">第 %1$d 章(%2$d)</string>
-    
+
     <!--file system-->
     <string name="nb.file.sub_count">%1$d 项</string>
     <string name="nb.file.path">存储卡:%1$s</string>
@@ -98,7 +64,6 @@
     <string name="nb.file.add_succeed">成功添加%1$d本书</string>
     
     <!--search-->
-    <string name="nb.search.book.brief">%1$d人在追 | %2$s读者留存 | %3$s著</string>
 
     <!--BookShelf-->
     <string name="nb.bookshelf.book_not_exist">文件不存在或者内容为空,是否删除?</string>

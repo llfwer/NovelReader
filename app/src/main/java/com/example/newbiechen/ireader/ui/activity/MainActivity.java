@@ -71,7 +71,7 @@ public class MainActivity extends BaseMVPActivity<BookShelfContract.Presenter>
 
     @Override
     protected int getContentId() {
-        return R.layout.activity_base_tab;
+        return R.layout.activity_main;
     }
 
     /**************init method***********************/
