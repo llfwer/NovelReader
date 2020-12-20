@@ -26,7 +26,6 @@
         <activity android:name=".ui.activity.SearchActivity">
         </activity>
         <activity android:name=".ui.activity.BillBookActivity"/>
-        <activity android:name=".ui.activity.OtherBillBookActivity"/>
         <activity android:name=".ui.activity.BookDetailActivity"/>
         <activity android:name=".ui.activity.DownloadActivity"/>
         <activity android:name=".ui.activity.ReadActivity">

@@ -26,7 +26,7 @@ import butterknife.BindView;
  */
 
 public class BillboardActivity extends BaseMVPActivity<BillboardContract.Presenter>
-        implements BillboardContract.View,ExpandableListView.OnGroupClickListener{
+        implements BillboardContract.View, ExpandableListView.OnGroupClickListener {
     private static final String TAG = "BillboardActivity";
 
     @BindView(R.id.billboard_rl_refresh)
@@ -38,7 +38,8 @@ public class BillboardActivity extends BaseMVPActivity<BillboardContract.Present
 
     private BillboardAdapter mBoyAdapter;
     private BillboardAdapter mGirlAdapter;
-     @Override
+
+    @Override
     protected int getContentId() {
         return R.layout.activity_bilboard;
     }
@@ -49,7 +50,7 @@ public class BillboardActivity extends BaseMVPActivity<BillboardContract.Present
         setUpAdapter();
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         mBoyAdapter = new BillboardAdapter(this);
         mGirlAdapter = new BillboardAdapter(this);
         mElvBoy.setAdapter(mBoyAdapter);
@@ -64,19 +65,18 @@ public class BillboardActivity extends BaseMVPActivity<BillboardContract.Present
         );
         mElvBoy.setOnGroupClickListener(
                 (parent, v, groupPosition, id) -> {
-                    if (groupPosition != mBoyAdapter.getGroupCount()-1){
+                    if (groupPosition != mBoyAdapter.getGroupCount() - 1) {
                         BillboardBean bean = mBoyAdapter.getGroup(groupPosition);
-                        BillBookActivity.startActivity(this,bean.get_id(),
-                                bean.getMonthRank(),bean.getTotalRank());
+                        BillBookActivity.startActivity(this, bean.get_id(),
+                                bean.getMonthRank(), bean.getTotalRank());
                         return true;
                     }
                     return false;
                 });
         mElvBoy.setOnChildClickListener(
                 (parent, v, groupPosition, childPosition, id) -> {
-                    if (groupPosition == mBoyAdapter.getGroupCount()-1){
-                        BillboardBean bean = mBoyAdapter.getChild(groupPosition,childPosition);
-                        OtherBillBookActivity.startActivity(this,bean.getTitle(),bean.get_id());
+                    if (groupPosition == mBoyAdapter.getGroupCount() - 1) {
+
                         return true;
                     }
                     return false;
@@ -85,10 +85,10 @@ public class BillboardActivity extends BaseMVPActivity<BillboardContract.Present
 
         mElvGirl.setOnGroupClickListener(
                 (parent, v, groupPosition, id) -> {
-                    if (groupPosition != mGirlAdapter.getGroupCount()-1){
+                    if (groupPosition != mGirlAdapter.getGroupCount() - 1) {
                         BillboardBean bean = mGirlAdapter.getGroup(groupPosition);
-                        BillBookActivity.startActivity(this,bean.get_id(),
-                                bean.getMonthRank(),bean.getTotalRank());
+                        BillBookActivity.startActivity(this, bean.get_id(),
+                                bean.getMonthRank(), bean.getTotalRank());
                         return true;
                     }
                     return false;
@@ -97,10 +97,9 @@ public class BillboardActivity extends BaseMVPActivity<BillboardContract.Present
 
         mElvGirl.setOnChildClickListener(
                 (parent, v, groupPosition, childPosition, id) -> {
-                    if (groupPosition == mGirlAdapter.getGroupCount()-1){
-                        BillboardBean bean = mGirlAdapter.getChild(groupPosition,childPosition);
-                        OtherBillBookActivity.startActivity(this,bean.getTitle(),bean.get_id());
-                        return  true;
+                    if (groupPosition == mGirlAdapter.getGroupCount() - 1) {
+
+                        return true;
                     }
                     return false;
                 }
@@ -123,7 +122,7 @@ public class BillboardActivity extends BaseMVPActivity<BillboardContract.Present
     @Override
     public void finishRefresh(BillboardPackage beans) {
         if (beans == null || beans.getMale() == null || beans.getFemale() == null
-                || beans.getMale().size() == 0 || beans.getFemale().size() == 0){
+                || beans.getMale().size() == 0 || beans.getFemale().size() == 0) {
             mRlRefresh.showEmpty();
             return;
         }
@@ -131,14 +130,13 @@ public class BillboardActivity extends BaseMVPActivity<BillboardContract.Present
         updateFemaleBillboard(beans.getFemale());
     }
 
-    private void updateMaleBillboard(List<BillboardBean> disposes){
+    private void updateMaleBillboard(List<BillboardBean> disposes) {
         List<BillboardBean> maleGroups = new ArrayList<>();
         List<BillboardBean> maleChildren = new ArrayList<>();
-        for (BillboardBean bean : disposes){
-            if (bean.isCollapse()){
+        for (BillboardBean bean : disposes) {
+            if (bean.isCollapse()) {
                 maleChildren.add(bean);
-            }
-            else {
+            } else {
                 maleGroups.add(bean);
             }
         }
@@ -147,15 +145,14 @@ public class BillboardActivity extends BaseMVPActivity<BillboardContract.Present
         mBoyAdapter.addChildren(maleChildren);
     }
 
-    private void updateFemaleBillboard(List<BillboardBean> disposes){
+    private void updateFemaleBillboard(List<BillboardBean> disposes) {
         List<BillboardBean> femaleGroups = new ArrayList<>();
         List<BillboardBean> femaleChildren = new ArrayList<>();
 
-        for(BillboardBean bean : disposes){
-            if (bean.isCollapse()){
+        for (BillboardBean bean : disposes) {
+            if (bean.isCollapse()) {
                 femaleChildren.add(bean);
-            }
-            else {
+            } else {
                 femaleGroups.add(bean);
             }
         }
