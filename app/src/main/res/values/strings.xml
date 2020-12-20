@@ -2,11 +2,6 @@
     <string name="app_name">IReader</string>
     <string name="nb.title.app">iReader</string>
 
-    <!--string_array-->
-    <string-array name="nb_fragment_title">
-        <item>@string/nb.fragment.title.bookshelf</item>
-    </string-array>
-
     <!--CollBook的长按点击-->
     <string-array name="nb_menu_net_book">
         <item>@string/nb.menu.action.top</item>
@@ -30,9 +25,6 @@
     
     <string name="nb.net.error_tip">似乎没有网络哦</string>
     
-    <!--fragment_title:主页的名字-->
-    <string name="nb.fragment.title.bookshelf">书架</string>
-
     <!--fragment 主题书单-->
     <string name="nb.fragment.book_list.hot">本周最热</string>
     <string name="nb.fragment.book_list.newest">最新发布</string>
