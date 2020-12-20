@@ -12,7 +12,6 @@ import com.example.newbiechen.ireader.model.bean.BookListBean;
 import com.example.newbiechen.ireader.model.flag.BookListType;
 import com.example.newbiechen.ireader.presenter.BookListPresenter;
 import com.example.newbiechen.ireader.presenter.contract.BookListContract;
-import com.example.newbiechen.ireader.ui.activity.BookListDetailActivity;
 import com.example.newbiechen.ireader.ui.adapter.BookListAdapter;
 import com.example.newbiechen.ireader.ui.base.BaseMVPFragment;
 import com.example.newbiechen.ireader.widget.RefreshLayout;
@@ -31,7 +30,7 @@ import io.reactivex.disposables.Disposable;
  */
 
 public class BookListFragment extends BaseMVPFragment<BookListContract.Presenter>
-        implements BookListContract.View{
+        implements BookListContract.View {
     private static final String EXTRA_BOOK_LIST_TYPE = "extra_book_list_type";
     private static final String BUNDLE_BOOK_TAG = "bundle_book_tag";
     @BindView(R.id.refresh_layout)
@@ -46,9 +45,9 @@ public class BookListFragment extends BaseMVPFragment<BookListContract.Presenter
     private int mStart = 0;
     private int mLimit = 20;
 
-    public static Fragment newInstance(BookListType bookListType){
+    public static Fragment newInstance(BookListType bookListType) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(EXTRA_BOOK_LIST_TYPE,bookListType);
+        bundle.putSerializable(EXTRA_BOOK_LIST_TYPE, bookListType);
         Fragment fragment = new BookListFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -67,11 +66,10 @@ public class BookListFragment extends BaseMVPFragment<BookListContract.Presenter
     @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mBookListType = (BookListType) savedInstanceState.getSerializable(EXTRA_BOOK_LIST_TYPE);
             mTag = savedInstanceState.getString(BUNDLE_BOOK_TAG);
-        }
-        else {
+        } else {
             mBookListType = (BookListType) getArguments().getSerializable(EXTRA_BOOK_LIST_TYPE);
         }
     }
@@ -88,16 +86,9 @@ public class BookListFragment extends BaseMVPFragment<BookListContract.Presenter
         super.initClick();
         mBookListAdapter.setOnLoadMoreListener(
                 () -> {
-                   mPresenter.loadBookList(mBookListType,mTag,mStart,mLimit);
+                    mPresenter.loadBookList(mBookListType, mTag, mStart, mLimit);
                 }
         );
-        mBookListAdapter.setOnItemClickListener(
-                (view,pos) -> {
-                    BookListBean bean = mBookListAdapter.getItem(pos);
-                    BookListDetailActivity.startActivity(getContext(),bean.get_id());
-                }
-        );
-
         Disposable disposable = RxBus.getInstance()
                 .toObservable(BookSubSortEvent.class)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -116,21 +107,21 @@ public class BookListFragment extends BaseMVPFragment<BookListContract.Presenter
         showRefresh();
     }
 
-    private void showRefresh(){
+    private void showRefresh() {
         mStart = 0;
         mRefreshLayout.showLoading();
-        mPresenter.refreshBookList(mBookListType,mTag,mStart,mLimit);
+        mPresenter.refreshBookList(mBookListType, mTag, mStart, mLimit);
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
-        mBookListAdapter = new BookListAdapter(getContext(),new WholeAdapter.Options());
+        mBookListAdapter = new BookListAdapter(getContext(), new WholeAdapter.Options());
         mRvContent.setAdapter(mBookListAdapter);
     }
 
     @Override
-    public void finishRefresh(List<BookListBean> beans){
+    public void finishRefresh(List<BookListBean> beans) {
         mBookListAdapter.refreshItems(beans);
         mStart = beans.size();
     }
@@ -161,6 +152,6 @@ public class BookListFragment extends BaseMVPFragment<BookListContract.Presenter
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(EXTRA_BOOK_LIST_TYPE, mBookListType);
-        outState.putSerializable(BUNDLE_BOOK_TAG,mTag);
+        outState.putSerializable(BUNDLE_BOOK_TAG, mTag);
     }
 }
