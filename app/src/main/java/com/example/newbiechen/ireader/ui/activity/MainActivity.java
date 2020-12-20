@@ -214,10 +214,7 @@ public class MainActivity extends BaseMVPActivity<BookShelfContract.Presenter>
                 break;
             //缓存
             case "缓存":
-                //2. 进行判断，如果CollBean中状态为未更新。那么就创建Task，加入到Service中去。
-                //3. 如果状态为finish，并且isUpdate为true，那么就根据chapter创建状态
-                //4. 如果状态为finish，并且isUpdate为false。
-                downloadBook(collBook);
+
                 break;
             //删除
             case "删除":
@@ -229,11 +226,6 @@ public class MainActivity extends BaseMVPActivity<BookShelfContract.Presenter>
             default:
                 break;
         }
-    }
-
-    private void downloadBook(CollBookBean collBook) {
-        //创建任务
-        mPresenter.createDownloadTask(collBook);
     }
 
     /**
