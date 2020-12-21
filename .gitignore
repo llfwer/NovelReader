@@ -18,6 +18,10 @@ out/
 .gradle/
 build/
 
+local.properties
+.classpath
+.project
+
 # Local configuration file (sdk path, etc)
 local.properties
 
@@ -33,13 +37,13 @@ proguard/
 # Android Studio captures folder
 captures/
 
+.settings/
+
 # Intellij
 *.iml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/gradle.xml
-.idea/dictionaries
-.idea/libraries
+*.ipr
+*.iws
+.idea/
 
 # Keystore files
 *.jks
@@ -63,3 +67,6 @@ app/daily
 app/libs/
 .DS_Store
 /.ssh/
+/gradle
+/gradlew
+/gradlew.bat
