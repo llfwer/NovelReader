@@ -19,6 +19,7 @@
         <activity android:name=".activity.ReadActivity" />
         <activity android:name=".activity.FileSystemActivity" />
         <activity android:name=".activity.UPSettingsActivity" />
+        <activity android:name=".activity.UPFileActivity" />
 
     </application>
 

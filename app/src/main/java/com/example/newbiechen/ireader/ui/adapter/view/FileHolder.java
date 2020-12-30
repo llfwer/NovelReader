@@ -31,8 +31,9 @@ public class FileHolder extends ViewHolderImpl<File> {
     private TextView mTvDate;
     private TextView mTvSubCount;
 
-    private HashMap<File,Boolean> mSelectedMap;
-    public FileHolder(HashMap<File,Boolean> selectedMap){
+    private HashMap<File, Boolean> mSelectedMap;
+
+    public FileHolder(HashMap<File, Boolean> selectedMap) {
         mSelectedMap = selectedMap;
     }
 
@@ -51,24 +52,22 @@ public class FileHolder extends ViewHolderImpl<File> {
     @Override
     public void onBind(File data, int pos) {
         //判断是文件还是文件夹
-        if (data.isDirectory()){
+        if (data.isDirectory()) {
             setFolder(data);
-        }
-        else {
+        } else {
             setFile(data);
         }
     }
 
-    private void setFile(File file){
+    private void setFile(File file) {
         //选择
         String id = MD5Utils.strToMd5By16(file.getAbsolutePath());
 
-        if (BookRepository.getInstance().getCollBook(id) != null){
+        if (BookRepository.getInstance().getCollBook(id) != null) {
             mIvIcon.setImageResource(R.drawable.ic_file_loaded);
             mIvIcon.setVisibility(View.VISIBLE);
             mCbSelect.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             boolean isSelected = mSelectedMap.get(file);
             mCbSelect.setChecked(isSelected);
             mIvIcon.setVisibility(View.GONE);
@@ -83,7 +82,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         mTvDate.setText(StringUtils.dateConvert(file.lastModified(), Constant.FORMAT_FILE_DATE));
     }
 
-    public void setFolder(File folder){
+    public void setFolder(File folder) {
         //图片
         mIvIcon.setVisibility(View.VISIBLE);
         mCbSelect.setVisibility(View.GONE);
@@ -94,11 +93,11 @@ public class FileHolder extends ViewHolderImpl<File> {
         mLlBrief.setVisibility(View.GONE);
         mTvSubCount.setVisibility(View.VISIBLE);
 
-        mTvSubCount.setText(getContext().getString(R.string.nb_file_sub_count,folder.list().length));
+        mTvSubCount.setText(getContext().getString(R.string.nb_file_sub_count, folder.list().length));
     }
 
     @Override
     protected int getItemLayoutId() {
-        return R.layout.item_file;
+        return R.layout.up_file_item_view;
     }
 }

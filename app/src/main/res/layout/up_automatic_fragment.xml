@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--内容-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/up_manual_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <!--空视图-->
+    <com.example.newbiechen.ireader.widget.UPEmptyView
+        android:id="@+id/up_manual_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <!--加载视图-->
+    <include
+        android:id="@+id/up_manual_loading_view"
+        layout="@layout/up_base_ui_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</FrameLayout>

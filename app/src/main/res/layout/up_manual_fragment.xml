@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--path-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/up_manual_path_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:text="存储卡:/"
+            android:textColor="@color/up_common_secondary_color"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/up_common_divider_color" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/up_manual_back_view"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_back_last"
+            android:gravity="center"
+            android:text="上一级"
+            android:textColor="@color/up_common_secondary_color"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--内容-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/up_manual_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!--空视图-->
+        <com.example.newbiechen.ireader.widget.UPEmptyView
+            android:id="@+id/up_manual_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!--加载视图-->
+        <include
+            android:id="@+id/up_manual_loading_view"
+            layout="@layout/up_base_ui_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/up_file_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:fitsSystemWindows="true"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/Theme.ToolBar.Menu" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/up_file_tab"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimary"
+        app:tabIndicatorColor="@color/white"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/translucent_text" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/up_file_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!--文件点击按钮-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:gravity="center_vertical"
+        android:paddingRight="10dp">
+
+        <CheckBox
+            android:id="@+id/up_file_selected_all"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:button="@drawable/selector_cb_file"
+            android:text="全选"
+            android:textColor="@color/selector_cb_file" />
+
+        <Button
+            android:id="@+id/up_file_add_book"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/selector_btn_add"
+            android:minWidth="110dp"
+            android:text="加入书架"
+            android:textColor="@color/selector_btn_file_add" />
+
+        <Button
+            android:id="@+id/up_file_delete"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/up_file_add_book"
+            android:background="@drawable/selector_btn_delete"
+            android:text="删除"
+            android:textColor="@color/selector_btn_file_delete" />
+
+    </RelativeLayout>
+
+</LinearLayout>

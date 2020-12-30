@@ -65,4 +65,53 @@
     
     <color name="nb.read.menu.bg">#191919</color>
     <color name="nb.read.menu.text">#CBCBCB</color>
+    <!-- 品牌色 -->
+    <color name="up_common_brand_color">#F71828</color>
+
+    <!-- 标题栏背景色 -->
+    <color name="up_common_title_bar_bg_color">#FFFFFF</color>
+    <!-- 底层View背景色 -->
+    <color name="up_common_background_color">#F7F7F7</color>
+    <!-- 内容区背景色 -->
+    <color name="up_common_content_bg_color">#FFFFFF</color>
+    <!-- 卡片背景色 -->
+    <color name="up_common_card_bg_color">#FFFFFF</color>
+
+    <!-- 涨跌平颜色 -->
+    <color name="up_common_rise_color">#F71828</color>
+    <color name="up_common_equal_color">#CCCCCC</color>
+    <color name="up_common_fall_color">#00AA73</color>
+
+    <!-- 分割线颜色 -->
+    <color name="up_common_divider_color">#F0F0F0</color>
+
+    <!-- 主内容颜色（e.g.标题、股票名称） -->
+    <color name="up_common_primary_color">#060708</color>
+    <!-- 次内容颜色（e.g.摘要、股票代码）  #111111 60% -->
+    <color name="up_common_secondary_color">#99060708</color>
+    <!-- 高于次内容的颜色  #111111 80% -->
+    <color name="up_common_secondary_more_color">#CC060708</color>
+    <!-- 低于次内容的颜色  #111111 40% -->
+    <color name="up_common_secondary_less_color">#66060708</color>
+    <!-- 低于次内容的颜色  #111111 20% -->
+    <color name="up_common_secondary_least_color">#33060708</color>
+
+    <!-- 锚点颜色 -->
+    <color name="up_common_href_color">#318CF8</color>
+
+    <!-- 指示器颜色 -->
+    <color name="up_common_page_indicator_fill_color">#66000000</color>
+    <color name="up_common_page_indicator_page_color">#33000000</color>
+
+    <color name="up_common_tablayout_indicator_color">#F54646</color>
+
+    <!-- 选中和非选中颜色 -->
+    <color name="up_common_selected_color">#F71828</color>
+    <color name="up_common_unselected_color">#66060708</color>
+
+    <!-- 选中次颜色 60% -->
+    <color name="up_common_selected_secondary_color">#99F71828</color>
+
+    <!-- item的点击颜色 -->
+    <color name="up_common_item_pressed_color">#19000000</color>
 </resources>

@@ -1,6 +1,5 @@
-
 <resources>
-    
+
     <!-- Base application theme. -->
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -10,9 +9,9 @@
         <item name="android:listDivider">@drawable/shape_divider_dash</item>
         <item name="android:actionOverflowMenuStyle">@style/ActionButton.Overflow.Menu</item>
     </style>
-    
-    <style name="AppTheme" parent="BaseAppTheme"/>
-    
+
+    <style name="AppTheme" parent="BaseAppTheme" />
+
     <!--Splash-->
 
     <!--Dialog-->
@@ -27,17 +26,17 @@
         <!--直接写windowEnter或者windowExit 是无效的-->Re
         <item name="android:windowAnimationStyle">@style/anim_slide_left_in_right_out</item>
     </style>
-    
+
     <style name="ReadSettingDialog" parent="CommonDialog">
         <item name="android:windowAnimationStyle">@style/anim_slide_bottom_in_out</item>
     </style>
-    
+
     <!--animation-->
     <style name="anim_slide_bottom_in_out" parent="android:Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/slide_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/slide_bottom_out</item>
     </style>
-    
+
     <style name="anim_slide_left_in_right_out" parent="android:Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/slide_left_in</item>
         <item name="android:windowExitAnimation">@anim/slide_right_out</item>
@@ -75,10 +74,17 @@
         <item name="android:divider">@color/nb.divider.common</item>
         <item name="android:dividerHeight">@dimen/nb.divider.line</item>
     </style>
-    
+
     <!--Common-->
-    <style name="NB.Theme" parent="AppTheme"/>
+    <style name="NB.Theme" parent="AppTheme" />
 
     <!-- TextAppearance:修改 -->
-    <style name="NB.Theme.TextAppearance"/>
+    <style name="NB.Theme.TextAppearance" />
+
+    <style name="UPBaseUIProgressBarStyle" parent="@android:style/Widget.ProgressBar.Small">
+        <item name="android:minHeight">24dp</item>
+        <item name="android:minWidth">24dp</item>
+        <item name="android:maxHeight">24dp</item>
+        <item name="android:maxWidth">24dp</item>
+    </style>
 </resources>

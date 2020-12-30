@@ -82,4 +82,8 @@
         <item>臺灣正體到簡體</item>
         <item>香港繁體到簡體</item>
     </string-array>
+
+    <string name="up_common_empty_login">需要登录才能查看内容</string>
+    <string name="up_common_empty_data">暂无内容</string>
+    <string name="up_common_empty_network">加载失败，请检查网络设置</string>
 </resources>
