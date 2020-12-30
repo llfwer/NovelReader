@@ -281,7 +281,7 @@ public class MainActivity extends BaseMVPActivity<BookShelfContract.Presenter>
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent(this, FileSystemActivity.class);
+        Intent intent = new Intent(this, UPFileActivity.class);
         startActivity(intent);
         return super.onOptionsItemSelected(item);
     }

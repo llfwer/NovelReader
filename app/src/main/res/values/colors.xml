@@ -114,4 +114,15 @@
 
     <!-- item的点击颜色 -->
     <color name="up_common_item_pressed_color">#19000000</color>
+
+    <!-- 弹出框遮罩背景色 -->
+    <color name="up_common_popup_shadow_color">#33000000</color>
+
+    <!-- 按钮文字颜色 -->
+    <color name="up_common_button_text_color">#ffffff</color>
+    <color name="up_common_button_text_select_color">#99ffffff</color>
+
+    <!-- 按钮背景颜色 -->
+    <color name="up_common_button_start_bg_color">#FF7881</color>
+    <color name="up_common_button_end_bg_color">#F71828</color>
 </resources>

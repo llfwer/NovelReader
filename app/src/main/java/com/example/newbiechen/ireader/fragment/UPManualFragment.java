@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class UPManualFragment extends UPBaseFragment implements View.OnClickListener {
+public class UPManualFragment extends UPFileBaseFragment implements View.OnClickListener {
     private TextView mPathView;
     private RecyclerView mListView;
     private UPEmptyView mEmptyView;
@@ -48,6 +48,11 @@ public class UPManualFragment extends UPBaseFragment implements View.OnClickList
     }
 
     @Override
+    public String getFragmentTitle(Context context) {
+        return "手机目录";
+    }
+
+    @Override
     public int getFragmentLayoutId() {
         return R.layout.up_manual_fragment;
     }
@@ -69,11 +74,31 @@ public class UPManualFragment extends UPBaseFragment implements View.OnClickList
             @Override
             public void onFolderClick(File file) {
                 mPath = file;
-                initData();
+                requestData();
             }
         }));
 
-        initData();
+        requestData();
+    }
+
+    @Override
+    public List<File> getCheckList() {
+        return mAdapter.getCheckList();
+    }
+
+    @Override
+    public boolean isCheckAll() {
+        return mAdapter.isCheckAll();
+    }
+
+    @Override
+    public void setCheckedAll(boolean checkAll) {
+        mAdapter.checkAll(checkAll);
+    }
+
+    @Override
+    public void deleteCheckedFiles() {
+        mAdapter.deleteCheckedFiles();
     }
 
     @Override
@@ -81,12 +106,23 @@ public class UPManualFragment extends UPBaseFragment implements View.OnClickList
         if (mPath != null) {
             if (mPath != Environment.getExternalStorageDirectory()) {
                 mPath = mPath.getParentFile();
-                initData();
+                requestData();
             }
         }
     }
 
-    private void initData() {
+    @Override
+    public void startRefreshData(int reason) {
+
+    }
+
+    @Override
+    public void stopRefreshData() {
+
+    }
+
+    @Override
+    public void requestData() {
         if (mPath == null) {
             mPath = Environment.getExternalStorageDirectory();
         }
@@ -113,16 +149,6 @@ public class UPManualFragment extends UPBaseFragment implements View.OnClickList
         if (mCallback != null) {
             mCallback.onCategoryChanged();
         }
-    }
-
-    @Override
-    public void startRefreshData(int reason) {
-
-    }
-
-    @Override
-    public void stopRefreshData() {
-
     }
 
     private void showEmptyView() {

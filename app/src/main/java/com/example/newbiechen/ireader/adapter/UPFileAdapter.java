@@ -20,12 +20,15 @@ import com.example.newbiechen.ireader.utils.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<File> mDataList = new ArrayList<>();
     private List<File> mCheckList = new ArrayList<>();
+
+    private int mCheckableCount;
 
     public interface Callback1 {
         void onCheckChanged();
@@ -49,9 +52,13 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void setData(List<File> list) {
         mDataList.clear();
         mCheckList.clear();
+        mCheckableCount = 0;
         if (list != null) {
             for (File item : list) {
                 if (item != null) {
+                    if (!isFileLoaded(item)) {
+                        mCheckableCount++;
+                    }
                     mDataList.add(item);
                 }
             }
@@ -74,11 +81,35 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         } else {
             mCheckList.clear();
         }
+        if (mCallback1 != null) {
+            mCallback1.onCheckChanged();
+        }
         notifyDataSetChanged();
     }
 
     public List<File> getCheckList() {
         return mCheckList;
+    }
+
+    public boolean isCheckAll() {
+        return mCheckableCount == mCheckList.size();
+    }
+
+    public void deleteCheckedFiles() {
+        Iterator<File> iterator = mCheckList.iterator();
+        while (iterator.hasNext()) {
+            File item = iterator.next();
+            if (item.exists()) {
+                if (item.delete()) {
+                    iterator.remove();
+                    mDataList.remove(item);
+                }
+            }
+        }
+        if (mCallback1 != null) {
+            mCallback1.onCheckChanged();
+        }
+        notifyDataSetChanged();
     }
 
     @Override

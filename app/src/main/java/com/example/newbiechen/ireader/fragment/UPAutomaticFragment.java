@@ -14,7 +14,7 @@ import com.example.newbiechen.ireader.widget.itemdecoration.DividerItemDecoratio
 import java.io.File;
 import java.util.List;
 
-public class UPAutomaticFragment extends UPBaseFragment {
+public class UPAutomaticFragment extends UPFileBaseFragment {
     private RecyclerView mListView;
     private UPEmptyView mEmptyView;
     private View mLoadingView;
@@ -39,6 +39,11 @@ public class UPAutomaticFragment extends UPBaseFragment {
     }
 
     @Override
+    public String getFragmentTitle(Context context) {
+        return "智能导入";
+    }
+
+    @Override
     public int getFragmentLayoutId() {
         return R.layout.up_automatic_fragment;
     }
@@ -59,6 +64,26 @@ public class UPAutomaticFragment extends UPBaseFragment {
     }
 
     @Override
+    public List<File> getCheckList() {
+        return mAdapter.getCheckList();
+    }
+
+    @Override
+    public boolean isCheckAll() {
+        return mAdapter.isCheckAll();
+    }
+
+    @Override
+    public void setCheckedAll(boolean checkAll) {
+        mAdapter.checkAll(checkAll);
+    }
+
+    @Override
+    public void deleteCheckedFiles() {
+        mAdapter.deleteCheckedFiles();
+    }
+
+    @Override
     public void startRefreshData(int reason) {
 
     }
@@ -68,15 +93,20 @@ public class UPAutomaticFragment extends UPBaseFragment {
 
     }
 
-    private void requestData() {
+    @Override
+    public void requestData() {
         MediaStoreHelper.getAllBookFile(getActivity(), new MediaStoreHelper.MediaResultCallback() {
             @Override
             public void onResultCallback(List<File> files) {
-                if (files == null || files.isEmpty()) {
+                mAdapter.setData(files);
+                if (mAdapter.getItemCount() == 0) {
                     showEmptyView();
                 } else {
-                    mAdapter.setData(files);
                     showContentView();
+                }
+
+                if (mCallback != null) {
+                    mCallback.onCategoryChanged();
                 }
             }
         });
