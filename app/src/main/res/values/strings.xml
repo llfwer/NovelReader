@@ -10,24 +10,13 @@
     </string-array>
 
     <string-array name="nb_menu_local_book">
-        <item>@string/nb.menu.action.top</item>
         <item>@string/nb.menu.action.delete</item>
-        <item>@string/nb.menu.action.batch_manage</item>
     </string-array>
 
     <!--常用-->
     <string name="nb.common.tip">提示</string>
     <string name="nb.common.sure">确定</string>
     <string name="nb.common.cancel">取消</string>
-
-    <!--网络相关-->
-
-    <!--fragment 主题书单-->
-
-    <!--评论相关-->
-
-    <!--书评区相关-->
-
 
     <!--menu-->
     <string name="nb.menu.action.scan">扫描本地书籍</string>

@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
-
-    <com.example.newbiechen.ireader.widget.refresh.ScrollRefreshRecyclerView
-        android:id="@+id/book_shelf_rv_content"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/up_main_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_scroll_empty="@layout/view_empty_book_shelf" />
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:fitsSystemWindows="true"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/Theme.ToolBar.Menu" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--内容-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/up_main_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!--空视图-->
+        <com.example.newbiechen.ireader.widget.UPEmptyView
+            android:id="@+id/up_main_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!--加载视图-->
+        <include
+            android:id="@+id/up_main_loading_view"
+            layout="@layout/up_base_ui_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 
 </LinearLayout>
