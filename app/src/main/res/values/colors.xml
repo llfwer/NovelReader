@@ -39,13 +39,6 @@
     <color name="nb.widget.button.normal">@color/white</color>
     <color name="nb.widget.button.selected">#E3E3E3</color>
 
-    <!--性别选择颜色值-->
-
-    <!---->
-    <!---->
-    <color name="nb.scroll_refresh.tip">#88303F9F</color>
-    <!--downlaod-->
-
     <!--read-->
     <color name="nb.read.bg_1">#CEC29C</color>
     <color name="nb.read.bg_2">#CCEBCC</color>
