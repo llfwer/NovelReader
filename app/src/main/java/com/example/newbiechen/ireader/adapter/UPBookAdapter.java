@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.newbiechen.ireader.R;
-import com.example.newbiechen.ireader.activity.MainActivity;
 import com.example.newbiechen.ireader.activity.ReadActivity;
 import com.example.newbiechen.ireader.model.bean.CollBookBean;
 import com.example.newbiechen.ireader.model.local.BookRepository;
@@ -138,8 +137,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 File file = new File(path);
                 //判断这个本地文件是否存在
                 if (file.exists() && file.length() != 0) {
-                    ReadActivity.startActivity(context,
-                            mData, true);
+                    ReadActivity.startActivity(context, mData, true);
                 } else {
                     String tip = context.getString(R.string.nb_bookshelf_book_not_exist);
                     //提示(从目录中移除这个文件)
@@ -196,7 +194,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (collBook.isLocal()) {
             View view = LayoutInflater.from(context)
                     .inflate(R.layout.dialog_delete, null);
-            CheckBox cb = (CheckBox) view.findViewById(R.id.delete_cb_select);
+            CheckBox cb = view.findViewById(R.id.delete_cb_select);
             new AlertDialog.Builder(context)
                     .setTitle("删除文件")
                     .setView(view)

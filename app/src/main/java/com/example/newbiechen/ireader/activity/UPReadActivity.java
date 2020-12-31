@@ -22,7 +22,9 @@ import com.example.newbiechen.ireader.utils.UPPermissionUtil;
 import com.example.newbiechen.ireader.widget.UPEmptyView;
 import com.example.newbiechen.ireader.widget.itemdecoration.DividerItemDecoration;
 
-public class MainActivity extends AppCompatActivity {
+public class UPReadActivity extends AppCompatActivity {
+    public static final String EXTRA_COLL_BOOK = "extra_coll_book";
+    public static final String EXTRA_IS_COLLECTED = "extra_is_collected";
 
     private Toolbar mToolbar;
     private RecyclerView mListView;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_read);
 
         if (UPPermissionUtil.checkPermissions(this)) {
             initView();
