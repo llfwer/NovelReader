@@ -18,7 +18,6 @@ public class UPSettingManager {
     private static final String SHARED_READ_NIGHT_MODE = "shared_night_mode";
     private static final String SHARED_READ_VOLUME_TURN_PAGE = "shared_read_volume_turn_page";
     private static final String SHARED_READ_FULL_SCREEN = "shared_read_full_screen";
-    private static final String SHARED_READ_CONVERT_TYPE = "shared_read_convert_type";
 
     private static volatile UPSettingManager sInstance;
 
@@ -111,13 +110,5 @@ public class UPSettingManager {
 
     public boolean isFullScreen() {
         return mSp.getBoolean(SHARED_READ_FULL_SCREEN, false);
-    }
-
-    public void setConvertType(int convertType) {
-        mSp.putInt(SHARED_READ_CONVERT_TYPE, convertType);
-    }
-
-    public int getConvertType() {
-        return mSp.getInt(SHARED_READ_CONVERT_TYPE, 0);
     }
 }

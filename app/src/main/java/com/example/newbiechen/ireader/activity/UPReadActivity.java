@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -329,7 +328,7 @@ public class UPReadActivity extends AppCompatActivity {
                     @Override
                     public void onCategoryFinish(List<TxtChapter> chapters) {
                         for (TxtChapter chapter : chapters) {
-                            chapter.setTitle(StringUtils.convertCC(chapter.getTitle(), mPvPage.getContext()));
+                            chapter.setTitle(chapter.getTitle());
                         }
                         mCategoryAdapter.refreshItems(chapters);
                     }
