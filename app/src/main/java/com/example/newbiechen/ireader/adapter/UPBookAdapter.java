@@ -16,11 +16,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.newbiechen.ireader.R;
-import com.example.newbiechen.ireader.activity.ReadActivity;
 import com.example.newbiechen.ireader.model.bean.CollBookBean;
 import com.example.newbiechen.ireader.model.local.BookRepository;
 import com.example.newbiechen.ireader.utils.Constant;
 import com.example.newbiechen.ireader.utils.StringUtils;
+import com.example.newbiechen.ireader.utils.UPRouteUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -137,7 +137,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 File file = new File(path);
                 //判断这个本地文件是否存在
                 if (file.exists() && file.length() != 0) {
-                    ReadActivity.startActivity(context, mData, true);
+                    UPRouteUtil.gotoReadActivity(context, mData, true);
                 } else {
                     String tip = context.getString(R.string.nb_bookshelf_book_not_exist);
                     //提示(从目录中移除这个文件)
@@ -155,7 +155,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             .show();
                 }
             } else {
-                ReadActivity.startActivity(context, mData, true);
+                UPRouteUtil.gotoReadActivity(context, mData, true);
             }
         }
 

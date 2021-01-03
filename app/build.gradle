@@ -48,9 +48,6 @@ dependencies {
     implementation deps.android.design
     implementation deps.android.support
     implementation deps.android.cardview
-    //View injection
-    implementation deps.butterknife.runtime
-    annotationProcessor deps.butterknife.compiler
     //RxJava
     implementation deps.reactivex.rxandroid
     implementation deps.reactivex.rxjava2

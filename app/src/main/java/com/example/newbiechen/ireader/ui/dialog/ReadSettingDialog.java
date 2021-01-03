@@ -20,7 +20,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.newbiechen.ireader.R;
-import com.example.newbiechen.ireader.activity.ReadActivity;
+import com.example.newbiechen.ireader.activity.UPReadActivity;
 import com.example.newbiechen.ireader.activity.UPSettingsActivity;
 import com.example.newbiechen.ireader.other.UPSettingManager;
 import com.example.newbiechen.ireader.ui.adapter.PageStyleAdapter;
@@ -32,9 +32,6 @@ import com.example.newbiechen.ireader.widget.page.PageStyle;
 
 import java.util.Arrays;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by newbiechen on 17-5-18.
  */
@@ -43,38 +40,22 @@ public class ReadSettingDialog extends Dialog {
     private static final String TAG = "ReadSettingDialog";
     private static final int DEFAULT_TEXT_SIZE = 16;
 
-    @BindView(R.id.read_setting_iv_brightness_minus)
     ImageView mIvBrightnessMinus;
-    @BindView(R.id.read_setting_sb_brightness)
     SeekBar mSbBrightness;
-    @BindView(R.id.read_setting_iv_brightness_plus)
     ImageView mIvBrightnessPlus;
-    @BindView(R.id.read_setting_cb_brightness_auto)
     CheckBox mCbBrightnessAuto;
-    @BindView(R.id.read_setting_tv_font_minus)
     TextView mTvFontMinus;
-    @BindView(R.id.read_setting_tv_font)
     TextView mTvFont;
-    @BindView(R.id.read_setting_tv_font_plus)
     TextView mTvFontPlus;
-    @BindView(R.id.read_setting_cb_font_default)
     CheckBox mCbFontDefault;
-    @BindView(R.id.read_setting_rg_page_mode)
     RadioGroup mRgPageMode;
 
-    @BindView(R.id.read_setting_rb_simulation)
     RadioButton mRbSimulation;
-    @BindView(R.id.read_setting_rb_cover)
     RadioButton mRbCover;
-    @BindView(R.id.read_setting_rb_slide)
     RadioButton mRbSlide;
-    @BindView(R.id.read_setting_rb_scroll)
     RadioButton mRbScroll;
-    @BindView(R.id.read_setting_rb_none)
     RadioButton mRbNone;
-    @BindView(R.id.read_setting_rv_bg)
     RecyclerView mRvBg;
-    @BindView(R.id.read_setting_tv_more)
     TextView mTvMore;
     /************************************/
     private PageStyleAdapter mPageStyleAdapter;
@@ -102,7 +83,6 @@ public class ReadSettingDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_read_setting);
-        ButterKnife.bind(this);
         setUpWindow();
         initData();
         initWidget();
@@ -131,6 +111,23 @@ public class ReadSettingDialog extends Dialog {
     }
 
     private void initWidget() {
+        mIvBrightnessMinus = findViewById(R.id.read_setting_iv_brightness_minus);
+        mSbBrightness = findViewById(R.id.read_setting_sb_brightness);
+        mIvBrightnessPlus = findViewById(R.id.read_setting_iv_brightness_plus);
+        mCbBrightnessAuto = findViewById(R.id.read_setting_cb_brightness_auto);
+        mTvFontMinus = findViewById(R.id.read_setting_tv_font_minus);
+        mTvFont = findViewById(R.id.read_setting_tv_font);
+        mTvFontPlus = findViewById(R.id.read_setting_tv_font_plus);
+        mCbFontDefault = findViewById(R.id.read_setting_cb_font_default);
+        mRgPageMode = findViewById(R.id.read_setting_rg_page_mode);
+        mRbSimulation = findViewById(R.id.read_setting_rb_simulation);
+        mRbCover = findViewById(R.id.read_setting_rb_cover);
+        mRbSlide = findViewById(R.id.read_setting_rb_slide);
+        mRbScroll = findViewById(R.id.read_setting_rb_scroll);
+        mRbNone = findViewById(R.id.read_setting_rb_none);
+        mRvBg = findViewById(R.id.read_setting_rv_bg);
+        mTvMore = findViewById(R.id.read_setting_tv_more);
+
         mSbBrightness.setProgress(mBrightness);
         mTvFont.setText(mTextSize + "");
         mCbBrightnessAuto.setChecked(isBrightnessAuto);
@@ -316,7 +313,7 @@ public class ReadSettingDialog extends Dialog {
         mTvMore.setOnClickListener(
                 (v) -> {
                     Intent intent = new Intent(getContext(), UPSettingsActivity.class);
-                    mActivity.startActivityForResult(intent, ReadActivity.REQUEST_MORE_SETTING);
+                    mActivity.startActivityForResult(intent, UPReadActivity.REQUEST_MORE_SETTING);
                     //关闭当前设置
                     dismiss();
                 }

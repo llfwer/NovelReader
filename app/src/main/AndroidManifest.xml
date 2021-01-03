@@ -24,7 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ReadActivity" />
         <activity android:name=".activity.UPSettingsActivity" />
         <activity android:name=".activity.UPFileActivity" />
         <activity android:name=".activity.UPReadActivity" />

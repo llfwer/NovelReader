@@ -12,8 +12,6 @@ import android.support.v7.widget.Toolbar;
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.utils.StatusBarCompat;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -26,8 +24,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected CompositeDisposable mDisposable;
     //ButterKnife
     private Toolbar mToolbar;
-
-    private Unbinder unbinder;
 
     /****************************abstract area*************************************/
 
@@ -79,7 +75,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getContentId());
         initData(savedInstanceState);
-        unbinder = ButterKnife.bind(this);
         initToolbar();
         initWidget();
         initClick();
@@ -89,7 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void initToolbar() {
         //更严谨是通过反射判断是否存在Toolbar
-        mToolbar = ButterKnife.findById(this, R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         if (mToolbar != null) {
             supportActionBar(mToolbar);
             setUpToolbar(mToolbar);
@@ -100,7 +95,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
         if (mDisposable != null) {
             mDisposable.dispose();
         }
