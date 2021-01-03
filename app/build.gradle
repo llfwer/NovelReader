@@ -26,7 +26,7 @@ android {
     buildToolsVersion '26.0.2'
 }
 
-greendao{
+greendao {
     schemaVersion 3
     daoPackage 'com.example.newbiechen.ireader.model.gen'
     targetGenDir 'src/main/java'
@@ -67,7 +67,4 @@ dependencies {
     // Android Leak Analysis
     releaseImplementation deps.leakcanary.release
     debugImplementation deps.leakcanary.debug
-
-    // AndroidTagGroup
-    implementation 'me.gujun.android.taggroup:library:1.4@aar'
 }
