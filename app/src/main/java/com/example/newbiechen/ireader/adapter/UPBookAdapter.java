@@ -137,7 +137,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 File file = new File(path);
                 //判断这个本地文件是否存在
                 if (file.exists() && file.length() != 0) {
-                    UPRouteUtil.gotoReadActivity(context, mData, true);
+                    UPRouteUtil.gotoReadActivity(context, mData);
                 } else {
                     String tip = context.getString(R.string.nb_bookshelf_book_not_exist);
                     //提示(从目录中移除这个文件)
@@ -155,7 +155,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             .show();
                 }
             } else {
-                UPRouteUtil.gotoReadActivity(context, mData, true);
+                UPRouteUtil.gotoReadActivity(context, mData);
             }
         }
 

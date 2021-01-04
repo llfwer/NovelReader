@@ -1,10 +1,6 @@
 package com.example.newbiechen.ireader.model.remote;
 
-import com.example.newbiechen.ireader.model.bean.BookChapterBean;
 import com.example.newbiechen.ireader.model.bean.ChapterInfoBean;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Single;
 import retrofit2.Retrofit;
@@ -17,11 +13,10 @@ public class RemoteRepository {
     private static final String TAG = "RemoteRepository";
 
     private static RemoteRepository sInstance;
-    private Retrofit mRetrofit;
     private BookApi mBookApi;
 
     private RemoteRepository() {
-        mRetrofit = RemoteHelper.getInstance()
+        Retrofit mRetrofit = RemoteHelper.getInstance()
                 .getRetrofit();
 
         mBookApi = mRetrofit.create(BookApi.class);
@@ -36,17 +31,6 @@ public class RemoteRepository {
             }
         }
         return sInstance;
-    }
-
-    public Single<List<BookChapterBean>> getBookChapters(String bookId) {
-        return mBookApi.getBookChapterPackage(bookId, "chapter")
-                .map(bean -> {
-                    if (bean.getMixToc() == null) {
-                        return new ArrayList<BookChapterBean>(1);
-                    } else {
-                        return bean.getMixToc().getChapters();
-                    }
-                });
     }
 
     /**

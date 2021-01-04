@@ -1,15 +1,12 @@
 package com.example.newbiechen.ireader.presenter;
 
 
-import com.example.newbiechen.ireader.model.bean.BookChapterBean;
 import com.example.newbiechen.ireader.model.bean.ChapterInfoBean;
 import com.example.newbiechen.ireader.model.local.BookRepository;
 import com.example.newbiechen.ireader.model.remote.RemoteRepository;
 import com.example.newbiechen.ireader.presenter.contract.ReadContract;
 import com.example.newbiechen.ireader.ui.base.RxPresenter;
 import com.example.newbiechen.ireader.utils.LogUtils;
-import com.example.newbiechen.ireader.utils.MD5Utils;
-import com.example.newbiechen.ireader.utils.RxUtils;
 import com.example.newbiechen.ireader.widget.page.TxtChapter;
 
 import org.reactivestreams.Subscriber;
@@ -21,8 +18,6 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -34,34 +29,6 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
     private static final String TAG = "ReadPresenter";
 
     private Subscription mChapterSub;
-
-    @Override
-    public void loadCategory(String bookId) {
-        Disposable disposable = RemoteRepository.getInstance()
-                .getBookChapters(bookId)
-                .doOnSuccess(new Consumer<List<BookChapterBean>>() {
-                    @Override
-                    public void accept(List<BookChapterBean> bookChapterBeen) throws Exception {
-                        //进行设定BookChapter所属的书的id。
-                        for (BookChapterBean bookChapter : bookChapterBeen) {
-                            bookChapter.setId(MD5Utils.strToMd5By16(bookChapter.getLink()));
-                            bookChapter.setBookId(bookId);
-                        }
-                    }
-                })
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(
-                        beans -> {
-                            mView.showCategory(beans);
-                        }
-                        ,
-                        e -> {
-                            //TODO: Haven't grate conversation method.
-                            LogUtils.e(e);
-                        }
-                );
-        addDisposable(disposable);
-    }
 
     @Override
     public void loadChapter(String bookId, List<TxtChapter> bookChapters) {

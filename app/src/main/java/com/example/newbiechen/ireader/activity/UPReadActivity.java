@@ -17,6 +17,7 @@ import android.provider.Settings;
 import androidx.annotation.Nullable;
 import com.google.android.material.appbar.AppBarLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -175,7 +176,6 @@ public class UPReadActivity extends AppCompatActivity {
     };
 
     /***************params*****************/
-    private boolean isCollected = false; // isFromSDCard
     private boolean isNightMode = false;
     private boolean isFullScreen = false;
     private boolean isRegistered = false;
@@ -201,7 +201,6 @@ public class UPReadActivity extends AppCompatActivity {
 
     private void initView() {
         mCollBook = getIntent().getParcelableExtra(EXTRA_COLL_BOOK);
-        isCollected = getIntent().getBooleanExtra(EXTRA_IS_COLLECTED, false);
         isNightMode = UPSettingManager.getInstance().isNightMode();
         isFullScreen = UPSettingManager.getInstance().isFullScreen();
 
@@ -230,7 +229,7 @@ public class UPReadActivity extends AppCompatActivity {
                 mPageLoader.refreshChapterList();
 
                 // 如果是目录更新的情况，那么就需要存储更新数据
-                if (mCollBook.isUpdate() && isCollected) {
+                if (mCollBook.isUpdate()) {
                     BookRepository.getInstance()
                             .saveBookChaptersWithAsync(bookChapters);
                 }
@@ -409,7 +408,7 @@ public class UPReadActivity extends AppCompatActivity {
 
         mLvCategory.setOnItemClickListener(
                 (parent, view, position, id) -> {
-                    mDlSlide.closeDrawer(Gravity.START);
+                    mDlSlide.closeDrawer(GravityCompat.START);
                     mPageLoader.skipToChapter(position);
                 }
         );
@@ -423,7 +422,7 @@ public class UPReadActivity extends AppCompatActivity {
                     //切换菜单
                     toggleMenu(true);
                     //打开侧滑动栏
-                    mDlSlide.openDrawer(Gravity.START);
+                    mDlSlide.openDrawer(GravityCompat.START);
                 }
         );
         mTvSetting.setOnClickListener(
@@ -464,28 +463,21 @@ public class UPReadActivity extends AppCompatActivity {
         mSettingDialog.setOnDismissListener(
                 dialog -> hideSystemBar()
         );// 如果是已经收藏的，那么就从数据库中获取目录
-        if (isCollected) {
-            Disposable disposable = BookRepository.getInstance()
-                    .getBookChaptersInRx(mBookId)
-                    .compose(RxUtils::toSimpleSingle)
-                    .subscribe(
-                            (bookChapterBeen, throwable) -> {
-                                // 设置 CollBook
-                                mPageLoader.getCollBook().setBookChapters(bookChapterBeen);
-                                // 刷新章节列表
-                                mPageLoader.refreshChapterList();
-                                // 如果是网络小说并被标记更新的，则从网络下载目录
-                                if (mCollBook.isUpdate() && !mCollBook.isLocal()) {
-                                    mPresenter.loadCategory(mBookId);
-                                }
-                                LogUtils.e(throwable);
-                            }
-                    );
-            mDisposable.add(disposable);
-        } else {
-            // 从网络中获取目录
-            mPresenter.loadCategory(mBookId);
-        }
+        Disposable disposable = BookRepository.getInstance()
+                .getBookChaptersInRx(mBookId)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(
+                        (bookChapterBeen, throwable) -> {
+                            // 设置 CollBook
+                            mPageLoader.getCollBook().setBookChapters(bookChapterBeen);
+                            // 刷新章节列表
+                            mPageLoader.refreshChapterList();
+                            // 如果是网络小说并被标记更新的，则从网络下载目录
+                            // 忽略
+                            LogUtils.e(throwable);
+                        }
+                );
+        mDisposable.add(disposable);
     }
 
     private void initTopMenu() {
@@ -650,35 +642,12 @@ public class UPReadActivity extends AppCompatActivity {
         } else if (mSettingDialog.isShowing()) {
             mSettingDialog.dismiss();
             return;
-        } else if (mDlSlide.isDrawerOpen(Gravity.START)) {
-            mDlSlide.closeDrawer(Gravity.START);
+        } else if (mDlSlide.isDrawerOpen(GravityCompat.START)) {
+            mDlSlide.closeDrawer(GravityCompat.START);
             return;
         }
 
-        if (!mCollBook.isLocal() && !isCollected
-                && !mCollBook.getBookChapters().isEmpty()) {
-            AlertDialog alertDialog = new AlertDialog.Builder(this)
-                    .setTitle("加入书架")
-                    .setMessage("喜欢本书就加入书架吧")
-                    .setPositiveButton("确定", (dialog, which) -> {
-                        //设置为已收藏
-                        isCollected = true;
-                        //设置阅读时间
-                        mCollBook.setLastRead(StringUtils.
-                                dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-
-                        BookRepository.getInstance()
-                                .saveCollBookWithAsync(mCollBook);
-
-                        exit();
-                    })
-                    .setNegativeButton("取消", (dialog, which) -> {
-                        exit();
-                    }).create();
-            alertDialog.show();
-        } else {
-            exit();
-        }
+        exit();
     }
 
     // 退出
@@ -696,9 +665,7 @@ public class UPReadActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (isCollected) {
-            mPageLoader.saveRecord();
-        }
+        mPageLoader.saveRecord();
     }
 
     @Override

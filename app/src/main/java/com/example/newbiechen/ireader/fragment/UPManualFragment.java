@@ -2,10 +2,11 @@ package com.example.newbiechen.ireader.fragment;
 
 import android.content.Context;
 import android.os.Environment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.adapter.UPFileAdapter;
@@ -182,8 +183,11 @@ public class UPManualFragment extends UPFileBaseFragment implements View.OnClick
                 return false;
             }
             //文件夹内部数量为0
-            if (pathname.isDirectory() && pathname.list().length == 0) {
-                return false;
+            if (pathname.isDirectory()) {
+                String[] list = pathname.list();
+                if (list == null || list.length == 0) {
+                    return false;
+                }
             }
 
             /**
