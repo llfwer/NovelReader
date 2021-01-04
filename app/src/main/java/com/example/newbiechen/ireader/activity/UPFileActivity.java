@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UPFileActivity extends AppCompatActivity implements View.OnClickListener, UPFileAdapter.Callback1 {
-
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;

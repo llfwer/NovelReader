@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.adapter.UPFileAdapter;
-import com.example.newbiechen.ireader.utils.media.MediaStoreHelper;
+import com.example.newbiechen.ireader.data.UPMediaManager;
 import com.example.newbiechen.ireader.widget.UPEmptyView;
 import com.example.newbiechen.ireader.widget.itemdecoration.DividerItemDecoration;
 
@@ -95,9 +95,9 @@ public class UPAutomaticFragment extends UPFileBaseFragment {
 
     @Override
     public void requestData() {
-        MediaStoreHelper.getAllBookFile(getActivity(), new MediaStoreHelper.MediaResultCallback() {
+        UPMediaManager.getAllBookFile(getActivity(), new UPMediaManager.Callback() {
             @Override
-            public void onResultCallback(List<File> files) {
+            public void onResponse(List<File> files) {
                 mAdapter.setData(files);
                 if (mAdapter.getItemCount() == 0) {
                     showEmptyView();
