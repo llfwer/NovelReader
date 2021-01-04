@@ -2,15 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion build_versions.target_sdk
-    buildToolsVersion build_versions.tools_version
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
     defaultConfig {
-        applicationId "com.example.newbiechen.ireader"
-        minSdkVersion build_versions.min_sdk
-        targetSdkVersion build_versions.target_sdk
+        minSdkVersion 21
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
     buildTypes {
@@ -23,7 +21,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '26.0.2'
 }
 
 greendao {
@@ -44,27 +41,26 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    implementation deps.android.appcompat
-    implementation deps.android.design
-    implementation deps.android.support
-    implementation deps.android.cardview
+    implementation "com.android.support:appcompat-v7:28.0.0"
+    implementation "com.android.support:design:28.0.0"
+    implementation "com.android.support:support-v4:28.0.0"
+    implementation "com.android.support:cardview-v7:28.0.0"
     //RxJava
-    implementation deps.reactivex.rxandroid
-    implementation deps.reactivex.rxjava2
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.19"
     //NetWork
-    implementation deps.okhttp.runtime
+    implementation "com.squareup.okhttp3:okhttp:3.6.0"
 
-    implementation deps.retrofit.runtime
-    implementation deps.retrofit.gson
-    implementation deps.retrofit.rxjava2
+    implementation "com.squareup.retrofit2:retrofit:2.7.2"
+    implementation "com.squareup.retrofit2:converter-gson:2.7.2"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.7.2"
     //ImageLoader
-    implementation deps.glide.runtime
-    /*implementation deps.glide.compiler*/
+    implementation "com.github.bumptech.glide:glide:3.7.0"
+    /*implementation "com.github.bumptech.glide:compiler:3.7.0"*/
     //ORM Database
-    implementation deps.greendao.runtime
-    testImplementation deps.testing.junit
+    implementation "org.greenrobot:greendao:3.2.2"
 
     // Android Leak Analysis
-    releaseImplementation deps.leakcanary.release
-    debugImplementation deps.leakcanary.debug
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:1.5.4"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:1.5.4"
 }
