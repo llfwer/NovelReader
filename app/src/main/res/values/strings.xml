@@ -2,16 +2,6 @@
     <string name="app_name">IReader</string>
 
     <!--CollBook的长按点击-->
-    <string-array name="nb_menu_net_book">
-        <item>@string/nb.menu.action.top</item>
-        <item>@string/nb.menu.action.cache</item>
-        <item>@string/nb.menu.action.delete</item>
-        <item>@string/nb.menu.action.batch_manage</item>
-    </string-array>
-
-    <string-array name="nb_menu_local_book">
-        <item>@string/nb.menu.action.delete</item>
-    </string-array>
 
     <!--常用-->
     <string name="nb.common.tip">提示</string>
@@ -20,11 +10,6 @@
 
     <!--menu-->
     <string name="nb.menu.action.scan">扫描本地书籍</string>
-
-    <string name="nb.menu.action.top">置顶</string>
-    <string name="nb.menu.action.cache">缓存</string>
-    <string name="nb.menu.action.delete">删除</string>
-    <string name="nb.menu.action.batch_manage">批量管理</string>
 
     <!--user:用户的信息-->
     <!--book:书籍的信息-->
@@ -47,7 +32,6 @@
 
     <!--file system-->
     <string name="nb.file.sub_count">%1$d 项</string>
-    <string name="nb.file.path">存储卡:%1$s</string>
     <string name="nb.file.add_shelf">加入书架</string>
     <string name="nb.file.add_shelves">加入书架(%1$d)</string>
     <string name="nb.file.add_succeed">成功添加%1$d本书</string>
