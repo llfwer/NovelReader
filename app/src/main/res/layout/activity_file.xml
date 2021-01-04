@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/up_file_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/Theme.ToolBar.Menu" />
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/up_file_tab"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -23,7 +23,7 @@
         app:tabSelectedTextColor="@color/white"
         app:tabTextColor="@color/translucent_text" />
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/up_file_view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"

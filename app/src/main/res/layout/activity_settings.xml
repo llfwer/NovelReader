@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/up_settings_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,13 +22,13 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="音量键翻页" />
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/up_settings_switch_volume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,13 +47,13 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="全屏模式" />
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/up_settings_switch_full_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

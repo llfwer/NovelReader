@@ -2,12 +2,21 @@
 
 buildscript {
     repositories {
+        maven {
+            url "https://maven.aliyun.com/groups/public"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/google"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/jcenter"
+        }
         mavenCentral()
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath 'com.android.tools.build:gradle:3.6.4'
         classpath 'me.tatarka:gradle-retrolambda:3.6.0'
         classpath "org.greenrobot:greendao-gradle-plugin:3.2.2"
         // NOTE: Do not place your application dependencies here; they belong
@@ -17,6 +26,15 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url "https://maven.aliyun.com/groups/public"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/google"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/jcenter"
+        }
         mavenCentral()
         google()
     }
