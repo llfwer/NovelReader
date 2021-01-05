@@ -12,7 +12,7 @@ import com.rowe.book.R;
 import com.rowe.book.adapter.UPFileAdapter;
 import com.rowe.book.utils.FileUtils;
 import com.rowe.book.widget.UPEmptyView;
-import com.rowe.book.widget.itemdecoration.DividerItemDecoration;
+import com.rowe.book.widget.UPDividerItemDecoration;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -70,7 +70,7 @@ public class UPManualFragment extends UPFileBaseFragment implements View.OnClick
         view.findViewById(R.id.up_manual_back_view).setOnClickListener(this);
 
         mListView.setLayoutManager(new LinearLayoutManager(context));
-        mListView.addItemDecoration(new DividerItemDecoration(context));
+        mListView.addItemDecoration(new UPDividerItemDecoration(context));
         mListView.setAdapter(mAdapter = new UPFileAdapter(mCallback, new UPFileAdapter.Callback2() {
             @Override
             public void onFolderClick(File file) {

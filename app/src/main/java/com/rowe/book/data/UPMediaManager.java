@@ -83,6 +83,8 @@ public class UPMediaManager {
             return null;
         }
         List<File> files = new ArrayList<>();
+        // 重复使用Loader时，需要重置cursor的position；
+        cursor.moveToPosition(-1);
         while (cursor.moveToNext()) {
             String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
             if (!TextUtils.isEmpty(path)) {

@@ -9,7 +9,7 @@ import com.rowe.book.R;
 import com.rowe.book.adapter.UPFileAdapter;
 import com.rowe.book.data.UPMediaManager;
 import com.rowe.book.widget.UPEmptyView;
-import com.rowe.book.widget.itemdecoration.DividerItemDecoration;
+import com.rowe.book.widget.UPDividerItemDecoration;
 
 import java.io.File;
 import java.util.List;
@@ -57,7 +57,7 @@ public class UPAutomaticFragment extends UPFileBaseFragment {
         mLoadingView = view.findViewById(R.id.up_manual_loading_view);
 
         mListView.setLayoutManager(new LinearLayoutManager(context));
-        mListView.addItemDecoration(new DividerItemDecoration(context));
+        mListView.addItemDecoration(new UPDividerItemDecoration(context));
         mListView.setAdapter(mAdapter = new UPFileAdapter(mCallback, null));
 
         requestData();

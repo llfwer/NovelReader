@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.rowe.book.R;
 import com.rowe.book.adapter.UPFileAdapter;
 import com.rowe.book.fragment.UPAutomaticFragment;
@@ -29,7 +30,6 @@ import com.rowe.book.model.local.BookRepository;
 import com.rowe.book.utils.Constant;
 import com.rowe.book.utils.MD5Utils;
 import com.rowe.book.utils.StringUtils;
-import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,8 +37,6 @@ import java.util.List;
 
 public class UPFileActivity extends AppCompatActivity implements View.OnClickListener, UPFileAdapter.Callback1, CompoundButton.OnCheckedChangeListener {
     private Toolbar mToolbar;
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
 
     private CheckBox mCheckBox;
     private Button mDelete;
@@ -56,11 +54,8 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
         mToolbar = findViewById(R.id.up_file_toolbar);
         initToolBar();
 
-        mTabLayout = findViewById(R.id.up_file_tab);
-        mViewPager = findViewById(R.id.up_file_view_pager);
-        mCheckBox = findViewById(R.id.up_file_selected_all);
-        mDelete = findViewById(R.id.up_file_delete);
-        mAddBook = findViewById(R.id.up_file_add_book);
+        TabLayout mTabLayout = findViewById(R.id.up_file_tab);
+        ViewPager mViewPager = findViewById(R.id.up_file_view_pager);
 
         mFragments = new UPFileBaseFragment[]{
                 new UPAutomaticFragment(),
@@ -77,6 +72,10 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
         mTabLayout.setupWithViewPager(mViewPager);
 
         mViewPager.addOnPageChangeListener(mListener);
+
+        mCheckBox = findViewById(R.id.up_file_selected_all);
+        mDelete = findViewById(R.id.up_file_delete);
+        mAddBook = findViewById(R.id.up_file_add_book);
 
         mCheckBox.setOnCheckedChangeListener(this);
         mDelete.setOnClickListener(this);

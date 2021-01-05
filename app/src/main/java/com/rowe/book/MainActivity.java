@@ -2,26 +2,26 @@ package com.rowe.book;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.rowe.book.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.rowe.book.activity.UPFileActivity;
 import com.rowe.book.adapter.UPBookAdapter;
 import com.rowe.book.model.local.BookRepository;
 import com.rowe.book.utils.UPPermissionUtil;
 import com.rowe.book.widget.UPEmptyView;
-import com.rowe.book.widget.itemdecoration.DividerItemDecoration;
+import com.rowe.book.widget.UPDividerItemDecoration;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         mLoadingView = findViewById(R.id.up_main_loading_view);
 
         mListView.setLayoutManager(new LinearLayoutManager(this));
-        mListView.addItemDecoration(new DividerItemDecoration(this));
+        mListView.addItemDecoration(new UPDividerItemDecoration(this));
         mListView.setAdapter(mAdapter = new UPBookAdapter());
 
         requestData();
@@ -102,8 +102,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent(this, UPFileActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 1001);
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1001) {
+            requestData();
+        }
     }
 
     private long mLastBackTime = 0;
