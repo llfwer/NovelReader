@@ -1,12 +1,11 @@
 package com.example.newbiechen.ireader.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int TYPE_FILE = 1;
+    private static final int TYPE_FOLDER = 2;
 
     private List<File> mDataList = new ArrayList<>();
     private List<File> mCheckList = new ArrayList<>();
@@ -122,41 +123,43 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return mDataList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return mDataList.get(position).isDirectory() ? TYPE_FOLDER : TYPE_FILE;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new InternalHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.up_file_item_view, parent, false));
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        if (viewType == TYPE_FOLDER) {
+            return new InternalHolder1(inflater.inflate(R.layout.up_file_folder_item_view, parent, false));
+        } else {
+            return new InternalHolder2(inflater.inflate(R.layout.up_file_file_item_view, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((InternalHolder) holder).bindData(mDataList.get(position));
+        if (holder instanceof InternalHolder1) {
+            ((InternalHolder1) holder).bindData(mDataList.get(position));
+        } else if (holder instanceof InternalHolder2) {
+            ((InternalHolder2) holder).bindData(mDataList.get(position));
+        }
     }
 
-    private class InternalHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView mIvIcon;
-        private CheckBox mCbSelect;
-        private TextView mTvName;
-        private LinearLayout mLlBrief;
-        private TextView mTvTag;
-        private TextView mTvSize;
-        private TextView mTvDate;
-        private TextView mTvSubCount;
+    // 文件夹
+    private class InternalHolder1 extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView mName;
+        private TextView mCount;
 
         private File mData;
 
-        InternalHolder(@NonNull View itemView) {
+        InternalHolder1(@NonNull View itemView) {
             super(itemView);
 
-            mIvIcon = itemView.findViewById(R.id.file_iv_icon);
-            mCbSelect = itemView.findViewById(R.id.file_cb_select);
-            mTvName = itemView.findViewById(R.id.file_tv_name);
-            mLlBrief = itemView.findViewById(R.id.file_ll_brief);
-            mTvTag = itemView.findViewById(R.id.file_tv_tag);
-            mTvSize = itemView.findViewById(R.id.file_tv_size);
-            mTvDate = itemView.findViewById(R.id.file_tv_date);
-            mTvSubCount = itemView.findViewById(R.id.file_tv_sub_count);
+            mName = itemView.findViewById(R.id.up_folder_name);
+            mCount = itemView.findViewById(R.id.up_folder_count);
 
             itemView.setOnClickListener(this);
         }
@@ -166,36 +169,13 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             Context context = itemView.getContext();
 
-            if (data.isDirectory()) {
-                //图片
-                mIvIcon.setVisibility(View.VISIBLE);
-                mCbSelect.setVisibility(View.GONE);
-                mIvIcon.setImageResource(R.drawable.ic_dir);
-                //名字
-                mTvName.setText(data.getName());
-                //介绍
-                mLlBrief.setVisibility(View.GONE);
-                mTvSubCount.setVisibility(View.VISIBLE);
+            //名字
+            String nameText = data.getName();
+            mName.setText(TextUtils.isEmpty(nameText) ? "--" : nameText);
 
-                mTvSubCount.setText(context.getString(R.string.nb_file_sub_count, data.list().length));
-            } else {
-                if (isFileLoaded(data)) {
-                    mIvIcon.setImageResource(R.drawable.ic_file_loaded);
-                    mIvIcon.setVisibility(View.VISIBLE);
-                    mCbSelect.setVisibility(View.GONE);
-                } else {
-                    mCbSelect.setChecked(mCheckList.contains(data));
-                    mIvIcon.setVisibility(View.GONE);
-                    mCbSelect.setVisibility(View.VISIBLE);
-                }
-
-                mLlBrief.setVisibility(View.VISIBLE);
-                mTvSubCount.setVisibility(View.GONE);
-
-                mTvName.setText(data.getName());
-                mTvSize.setText(FileUtils.getFileSize(data.length()));
-                mTvDate.setText(StringUtils.dateConvert(data.lastModified(), Constant.FORMAT_FILE_DATE));
-            }
+            //子文件数目
+            String[] subFiles = data.list();
+            mCount.setText(context.getString(R.string.up_folder_sub_count, subFiles == null ? 0 : subFiles.length));
         }
 
         @Override
@@ -204,18 +184,73 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (mCallback2 != null) {
                     mCallback2.onFolderClick(mData);
                 }
-            } else {
-                if (!isFileLoaded(mData)) {
-                    if (mCheckList.contains(mData)) {
-                        mCheckList.remove(mData);
-                    } else {
-                        mCheckList.add(mData);
-                    }
-                    notifyDataSetChanged();
+            }
+        }
+    }
 
-                    if (mCallback1 != null) {
-                        mCallback1.onCheckChanged();
-                    }
+    // 文件
+    private class InternalHolder2 extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private CheckBox mCheckBox;
+        private View mIcon;
+        private TextView mName;
+        private TextView mTag;
+        private TextView mSize;
+        private TextView mDate;
+
+        private File mData;
+
+        InternalHolder2(@NonNull View itemView) {
+            super(itemView);
+
+            mCheckBox = itemView.findViewById(R.id.up_file_check);
+            mIcon = itemView.findViewById(R.id.up_file_icon);
+            mName = itemView.findViewById(R.id.up_file_name);
+            mTag = itemView.findViewById(R.id.up_file_tag);
+            mSize = itemView.findViewById(R.id.up_file_size);
+            mDate = itemView.findViewById(R.id.up_file_date);
+
+            itemView.setOnClickListener(this);
+        }
+
+        void bindData(File data) {
+            mData = data;
+
+            Context context = itemView.getContext();
+
+            // 状态
+            if (isFileLoaded(data)) {
+                mIcon.setVisibility(View.VISIBLE);
+                mCheckBox.setVisibility(View.GONE);
+            } else {
+                mCheckBox.setChecked(mCheckList.contains(data));
+                mIcon.setVisibility(View.GONE);
+                mCheckBox.setVisibility(View.VISIBLE);
+            }
+
+            //名字
+            String nameText = data.getName();
+            mName.setText(TextUtils.isEmpty(nameText) ? "--" : nameText);
+
+            //大小
+            mSize.setText(FileUtils.getFileSize(data.length()));
+
+            // 日期
+            mDate.setText(StringUtils.dateConvert(data.lastModified(), Constant.FORMAT_FILE_DATE));
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (isCheckable(mData)) {
+                if (mCheckList.contains(mData)) {
+                    mCheckList.remove(mData);
+                } else {
+                    mCheckList.add(mData);
+                }
+
+                notifyDataSetChanged();
+
+                if (mCallback1 != null) {
+                    mCallback1.onCheckChanged();
                 }
             }
         }

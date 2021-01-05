@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/up_common_transparent_item_selector">
+
+    <!--文件夹标志-->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/up_folder_icon"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:src="@drawable/up_folder_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/up_folder_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--名字-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/up_folder_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="--"
+            android:textColor="@color/up_common_primary_color"
+            android:textSize="16sp" />
+
+        <!--子文件数目-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/up_folder_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="- 项"
+            android:textColor="@color/up_common_secondary_color"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

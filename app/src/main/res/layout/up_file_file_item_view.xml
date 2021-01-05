@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/up_common_transparent_item_selector">
+
+    <FrameLayout
+        android:id="@+id/up_file_layout"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--文件选择-->
+        <CheckBox
+            android:id="@+id/up_file_check"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_cb_file"
+            android:button="@null"
+            android:clickable="false"
+            android:enabled="false"
+            android:focusableInTouchMode="false" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/up_file_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/up_file_loaded_icon" />
+
+    </FrameLayout>
+
+    <!--名字-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/up_file_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="--"
+        android:textColor="@color/up_common_primary_color"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/up_file_tag"
+        app:layout_constraintLeft_toRightOf="@id/up_file_layout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <!--标签-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/up_file_tag"
+        android:layout_width="38dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/up_file_tag_bg"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="TXT"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/up_file_name"
+        app:layout_constraintTop_toBottomOf="@id/up_file_name" />
+
+    <!--大小-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/up_file_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:includeFontPadding="false"
+        android:text="--"
+        app:layout_constraintBottom_toBottomOf="@id/up_file_tag"
+        app:layout_constraintLeft_toRightOf="@id/up_file_tag"
+        app:layout_constraintTop_toTopOf="@id/up_file_tag" />
+
+    <!--日期-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/up_file_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:includeFontPadding="false"
+        android:text="--"
+        app:layout_constraintBottom_toBottomOf="@id/up_file_tag"
+        app:layout_constraintLeft_toRightOf="@id/up_file_size"
+        app:layout_constraintTop_toTopOf="@id/up_file_tag" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
