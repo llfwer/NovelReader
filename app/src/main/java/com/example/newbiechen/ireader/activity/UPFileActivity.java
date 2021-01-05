@@ -2,19 +2,21 @@ package com.example.newbiechen.ireader.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.adapter.UPFileAdapter;
@@ -27,13 +29,13 @@ import com.example.newbiechen.ireader.model.local.BookRepository;
 import com.example.newbiechen.ireader.utils.Constant;
 import com.example.newbiechen.ireader.utils.MD5Utils;
 import com.example.newbiechen.ireader.utils.StringUtils;
-import com.example.newbiechen.ireader.utils.ToastUtils;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UPFileActivity extends AppCompatActivity implements View.OnClickListener, UPFileAdapter.Callback1 {
+public class UPFileActivity extends AppCompatActivity implements View.OnClickListener, UPFileAdapter.Callback1, CompoundButton.OnCheckedChangeListener {
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -71,12 +73,12 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         mViewPager.setAdapter(adapter);
-        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(1);
         mTabLayout.setupWithViewPager(mViewPager);
 
         mViewPager.addOnPageChangeListener(mListener);
 
-        mCheckBox.setOnClickListener(this);
+        mCheckBox.setOnCheckedChangeListener(this);
         mDelete.setOnClickListener(this);
         mAddBook.setOnClickListener(this);
     }
@@ -95,25 +97,29 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (buttonView == mCheckBox && buttonView.isPressed()) {
+            mFragments[mIndex].setCheckedAll(isChecked);
+        }
+    }
+
+    @Override
     public void onClick(View view) {
-        if (view == mCheckBox) {
-            UPFileBaseFragment fragment = mFragments[mIndex];
-            fragment.setCheckedAll(true);
-        } else if (view == mDelete) {
+        if (view == mDelete) {
             //弹出，确定删除文件吗。
             new AlertDialog.Builder(this)
                     .setTitle("删除文件")
                     .setMessage("确定删除文件吗?")
-                    .setPositiveButton(getResources().getString(R.string.nb_common_sure), new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.nb_common_sure, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //删除选中的文件
                             mFragments[mIndex].deleteCheckedFiles();
                             //提示删除文件成功
-                            ToastUtils.show("删除文件成功");
+                            Toast.makeText(UPFileActivity.this, "删除文件成功", Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .setNegativeButton(getResources().getString(R.string.nb_common_cancel), null)
+                    .setNegativeButton(R.string.nb_common_cancel, null)
                     .show();
         } else if (view == mAddBook) {
             //获取选中的文件
@@ -124,7 +130,7 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
             //设置HashMap为false
             mFragments[mIndex].requestData();
             //提示加入书架成功
-            ToastUtils.show(getResources().getString(R.string.nb_file_add_succeed, collBooks.size()));
+            Toast.makeText(this, getString(R.string.nb_file_add_succeed, collBooks.size()), Toast.LENGTH_SHORT).show();
         } else {
             finish();
         }
@@ -199,7 +205,7 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         public void onPageSelected(int position) {
             mIndex = position;
-
+            updateView();
         }
 
         @Override
@@ -208,12 +214,12 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
         }
     };
 
-    private class InternalAdapter extends FragmentPagerAdapter {
+    private static class InternalAdapter extends FragmentPagerAdapter {
         private List<String> mTitles = new ArrayList<>();
         private List<Fragment> mFragments = new ArrayList<>();
 
         public InternalAdapter(FragmentManager manager) {
-            super(manager);
+            super(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         public void addFragment(String title, Fragment fragment) {

@@ -1,8 +1,6 @@
 package com.example.newbiechen.ireader.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +8,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newbiechen.ireader.R;
 import com.example.newbiechen.ireader.model.local.BookRepository;
@@ -56,7 +57,7 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (list != null) {
             for (File item : list) {
                 if (item != null) {
-                    if (!isFileLoaded(item)) {
+                    if (isCheckable(item)) {
                         mCheckableCount++;
                     }
                     mDataList.add(item);
@@ -71,10 +72,14 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return BookRepository.getInstance().getCollBook(id) != null;
     }
 
+    private boolean isCheckable(File item) {
+        return item.isFile() && !isFileLoaded(item);
+    }
+
     public void checkAll(boolean check) {
         if (check) {
             for (File item : mDataList) {
-                if (!mCheckList.contains(item)) {
+                if (isCheckable(item) && !mCheckList.contains(item)) {
                     mCheckList.add(item);
                 }
             }
@@ -92,7 +97,7 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public boolean isCheckAll() {
-        return mCheckableCount == mCheckList.size();
+        return mCheckableCount > 0 && mCheckableCount == mCheckList.size();
     }
 
     public void deleteCheckedFiles() {

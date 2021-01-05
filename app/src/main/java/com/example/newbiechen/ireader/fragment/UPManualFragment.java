@@ -128,6 +128,8 @@ public class UPManualFragment extends UPFileBaseFragment implements View.OnClick
             mPath = Environment.getExternalStorageDirectory();
         }
 
+        mPathView.setText(mPath.getAbsolutePath());
+
         //获取数据
         File[] files = mPath.listFiles(new InternalFilter());
         if (files == null || files.length == 0) {
@@ -176,7 +178,7 @@ public class UPManualFragment extends UPFileBaseFragment implements View.OnClick
         mLoadingView.setVisibility(View.VISIBLE);
     }
 
-    public class InternalFilter implements FileFilter {
+    public static class InternalFilter implements FileFilter {
         @Override
         public boolean accept(File pathname) {
             if (pathname.getName().startsWith(".")) {
@@ -202,7 +204,7 @@ public class UPManualFragment extends UPFileBaseFragment implements View.OnClick
         }
     }
 
-    public class InternalComparator implements Comparator<File> {
+    public static class InternalComparator implements Comparator<File> {
         @Override
         public int compare(File o1, File o2) {
             if (o1.isDirectory() && o2.isFile()) {
