@@ -21,15 +21,13 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.rowe.book.R;
 import com.rowe.book.adapter.UPFileAdapter;
+import com.rowe.book.book.UPBookDBManager;
+import com.rowe.book.book.UPBookData;
 import com.rowe.book.fragment.UPAutomaticFragment;
 import com.rowe.book.fragment.UPBaseFragment;
 import com.rowe.book.fragment.UPFileBaseFragment;
 import com.rowe.book.fragment.UPManualFragment;
-import com.rowe.book.model.bean.CollBookBean;
-import com.rowe.book.model.local.BookRepository;
-import com.rowe.book.utils.Constant;
-import com.rowe.book.utils.MD5Utils;
-import com.rowe.book.utils.StringUtils;
+import com.rowe.book.utils.UPMD5Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -121,18 +119,38 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
                     .setNegativeButton(R.string.nb_common_cancel, null)
                     .show();
         } else if (view == mAddBook) {
-            //获取选中的文件
-            List<File> files = mFragments[mIndex].getCheckList();
-            //转换成CollBook,并存储
-            List<CollBookBean> collBooks = convertCollBook(files);
-            BookRepository.getInstance().saveCollBooks(collBooks);
-            //设置HashMap为false
-            mFragments[mIndex].requestData();
-            //提示加入书架成功
-            Toast.makeText(this, getString(R.string.nb_file_add_succeed, collBooks.size()), Toast.LENGTH_SHORT).show();
+            addBook();
         } else {
             finish();
         }
+    }
+
+    private void addBook() {
+        UPFileBaseFragment fragment = mFragments[mIndex];
+
+        List<File> files = fragment.getCheckList();
+        if (files == null || files.isEmpty()) {
+            Toast.makeText(this, "没有书籍可以加入书架", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<UPBookData> bookList = new ArrayList<>();
+        for (File file : files) {
+            if (file == null || !file.exists()) continue;
+            String path = file.getAbsolutePath();
+            UPBookData data = new UPBookData();
+            data.id = UPMD5Util.strToMd5By16(path);
+            data.name = file.getName().replace(".txt", "");
+            data.path = path;
+            data.modifyTime = file.lastModified();
+            data.readTime = System.currentTimeMillis();
+            bookList.add(data);
+        }
+        UPBookDBManager.getInstance(this).saveBookList(bookList);
+
+        fragment.requestData();
+
+        Toast.makeText(this, "成功添加" + bookList.size() + "本书", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -165,33 +183,6 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
             mCheckBox.setChecked(false);
             mCheckBox.setText("全选");
         }
-    }
-
-    /**
-     * 将文件转换成CollBook
-     *
-     * @param files:需要加载的文件列表
-     * @return
-     */
-    private List<CollBookBean> convertCollBook(List<File> files) {
-        List<CollBookBean> collBooks = new ArrayList<>(files.size());
-        for (File file : files) {
-            //判断文件是否存在
-            if (!file.exists()) continue;
-
-            CollBookBean collBook = new CollBookBean();
-            collBook.set_id(MD5Utils.strToMd5By16(file.getAbsolutePath()));
-            collBook.setTitle(file.getName().replace(".txt", ""));
-            collBook.setAuthor("");
-            collBook.setShortIntro("无");
-            collBook.setCover(file.getAbsolutePath());
-            collBook.setLocal(true);
-            collBook.setLastChapter("开始阅读");
-            collBook.setUpdated(StringUtils.dateConvert(file.lastModified(), Constant.FORMAT_BOOK_DATE));
-            collBook.setLastRead(StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-            collBooks.add(collBook);
-        }
-        return collBooks;
     }
 
     private ViewPager.OnPageChangeListener mListener = new ViewPager.OnPageChangeListener() {

@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rowe.book.activity.UPFileActivity;
 import com.rowe.book.adapter.UPBookAdapter;
-import com.rowe.book.model.local.BookRepository;
+import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.utils.UPPermissionUtil;
-import com.rowe.book.widget.UPEmptyView;
 import com.rowe.book.widget.UPDividerItemDecoration;
+import com.rowe.book.widget.UPEmptyView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestData() {
-        mAdapter.setData(BookRepository.getInstance().getCollBooks());
+        mAdapter.setData(UPBookDBManager.getInstance(this).getBookList());
 
         if (mAdapter.getItemCount() == 0) {
             showEmptyView();

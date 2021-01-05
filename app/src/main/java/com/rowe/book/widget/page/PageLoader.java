@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import androidx.core.content.ContextCompat;
 import android.text.TextPaint;
 
+import com.rowe.book.book.UPBookData;
 import com.rowe.book.model.bean.BookRecordBean;
 import com.rowe.book.model.bean.CollBookBean;
 import com.rowe.book.model.local.BookRepository;
@@ -57,7 +58,7 @@ public abstract class PageLoader {
     // 当前章节列表
     protected List<TxtChapter> mChapterList;
     // 书本对象
-    protected CollBookBean mCollBook;
+    protected UPBookData mBookData;
     // 监听器
     protected OnPageChangeListener mPageChangeListener;
 
@@ -141,10 +142,10 @@ public abstract class PageLoader {
     private int mLastChapterPos = 0;
 
     /*****************************init params*******************************/
-    public PageLoader(PageView pageView, CollBookBean collBook) {
+    public PageLoader(PageView pageView, UPBookData bookData) {
         mPageView = pageView;
         mContext = pageView.getContext();
-        mCollBook = collBook;
+        mBookData = bookData;
         mChapterList = new ArrayList<>(1);
 
         // 初始化数据
@@ -502,8 +503,8 @@ public abstract class PageLoader {
      *
      * @return
      */
-    public CollBookBean getCollBook() {
-        return mCollBook;
+    public UPBookData getBook() {
+        return mBookData;
     }
 
     /**
@@ -551,7 +552,7 @@ public abstract class PageLoader {
             return;
         }
 
-        mBookRecord.setBookId(mCollBook.get_id());
+        mBookRecord.setBookId(mBookData.id);
         mBookRecord.setChapter(mCurChapterPos);
 
         if (mCurPage != null) {
@@ -570,7 +571,7 @@ public abstract class PageLoader {
      */
     private void prepareBook() {
         mBookRecord = BookRepository.getInstance()
-                .getBookRecord(mCollBook.get_id());
+                .getBookRecord(mBookData.id);
 
         if (mBookRecord == null) {
             mBookRecord = new BookRecordBean();

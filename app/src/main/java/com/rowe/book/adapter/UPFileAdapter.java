@@ -11,12 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rowe.book.App;
 import com.rowe.book.R;
-import com.rowe.book.model.local.BookRepository;
+import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.utils.Constant;
 import com.rowe.book.utils.FileUtils;
-import com.rowe.book.utils.MD5Utils;
 import com.rowe.book.utils.StringUtils;
+import com.rowe.book.utils.UPMD5Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,8 +70,8 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private boolean isFileLoaded(File file) {
-        String id = MD5Utils.strToMd5By16(file.getAbsolutePath());
-        return BookRepository.getInstance().getCollBook(id) != null;
+        String id = UPMD5Util.strToMd5By16(file.getAbsolutePath());
+        return UPBookDBManager.getInstance(App.getContext()).getBook(id) != null;
     }
 
     private boolean isCheckable(File item) {

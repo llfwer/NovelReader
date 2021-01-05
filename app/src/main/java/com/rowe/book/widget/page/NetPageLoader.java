@@ -42,10 +42,10 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     public void refreshChapterList() {
-        if (mCollBook.getBookChapters() == null) return;
+        if (mBookData.getBookChapters() == null) return;
 
         // 将 BookChapter 转换成当前可用的 Chapter
-        mChapterList = convertTxtChapter(mCollBook.getBookChapters());
+        mChapterList = convertTxtChapter(mBookData.getBookChapters());
         isChapterListPrepare = true;
 
         // 目录加载完成，执行回调操作。
@@ -62,7 +62,7 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
-        File file = new File(Constant.BOOK_CACHE_PATH + mCollBook.get_id()
+        File file = new File(Constant.BOOK_CACHE_PATH + mBookData.get_id()
                 + File.separator + chapter.title + FileUtils.SUFFIX_NB);
         if (!file.exists()) return null;
 
@@ -73,7 +73,7 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected boolean hasChapterData(TxtChapter chapter) {
-        return BookManager.isChapterCached(mCollBook.get_id(), chapter.title);
+        return BookManager.isChapterCached(mBookData.get_id(), chapter.title);
     }
 
     // 装载上一章节的内容
@@ -210,14 +210,14 @@ public class NetPageLoader extends PageLoader {
     @Override
     public void saveRecord() {
         super.saveRecord();
-        if (mCollBook != null && isChapterListPrepare) {
+        if (mBookData != null && isChapterListPrepare) {
             //表示当前CollBook已经阅读
-            mCollBook.setIsUpdate(false);
-            mCollBook.setLastRead(StringUtils.
+            mBookData.setIsUpdate(false);
+            mBookData.setLastRead(StringUtils.
                     dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
             //直接更新
             BookRepository.getInstance()
-                    .saveCollBook(mCollBook);
+                    .saveCollBook(mBookData);
         }
     }
 }

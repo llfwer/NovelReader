@@ -3,9 +3,6 @@ package com.rowe.book.adapter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +11,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.rowe.book.R;
-import com.rowe.book.model.bean.CollBookBean;
-import com.rowe.book.model.local.BookRepository;
-import com.rowe.book.utils.Constant;
-import com.rowe.book.utils.StringUtils;
+import com.rowe.book.book.UPBookDBManager;
+import com.rowe.book.book.UPBookData;
 import com.rowe.book.utils.UPRouteUtil;
 
 import java.io.File;
@@ -27,9 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<CollBookBean> mDataList = new ArrayList<>();
+    private List<UPBookData> mDataList = new ArrayList<>();
 
-    public void setData(List<CollBookBean> list) {
+    public void setData(List<UPBookData> list) {
         mDataList.clear();
         if (list != null) {
             mDataList.addAll(list);
@@ -37,7 +36,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    private void removeItem(CollBookBean data) {
+    private void removeItem(UPBookData data) {
         mDataList.remove(data);
         notifyDataSetChanged();
     }
@@ -68,7 +67,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         private ImageView mIvRedDot;
         private ImageView mIvTop;
 
-        private CollBookBean mData;
+        private UPBookData mData;
 
         InternalHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,41 +84,26 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             itemView.setOnLongClickListener(this);
         }
 
-        void bindData(CollBookBean data) {
+        void bindData(UPBookData data) {
             mData = data;
 
             Context context = itemView.getContext();
 
-            if (data.isLocal()) {
-                //本地文件的图片
-                Glide.with(context)
-                        .load(R.drawable.ic_local_file)
-                        .fitCenter()
-                        .into(mIvCover);
-            } else {
-                //书的图片
-                Glide.with(context)
-                        .load(Constant.IMG_BASE_URL + data.getCover())
-                        .placeholder(R.drawable.ic_book_loading)
-                        .error(R.drawable.ic_load_error)
-                        .fitCenter()
-                        .into(mIvCover);
-            }
+            //本地文件的图片
+            Glide.with(context)
+                    .load(R.drawable.ic_local_file)
+                    .fitCenter()
+                    .into(mIvCover);
+
             //书名
-            mTvName.setText(data.getTitle());
-            if (!data.isLocal()) {
-                //时间
-                mTvTime.setText(StringUtils.
-                        dateConvert(data.getUpdated(), Constant.FORMAT_BOOK_DATE) + ":");
-                mTvTime.setVisibility(View.VISIBLE);
-            } else {
-                mTvTime.setText("阅读进度:");
-            }
+            mTvName.setText(data.name);
+
+            mTvTime.setText("阅读进度:");
             //章节
-            mTvChapter.setText(data.getLastChapter());
+            mTvChapter.setText(data.chapterTitle);
             //我的想法是，在Collection中加一个字段，当追更的时候设置为true。当点击的时候设置为false。
             //当更新的时候，最新数据跟旧数据进行比较，如果更新的话，设置为true。
-            if (data.isUpdate()) {
+            if (!data.hasRead) {
                 mIvRedDot.setVisibility(View.VISIBLE);
             } else {
                 mIvRedDot.setVisibility(View.GONE);
@@ -131,31 +115,27 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Context context = itemView.getContext();
             if (context == null) return;
 
-            if (mData.isLocal()) {
-                //id表示本地文件的路径
-                String path = mData.getCover();
-                File file = new File(path);
-                //判断这个本地文件是否存在
-                if (file.exists() && file.length() != 0) {
-                    UPRouteUtil.gotoReadActivity(context, mData);
-                } else {
-                    String tip = context.getString(R.string.nb_bookshelf_book_not_exist);
-                    //提示(从目录中移除这个文件)
-                    new AlertDialog.Builder(context)
-                            .setTitle(R.string.nb_common_tip)
-                            .setMessage(tip)
-                            .setPositiveButton(R.string.nb_common_sure,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            deleteBook(context, mData);
-                                        }
-                                    })
-                            .setNegativeButton(R.string.nb_common_cancel, null)
-                            .show();
-                }
-            } else {
+            //id表示本地文件的路径
+            String path = mData.path;
+            File file = new File(path);
+            //判断这个本地文件是否存在
+            if (file.exists() && file.length() != 0) {
                 UPRouteUtil.gotoReadActivity(context, mData);
+            } else {
+                String tip = context.getString(R.string.nb_bookshelf_book_not_exist);
+                //提示(从目录中移除这个文件)
+                new AlertDialog.Builder(context)
+                        .setTitle(R.string.nb_common_tip)
+                        .setMessage(tip)
+                        .setPositiveButton(R.string.nb_common_sure,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deleteBook(context, mData);
+                                    }
+                                })
+                        .setNegativeButton(R.string.nb_common_cancel, null)
+                        .show();
             }
         }
 
@@ -167,7 +147,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             //开启Dialog,最方便的Dialog,就是AlterDialog
             String[] menus = new String[]{"删除"};
             AlertDialog collBookDialog = new AlertDialog.Builder(context)
-                    .setTitle(mData.getTitle())
+                    .setTitle(mData.name)
                     .setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, menus),
                             new DialogInterface.OnClickListener() {
                                 @Override
@@ -184,47 +164,36 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    /**
-     * 默认删除本地文件
-     *
-     * @param context
-     * @param collBook
-     */
-    private void deleteBook(Context context, CollBookBean collBook) {
-        if (collBook.isLocal()) {
-            View view = LayoutInflater.from(context)
-                    .inflate(R.layout.dialog_delete, null);
-            CheckBox cb = view.findViewById(R.id.delete_cb_select);
-            new AlertDialog.Builder(context)
-                    .setTitle("删除文件")
-                    .setView(view)
-                    .setPositiveButton(R.string.nb_common_sure, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            boolean isSelected = cb.isSelected();
-                            if (isSelected) {
-                                ProgressDialog progressDialog = new ProgressDialog(context);
-                                progressDialog.setMessage("正在删除中");
-                                progressDialog.show();
-                                //删除
-                                File file = new File(collBook.getCover());
-                                if (file.exists()) file.delete();
-                                BookRepository.getInstance().deleteCollBook(collBook);
-                                BookRepository.getInstance().deleteBookRecord(collBook.get_id());
+    private void deleteBook(Context context, UPBookData book) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_delete, null);
+        CheckBox cb = view.findViewById(R.id.delete_cb_select);
+        new AlertDialog.Builder(context)
+                .setTitle("删除文件")
+                .setView(view)
+                .setPositiveButton(R.string.nb_common_sure, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        boolean isSelected = cb.isSelected();
+                        if (isSelected) {
+                            ProgressDialog progressDialog = new ProgressDialog(context);
+                            progressDialog.setMessage("正在删除中");
+                            progressDialog.show();
+                            //删除
+                            File file = new File(book.path);
+                            if (file.exists()) file.delete();
 
-                                //从Adapter中删除
-                                removeItem(collBook);
-                                progressDialog.dismiss();
-                            } else {
-                                BookRepository.getInstance().deleteCollBook(collBook);
-                                BookRepository.getInstance().deleteBookRecord(collBook.get_id());
-                                //从Adapter中删除
-                                removeItem(collBook);
-                            }
+                            UPBookDBManager.getInstance(context).deleteBook(book);
+                            //从Adapter中删除
+                            removeItem(book);
+                            progressDialog.dismiss();
+                        } else {
+                            UPBookDBManager.getInstance(context).deleteBook(book);
+                            //从Adapter中删除
+                            removeItem(book);
                         }
-                    })
-                    .setNegativeButton(R.string.nb_common_cancel, null)
-                    .show();
-        }
+                    }
+                })
+                .setNegativeButton(R.string.nb_common_cancel, null)
+                .show();
     }
 }

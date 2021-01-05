@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.rowe.book.model.bean.CollBookBean;
+import com.rowe.book.book.UPBookData;
 import com.rowe.book.widget.animation.CoverPageAnim;
 import com.rowe.book.widget.animation.HorizonPageAnim;
 import com.rowe.book.widget.animation.NonePageAnim;
@@ -317,7 +317,7 @@ public class PageView extends View {
     public void drawCurPage(boolean isUpdate) {
         if (!isPrepare) return;
 
-        if (!isUpdate){
+        if (!isUpdate) {
             if (mPageAnim instanceof ScrollPageAnim) {
                 ((ScrollPageAnim) mPageAnim).resetBitmap();
             }
@@ -338,21 +338,14 @@ public class PageView extends View {
 
     /**
      * 获取 PageLoader
-     *
-     * @param collBook
-     * @return
      */
-    public PageLoader getPageLoader(CollBookBean collBook) {
+    public PageLoader getPageLoader(UPBookData bookData) {
         // 判是否已经存在
         if (mPageLoader != null) {
             return mPageLoader;
         }
         // 根据书籍类型，获取具体的加载器
-        if (collBook.isLocal()) {
-            mPageLoader = new LocalPageLoader(this, collBook);
-        } else {
-            mPageLoader = new NetPageLoader(this, collBook);
-        }
+        mPageLoader = new LocalPageLoader(this, bookData);
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {
             // 初始化 PageLoader 的屏幕大小

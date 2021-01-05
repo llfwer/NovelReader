@@ -16,7 +16,7 @@
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_toRightOf="@+id/delete_cb_select"
+		android:layout_toRightOf="@id/delete_cb_select"
 		android:layout_centerInParent="true"
 		android:text="同时删除源文件"
 		android:textSize="@dimen/nb.text.normal"/>

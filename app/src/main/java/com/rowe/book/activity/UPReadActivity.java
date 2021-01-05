@@ -34,8 +34,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.rowe.book.R;
+import com.rowe.book.book.UPBookData;
 import com.rowe.book.model.bean.BookChapterBean;
-import com.rowe.book.model.bean.CollBookBean;
 import com.rowe.book.model.local.BookRepository;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.presenter.ReadPresenter;
@@ -63,7 +63,7 @@ import static android.view.View.VISIBLE;
 
 public class UPReadActivity extends AppCompatActivity {
     private static final String TAG = "UPReadActivity";
-    public static final String EXTRA_COLL_BOOK = "extra_coll_book";
+    public static final String EXTRA_BOOK_DATA = "extra_book_data";
     public static final String EXTRA_IS_COLLECTED = "extra_is_collected";
     public static final int REQUEST_MORE_SETTING = 1;
 
@@ -107,7 +107,7 @@ public class UPReadActivity extends AppCompatActivity {
     private Animation mBottomInAnim;
     private Animation mBottomOutAnim;
     private CategoryAdapter mCategoryAdapter;
-    private CollBookBean mCollBook;
+    private UPBookData mBookData;
     //控制屏幕常亮
     private Handler mHandler = new Handler() {
         @Override
@@ -191,17 +191,17 @@ public class UPReadActivity extends AppCompatActivity {
     private void initToolBar() {
         setSupportActionBar(mToolbar);
         //设置标题
-        mToolbar.setTitle(mCollBook.getTitle());
+        mToolbar.setTitle(mBookData.name);
         //半透明化StatusBar
         SystemBarUtils.transparentStatusBar(this);
     }
 
     private void initView() {
-        mCollBook = getIntent().getParcelableExtra(EXTRA_COLL_BOOK);
+        mBookData = getIntent().getParcelableExtra(EXTRA_BOOK_DATA);
         isNightMode = UPSettingManager.getInstance().isNightMode();
         isFullScreen = UPSettingManager.getInstance().isFullScreen();
 
-        mBookId = mCollBook.get_id();
+        mBookId = mBookData.id;
 
         mToolbar = findViewById(R.id.toolbar);
         initToolBar();
@@ -222,15 +222,8 @@ public class UPReadActivity extends AppCompatActivity {
         mPresenter.attachView(new ReadContract.View() {
             @Override
             public void showCategory(List<BookChapterBean> bookChapters) {
-                mPageLoader.getCollBook().setBookChapters(bookChapters);
+                mPageLoader.getBook().setBookChapters(bookChapters);
                 mPageLoader.refreshChapterList();
-
-                // 如果是目录更新的情况，那么就需要存储更新数据
-                if (mCollBook.isUpdate()) {
-                    BookRepository.getInstance()
-                            .saveBookChaptersWithAsync(bookChapters);
-                }
-
             }
 
             @Override
@@ -267,7 +260,7 @@ public class UPReadActivity extends AppCompatActivity {
         }
 
         //获取页面加载器
-        mPageLoader = mPvPage.getPageLoader(mCollBook);
+        mPageLoader = mPvPage.getPageLoader(mBookData);
         //禁止滑动展示DrawerLayout
         mDlSlide.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //侧边打开后，返回键能够起作用
@@ -466,7 +459,7 @@ public class UPReadActivity extends AppCompatActivity {
                 .subscribe(
                         (bookChapterBeen, throwable) -> {
                             // 设置 CollBook
-                            mPageLoader.getCollBook().setBookChapters(bookChapterBeen);
+                            mPageLoader.getBook().setBookChapters(bookChapterBeen);
                             // 刷新章节列表
                             mPageLoader.refreshChapterList();
                             // 如果是网络小说并被标记更新的，则从网络下载目录

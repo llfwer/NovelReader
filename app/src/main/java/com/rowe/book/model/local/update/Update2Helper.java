@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.rowe.book.model.gen.BookChapterBeanDao;
 import com.rowe.book.model.gen.CollBookBeanDao;
-import com.rowe.book.utils.MD5Utils;
+import com.rowe.book.utils.UPMD5Util;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.database.Database;
@@ -69,7 +69,7 @@ public class Update2Helper {
         StringBuilder updateSb = new StringBuilder();
         while (cursor.moveToNext()) {
             cover = cursor.getString(0);
-            id = MD5Utils.strToMd5By16(cover);
+            id = UPMD5Util.strToMd5By16(cover);
             isLocal = cursor.getString(1);
 
             //如果是本地文件
@@ -156,7 +156,7 @@ public class Update2Helper {
 
         while (cursor.moveToNext()) {
             link = cursor.getString(0);
-            id = MD5Utils.strToMd5By16(link);
+            id = UPMD5Util.strToMd5By16(link);
             title = cursor.getString(1);
             taskName = cursor.getString(2);
             unreadble = cursor.getString(4);

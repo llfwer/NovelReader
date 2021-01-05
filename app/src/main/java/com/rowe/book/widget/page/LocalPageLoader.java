@@ -1,7 +1,9 @@
 package com.rowe.book.widget.page;
 
+import com.rowe.book.App;
+import com.rowe.book.book.UPBookDBManager;
+import com.rowe.book.book.UPBookData;
 import com.rowe.book.model.bean.BookChapterBean;
-import com.rowe.book.model.bean.CollBookBean;
 import com.rowe.book.model.local.BookRepository;
 import com.rowe.book.model.local.Void;
 import com.rowe.book.utils.Charset;
@@ -9,9 +11,9 @@ import com.rowe.book.utils.Constant;
 import com.rowe.book.utils.FileUtils;
 import com.rowe.book.utils.IOUtils;
 import com.rowe.book.utils.LogUtils;
-import com.rowe.book.utils.MD5Utils;
 import com.rowe.book.utils.RxUtils;
 import com.rowe.book.utils.StringUtils;
+import com.rowe.book.utils.UPMD5Util;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -64,8 +66,8 @@ public class LocalPageLoader extends PageLoader {
 
     private Disposable mChapterDisp = null;
 
-    public LocalPageLoader(PageView pageView, CollBookBean collBook) {
-        super(pageView, collBook);
+    public LocalPageLoader(PageView pageView, UPBookData bookData) {
+        super(pageView, bookData);
         mStatus = STATUS_PARING;
     }
 
@@ -319,15 +321,13 @@ public class LocalPageLoader extends PageLoader {
     public void saveRecord() {
         super.saveRecord();
         //修改当前COllBook记录
-        if (mCollBook != null && isChapterListPrepare) {
+        if (mBookData != null && isChapterListPrepare) {
             //表示当前CollBook已经阅读
-            mCollBook.setIsUpdate(false);
-            mCollBook.setLastChapter(mChapterList.get(mCurChapterPos).getTitle());
-            mCollBook.setLastRead(StringUtils.
-                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+            mBookData.hasRead = true;
+            mBookData.chapterTitle = mChapterList.get(mCurChapterPos).getTitle();
+            mBookData.readTime = System.currentTimeMillis();
             //直接更新
-            BookRepository.getInstance()
-                    .saveCollBook(mCollBook);
+            UPBookDBManager.getInstance(App.getContext()).saveBook(mBookData);
         }
     }
 
@@ -343,18 +343,18 @@ public class LocalPageLoader extends PageLoader {
     @Override
     public void refreshChapterList() {
         // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
-        mBookFile = new File(mCollBook.getCover());
+        mBookFile = new File(mBookData.getCover());
         //获取文件编码
         mCharset = FileUtils.getCharset(mBookFile.getAbsolutePath());
 
         String lastModified = StringUtils.dateConvert(mBookFile.lastModified(), Constant.FORMAT_BOOK_DATE);
 
         // 判断文件是否已经加载过，并具有缓存
-        if (!mCollBook.isUpdate() && mCollBook.getUpdated() != null
-                && mCollBook.getUpdated().equals(lastModified)
-                && mCollBook.getBookChapters() != null) {
+        if (!mBookData.isUpdate() && mBookData.getUpdated() != null
+                && mBookData.getUpdated().equals(lastModified)
+                && mBookData.getBookChapters() != null) {
 
-            mChapterList = convertTxtChapter(mCollBook.getBookChapters());
+            mChapterList = convertTxtChapter(mBookData.getBookChapters());
             isChapterListPrepare = true;
 
             //提示目录加载完成
@@ -397,7 +397,7 @@ public class LocalPageLoader extends PageLoader {
                         for (int i = 0; i < mChapterList.size(); ++i) {
                             TxtChapter chapter = mChapterList.get(i);
                             BookChapterBean bean = new BookChapterBean();
-                            bean.setId(MD5Utils.strToMd5By16(mBookFile.getAbsolutePath()
+                            bean.setId(UPMD5Util.strToMd5By16(mBookFile.getAbsolutePath()
                                     + File.separator + chapter.title)); // 将路径+i 作为唯一值
                             bean.setTitle(chapter.getTitle());
                             bean.setStart(chapter.getStart());
@@ -405,11 +405,11 @@ public class LocalPageLoader extends PageLoader {
                             bean.setEnd(chapter.getEnd());
                             bookChapterBeanList.add(bean);
                         }
-                        mCollBook.setBookChapters(bookChapterBeanList);
-                        mCollBook.setUpdated(lastModified);
+                        mBookData.setBookChapters(bookChapterBeanList);
+                        mBookData.setUpdated(lastModified);
 
                         BookRepository.getInstance().saveBookChaptersWithAsync(bookChapterBeanList);
-                        BookRepository.getInstance().saveCollBook(mCollBook);
+                        BookRepository.getInstance().saveCollBook(mBookData);
 
                         // 加载并显示当前章节
                         openChapter();
