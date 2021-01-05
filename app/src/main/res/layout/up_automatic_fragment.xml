@@ -11,7 +11,7 @@
         android:visibility="gone" />
 
     <!--空视图-->
-    <com.example.newbiechen.ireader.widget.UPEmptyView
+    <com.rowe.book.widget.UPEmptyView
         android:id="@+id/up_manual_empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

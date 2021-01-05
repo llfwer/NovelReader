@@ -1,7 +1,5 @@
 <resources>
-    <string name="app_name">IReader</string>
-
-    <!--CollBook的长按点击-->
+    <string name="app_name">阅读器</string>
 
     <!--常用-->
     <string name="nb.common.tip">提示</string>
@@ -10,14 +8,6 @@
 
     <!--menu-->
     <string name="nb.menu.action.scan">扫描本地书籍</string>
-
-    <!--user:用户的信息-->
-    <!--book:书籍的信息-->
-
-    <!--tag: 标签-->
-
-
-    <!--book_detail : -->
 
     <!--mode-->
     <string name="nb.mode.night">夜间</string>
@@ -35,8 +25,6 @@
     <string name="nb.file.add_shelf">加入书架</string>
     <string name="nb.file.add_shelves">加入书架(%1$d)</string>
     <string name="nb.file.add_succeed">成功添加%1$d本书</string>
-
-    <!--search-->
 
     <!--BookShelf-->
     <string name="nb.bookshelf.book_not_exist">文件不存在或者内容为空,是否删除?</string>
