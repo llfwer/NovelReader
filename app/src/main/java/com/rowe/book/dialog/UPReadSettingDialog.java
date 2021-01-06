@@ -1,4 +1,4 @@
-package com.rowe.book.ui.dialog;
+package com.rowe.book.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -32,31 +32,28 @@ import com.rowe.book.widget.page.PageStyle;
 
 import java.util.Arrays;
 
-/**
- * Created by newbiechen on 17-5-18.
- */
 
-public class ReadSettingDialog extends Dialog {
+public class UPReadSettingDialog extends Dialog {
     private static final String TAG = "ReadSettingDialog";
     private static final int DEFAULT_TEXT_SIZE = 16;
 
-    ImageView mIvBrightnessMinus;
-    SeekBar mSbBrightness;
-    ImageView mIvBrightnessPlus;
-    CheckBox mCbBrightnessAuto;
-    TextView mTvFontMinus;
-    TextView mTvFont;
-    TextView mTvFontPlus;
-    CheckBox mCbFontDefault;
-    RadioGroup mRgPageMode;
+    private ImageView mIvBrightnessMinus;
+    private SeekBar mSbBrightness;
+    private ImageView mIvBrightnessPlus;
+    private CheckBox mCbBrightnessAuto;
+    private TextView mTvFontMinus;
+    private TextView mTvFont;
+    private TextView mTvFontPlus;
+    private CheckBox mCbFontDefault;
+    private RadioGroup mRgPageMode;
 
-    RadioButton mRbSimulation;
-    RadioButton mRbCover;
-    RadioButton mRbSlide;
-    RadioButton mRbScroll;
-    RadioButton mRbNone;
-    RecyclerView mRvBg;
-    TextView mTvMore;
+    private RadioButton mRbSimulation;
+    private RadioButton mRbCover;
+    private RadioButton mRbSlide;
+    private RadioButton mRbScroll;
+    private RadioButton mRbNone;
+    private RecyclerView mRvBg;
+    private TextView mTvMore;
     /************************************/
     private PageStyleAdapter mPageStyleAdapter;
     private UPSettingManager mSettingManager;
@@ -73,7 +70,7 @@ public class ReadSettingDialog extends Dialog {
     private boolean isTextDefault;
 
 
-    public ReadSettingDialog(@NonNull Activity activity, PageLoader mPageLoader) {
+    public UPReadSettingDialog(@NonNull Activity activity, PageLoader mPageLoader) {
         super(activity, R.style.ReadSettingDialog);
         mActivity = activity;
         this.mPageLoader = mPageLoader;
@@ -82,7 +79,7 @@ public class ReadSettingDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_read_setting);
+        setContentView(R.layout.up_read_setting_view);
         setUpWindow();
         initData();
         initWidget();

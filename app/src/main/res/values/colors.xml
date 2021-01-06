@@ -53,9 +53,7 @@
     
     <color name="nb.read.bg.night">#000000</color>
     <color name="nb.read.font_night">#99ffffff</color>
-    
-    <color name="nb.read.menu.bg">#191919</color>
-    <color name="nb.read.menu.text">#CBCBCB</color>
+
     <!-- 品牌色 -->
     <color name="up_common_brand_color">#F71828</color>
 
@@ -116,4 +114,7 @@
     <!-- 按钮背景颜色 -->
     <color name="up_common_button_start_bg_color">#FF7881</color>
     <color name="up_common_button_end_bg_color">#F71828</color>
+
+    <color name="up_read_menu_bg_color">#191919</color>
+    <color name="up_read_menu_text_color">#CBCBCB</color>
 </resources>

@@ -37,11 +37,9 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.rowe.book.R;
 import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPBookData;
+import com.rowe.book.dialog.UPReadSettingDialog;
 import com.rowe.book.other.UPSettingManager;
-import com.rowe.book.presenter.ReadPresenter;
-import com.rowe.book.presenter.contract.ReadContract;
 import com.rowe.book.ui.adapter.CategoryAdapter;
-import com.rowe.book.ui.dialog.ReadSettingDialog;
 import com.rowe.book.utils.BrightnessUtils;
 import com.rowe.book.utils.LogUtils;
 import com.rowe.book.utils.ScreenUtils;
@@ -98,7 +96,7 @@ public class UPReadActivity extends AppCompatActivity {
     /***************left slide*******************************/
     ListView mLvCategory;
     /*****************view******************/
-    private ReadSettingDialog mSettingDialog;
+    private UPReadSettingDialog mSettingDialog;
     private PageLoader mPageLoader;
     private Animation mTopInAnim;
     private Animation mTopOutAnim;
@@ -176,7 +174,6 @@ public class UPReadActivity extends AppCompatActivity {
     private boolean isRegistered = false;
 
     private String mBookId;
-    private ReadPresenter mPresenter = new ReadPresenter();
     protected CompositeDisposable mDisposable = new CompositeDisposable();
 
     @Override
@@ -217,35 +214,6 @@ public class UPReadActivity extends AppCompatActivity {
         mTvSetting = findViewById(R.id.read_tv_setting);
         mLvCategory = findViewById(R.id.read_iv_category);
 
-        mPresenter.attachView(new ReadContract.View() {
-
-            @Override
-            public void finishChapter() {
-                if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
-                    mHandler.sendEmptyMessage(WHAT_CHAPTER);
-                }
-                // 当完成章节的时候，刷新列表
-                mCategoryAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void errorChapter() {
-                if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
-                    mPageLoader.chapterError();
-                }
-            }
-
-            @Override
-            public void showError() {
-
-            }
-
-            @Override
-            public void complete() {
-
-            }
-        });
-
         // 如果 API < 18 取消硬件加速
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -258,7 +226,7 @@ public class UPReadActivity extends AppCompatActivity {
         mDlSlide.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //侧边打开后，返回键能够起作用
         mDlSlide.setFocusableInTouchMode(false);
-        mSettingDialog = new ReadSettingDialog(this, mPageLoader);
+        mSettingDialog = new UPReadSettingDialog(this, mPageLoader);
 
         setUpAdapter();
 
@@ -297,14 +265,6 @@ public class UPReadActivity extends AppCompatActivity {
                     @Override
                     public void onChapterChange(int pos) {
                         mCategoryAdapter.setChapter(pos);
-                    }
-
-                    @Override
-                    public void requestChapters(List<TxtChapter> requestChapters) {
-                        mPresenter.loadChapter(mBookId, requestChapters);
-                        mHandler.sendEmptyMessage(WHAT_CATEGORY);
-                        //隐藏提示
-                        mTvPageTip.setVisibility(GONE);
                     }
 
                     @Override
@@ -656,7 +616,6 @@ public class UPReadActivity extends AppCompatActivity {
 
         mPageLoader.closeBook();
         mPageLoader = null;
-        mPresenter.detachView();
         if (mDisposable != null) {
             mDisposable.dispose();
         }

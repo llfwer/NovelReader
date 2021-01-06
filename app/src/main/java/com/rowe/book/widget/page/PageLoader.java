@@ -1402,13 +1402,6 @@ public abstract class PageLoader {
         void onChapterChange(int pos);
 
         /**
-         * 作用：请求加载章节内容
-         *
-         * @param requestChapters:需要下载的章节列表
-         */
-        void requestChapters(List<TxtChapter> requestChapters);
-
-        /**
          * 作用：章节目录加载完成时候回调
          *
          * @param chapters：返回章节目录
