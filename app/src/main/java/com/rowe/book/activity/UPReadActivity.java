@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -32,14 +31,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.rowe.book.R;
+import com.rowe.book.adapter.UPCategoryAdapter;
 import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPBookData;
 import com.rowe.book.dialog.UPReadSettingDialog;
 import com.rowe.book.other.UPSettingManager;
-import com.rowe.book.ui.adapter.CategoryAdapter;
 import com.rowe.book.utils.BrightnessUtils;
 import com.rowe.book.utils.LogUtils;
 import com.rowe.book.utils.ScreenUtils;
@@ -47,7 +48,7 @@ import com.rowe.book.utils.StringUtils;
 import com.rowe.book.utils.SystemBarUtils;
 import com.rowe.book.widget.page.PageLoader;
 import com.rowe.book.widget.page.PageView;
-import com.rowe.book.widget.page.TxtChapter;
+import com.rowe.book.widget.page.UPTxtChapter;
 
 import java.util.List;
 
@@ -94,7 +95,8 @@ public class UPReadActivity extends AppCompatActivity {
         TextView mTvDownload;*/
     TextView mTvSetting;
     /***************left slide*******************************/
-    ListView mLvCategory;
+    private RecyclerView mCategoryListView;
+    private UPCategoryAdapter mCategoryAdapter;
     /*****************view******************/
     private UPReadSettingDialog mSettingDialog;
     private PageLoader mPageLoader;
@@ -102,7 +104,6 @@ public class UPReadActivity extends AppCompatActivity {
     private Animation mTopOutAnim;
     private Animation mBottomInAnim;
     private Animation mBottomOutAnim;
-    private CategoryAdapter mCategoryAdapter;
     private UPBookData mBookData;
     //控制屏幕常亮
     private Handler mHandler = new Handler() {
@@ -112,7 +113,7 @@ public class UPReadActivity extends AppCompatActivity {
 
             switch (msg.what) {
                 case WHAT_CATEGORY:
-                    mLvCategory.setSelection(mPageLoader.getChapterPos());
+                    mCategoryListView.scrollToPosition(mPageLoader.getChapterPos());
                     break;
                 case WHAT_CHAPTER:
                     mPageLoader.openChapter();
@@ -212,7 +213,7 @@ public class UPReadActivity extends AppCompatActivity {
         mTvCategory = findViewById(R.id.read_tv_category);
         mTvNightMode = findViewById(R.id.read_tv_night_mode);
         mTvSetting = findViewById(R.id.read_tv_setting);
-        mLvCategory = findViewById(R.id.read_iv_category);
+        mCategoryListView = findViewById(R.id.read_iv_category);
 
         // 如果 API < 18 取消硬件加速
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
@@ -268,11 +269,11 @@ public class UPReadActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onCategoryFinish(List<TxtChapter> chapters) {
-                        for (TxtChapter chapter : chapters) {
+                    public void onCategoryFinish(List<UPTxtChapter> chapters) {
+                        for (UPTxtChapter chapter : chapters) {
                             chapter.setTitle(chapter.getTitle());
                         }
-                        mCategoryAdapter.refreshItems(chapters);
+                        mCategoryAdapter.setData(chapters);
                     }
 
                     @Override
@@ -349,18 +350,11 @@ public class UPReadActivity extends AppCompatActivity {
             }
         });
 
-        mLvCategory.setOnItemClickListener(
-                (parent, view, position, id) -> {
-                    mDlSlide.closeDrawer(GravityCompat.START);
-                    mPageLoader.skipToChapter(position);
-                }
-        );
-
         mTvCategory.setOnClickListener(
                 (v) -> {
                     //移动到指定位置
-                    if (mCategoryAdapter.getCount() > 0) {
-                        mLvCategory.setSelection(mPageLoader.getChapterPos());
+                    if (mCategoryAdapter.getItemCount() > 0) {
+                        mCategoryListView.scrollToPosition(mPageLoader.getChapterPos());
                     }
                     //切换菜单
                     toggleMenu(true);
@@ -452,9 +446,15 @@ public class UPReadActivity extends AppCompatActivity {
     }
 
     private void setUpAdapter() {
-        mCategoryAdapter = new CategoryAdapter();
-        mLvCategory.setAdapter(mCategoryAdapter);
-        mLvCategory.setFastScrollEnabled(true);
+        mCategoryAdapter = new UPCategoryAdapter(new UPCategoryAdapter.Callback() {
+            @Override
+            public void onItemClick(View view, UPTxtChapter data, int position) {
+                mDlSlide.closeDrawer(GravityCompat.START);
+                mPageLoader.skipToChapter(position);
+            }
+        });
+        mCategoryListView.setLayoutManager(new LinearLayoutManager(this));
+        mCategoryListView.setAdapter(mCategoryAdapter);
     }
 
     // 注册亮度观察者

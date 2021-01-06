@@ -66,10 +66,10 @@ public class LocalPageLoader extends PageLoader {
         mStatus = STATUS_PARING;
     }
 
-    private List<TxtChapter> convertTxtChapter(List<UPBookData.Chapter> bookChapters) {
-        List<TxtChapter> txtChapters = new ArrayList<>(bookChapters.size());
+    private List<UPTxtChapter> convertTxtChapter(List<UPBookData.Chapter> bookChapters) {
+        List<UPTxtChapter> txtChapters = new ArrayList<>(bookChapters.size());
         for (UPBookData.Chapter bean : bookChapters) {
-            TxtChapter chapter = new TxtChapter();
+            UPTxtChapter chapter = new UPTxtChapter();
             chapter.title = bean.title;
             chapter.start = bean.start;
             chapter.end = bean.end;
@@ -86,7 +86,7 @@ public class LocalPageLoader extends PageLoader {
      * @throws IOException
      */
     private void loadChapters() throws IOException {
-        List<TxtChapter> chapters = new ArrayList<>();
+        List<UPTxtChapter> chapters = new ArrayList<>();
         //获取文件流
         RandomAccessFile bookStream = new RandomAccessFile(mBookFile, "r");
         //寻找匹配文章标题的正则表达式，判断是否存在章节名
@@ -127,7 +127,7 @@ public class LocalPageLoader extends PageLoader {
                         //如果当前对整个文件的偏移位置为0的话，那么就是序章
                         if (curOffset == 0) {
                             //创建序章
-                            TxtChapter preChapter = new TxtChapter();
+                            UPTxtChapter preChapter = new UPTxtChapter();
                             preChapter.title = "序章";
                             preChapter.start = 0;
                             preChapter.end = chapterContent.getBytes(mCharset.getName()).length; //获取String的byte值,作为最终值
@@ -138,7 +138,7 @@ public class LocalPageLoader extends PageLoader {
                             }
 
                             //创建当前章节
-                            TxtChapter curChapter = new TxtChapter();
+                            UPTxtChapter curChapter = new UPTxtChapter();
                             curChapter.title = matcher.group();
                             curChapter.start = preChapter.end;
                             chapters.add(curChapter);
@@ -146,7 +146,7 @@ public class LocalPageLoader extends PageLoader {
                         //否则就block分割之后，上一个章节的剩余内容
                         else {
                             //获取上一章节
-                            TxtChapter lastChapter = chapters.get(chapters.size() - 1);
+                            UPTxtChapter lastChapter = chapters.get(chapters.size() - 1);
                             //将当前段落添加上一章去
                             lastChapter.end += chapterContent.getBytes(mCharset.getName()).length;
 
@@ -156,7 +156,7 @@ public class LocalPageLoader extends PageLoader {
                             }
 
                             //创建当前章节
-                            TxtChapter curChapter = new TxtChapter();
+                            UPTxtChapter curChapter = new UPTxtChapter();
                             curChapter.title = matcher.group();
                             curChapter.start = lastChapter.end;
                             chapters.add(curChapter);
@@ -169,7 +169,7 @@ public class LocalPageLoader extends PageLoader {
                             seekPos += chapterContent.length();
 
                             //获取上一章节
-                            TxtChapter lastChapter = chapters.get(chapters.size() - 1);
+                            UPTxtChapter lastChapter = chapters.get(chapters.size() - 1);
                             lastChapter.end = lastChapter.start + chapterContent.getBytes(mCharset.getName()).length;
 
                             //如果章节内容太小，则移除
@@ -178,14 +178,14 @@ public class LocalPageLoader extends PageLoader {
                             }
 
                             //创建当前章节
-                            TxtChapter curChapter = new TxtChapter();
+                            UPTxtChapter curChapter = new UPTxtChapter();
                             curChapter.title = matcher.group();
                             curChapter.start = lastChapter.end;
                             chapters.add(curChapter);
                         }
                         //如果章节不存在则创建章节
                         else {
-                            TxtChapter curChapter = new TxtChapter();
+                            UPTxtChapter curChapter = new UPTxtChapter();
                             curChapter.title = matcher.group();
                             curChapter.start = 0;
                             chapters.add(curChapter);
@@ -215,7 +215,7 @@ public class LocalPageLoader extends PageLoader {
                                 break;
                             }
                         }
-                        TxtChapter chapter = new TxtChapter();
+                        UPTxtChapter chapter = new UPTxtChapter();
                         chapter.title = "第" + blockPos + "章" + "(" + chapterPos + ")";
                         chapter.start = curOffset + chapterOffset + 1;
                         chapter.end = curOffset + end;
@@ -225,7 +225,7 @@ public class LocalPageLoader extends PageLoader {
                         //设置偏移的位置
                         chapterOffset = end;
                     } else {
-                        TxtChapter chapter = new TxtChapter();
+                        UPTxtChapter chapter = new UPTxtChapter();
                         chapter.title = "第" + blockPos + "章" + "(" + chapterPos + ")";
                         chapter.start = curOffset + chapterOffset + 1;
                         chapter.end = curOffset + length;
@@ -240,7 +240,7 @@ public class LocalPageLoader extends PageLoader {
 
             if (hasChapter) {
                 //设置上一章的结尾
-                TxtChapter lastChapter = chapters.get(chapters.size() - 1);
+                UPTxtChapter lastChapter = chapters.get(chapters.size() - 1);
                 lastChapter.end = curOffset;
             }
 
@@ -264,7 +264,7 @@ public class LocalPageLoader extends PageLoader {
      * @param chapter
      * @return
      */
-    private byte[] getChapterContent(TxtChapter chapter) {
+    private byte[] getChapterContent(UPTxtChapter chapter) {
         RandomAccessFile bookStream = null;
         try {
             bookStream = new RandomAccessFile(mBookFile, "r");
@@ -388,7 +388,7 @@ public class LocalPageLoader extends PageLoader {
                         // 存储章节到数据库
                         List<UPBookData.Chapter> bookChapterBeanList = new ArrayList<>();
                         for (int i = 0; i < mChapterList.size(); ++i) {
-                            TxtChapter chapter = mChapterList.get(i);
+                            UPTxtChapter chapter = mChapterList.get(i);
                             UPBookData.Chapter bean = new UPBookData.Chapter();
                             bean.title = chapter.getTitle();
                             bean.bookId = mBookData.id;
@@ -414,7 +414,7 @@ public class LocalPageLoader extends PageLoader {
     }
 
     @Override
-    protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
+    protected BufferedReader getChapterReader(UPTxtChapter chapter) throws Exception {
         //从文件中获取数据
         byte[] content = getChapterContent(chapter);
         ByteArrayInputStream bais = new ByteArrayInputStream(content);
@@ -423,7 +423,7 @@ public class LocalPageLoader extends PageLoader {
     }
 
     @Override
-    protected boolean hasChapterData(TxtChapter chapter) {
+    protected boolean hasChapterData(UPTxtChapter chapter) {
         return true;
     }
 }

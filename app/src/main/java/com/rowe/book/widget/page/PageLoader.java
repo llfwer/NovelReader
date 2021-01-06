@@ -56,7 +56,7 @@ public abstract class PageLoader {
     private static final int EXTRA_TITLE_SIZE = 4;
 
     // 当前章节列表
-    protected List<TxtChapter> mChapterList;
+    protected List<UPTxtChapter> mChapterList;
     // 书本对象
     protected UPBookData mBookData;
     // 监听器
@@ -510,7 +510,7 @@ public abstract class PageLoader {
      *
      * @return
      */
-    public List<TxtChapter> getChapterCategory() {
+    public List<UPTxtChapter> getChapterCategory() {
         return mChapterList;
     }
 
@@ -662,7 +662,7 @@ public abstract class PageLoader {
      */
     private List<TxtPage> loadPageList(int chapterPos) throws Exception {
         // 获取章节
-        TxtChapter chapter = mChapterList.get(chapterPos);
+        UPTxtChapter chapter = mChapterList.get(chapterPos);
         // 判断章节是否存在
         if (!hasChapterData(chapter)) {
             return null;
@@ -687,14 +687,14 @@ public abstract class PageLoader {
      * @param chapter
      * @return
      */
-    protected abstract BufferedReader getChapterReader(TxtChapter chapter) throws Exception;
+    protected abstract BufferedReader getChapterReader(UPTxtChapter chapter) throws Exception;
 
     /**
      * 章节数据是否存在
      *
      * @return
      */
-    protected abstract boolean hasChapterData(TxtChapter chapter);
+    protected abstract boolean hasChapterData(UPTxtChapter chapter);
 
     /***********************************default method***********************************************/
 
@@ -1214,7 +1214,7 @@ public abstract class PageLoader {
      * @param br：章节的文本流
      * @return
      */
-    private List<TxtPage> loadPages(TxtChapter chapter, BufferedReader br) {
+    private List<TxtPage> loadPages(UPTxtChapter chapter, BufferedReader br) {
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
         //使用流的方式加载
@@ -1406,7 +1406,7 @@ public abstract class PageLoader {
          *
          * @param chapters：返回章节目录
          */
-        void onCategoryFinish(List<TxtChapter> chapters);
+        void onCategoryFinish(List<UPTxtChapter> chapters);
 
         /**
          * 作用：章节页码数量改变之后的回调。==> 字体大小的调整，或者是否关闭虚拟按钮功能都会改变页面的数量。
