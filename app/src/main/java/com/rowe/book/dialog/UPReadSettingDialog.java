@@ -5,11 +5,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -19,11 +16,16 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.rowe.book.R;
 import com.rowe.book.activity.UPReadActivity;
 import com.rowe.book.activity.UPSettingsActivity;
+import com.rowe.book.adapter.UPPageStyleAdapter;
 import com.rowe.book.other.UPSettingManager;
-import com.rowe.book.ui.adapter.PageStyleAdapter;
 import com.rowe.book.utils.BrightnessUtils;
 import com.rowe.book.utils.ScreenUtils;
 import com.rowe.book.widget.page.PageLoader;
@@ -52,10 +54,10 @@ public class UPReadSettingDialog extends Dialog {
     private RadioButton mRbSlide;
     private RadioButton mRbScroll;
     private RadioButton mRbNone;
-    private RecyclerView mRvBg;
+    private RecyclerView mBgListView;
     private TextView mTvMore;
     /************************************/
-    private PageStyleAdapter mPageStyleAdapter;
+    private UPPageStyleAdapter mPageStyleAdapter;
     private UPSettingManager mSettingManager;
     private PageLoader mPageLoader;
     private Activity mActivity;
@@ -70,33 +72,28 @@ public class UPReadSettingDialog extends Dialog {
     private boolean isTextDefault;
 
 
-    public UPReadSettingDialog(@NonNull Activity activity, PageLoader mPageLoader) {
+    public UPReadSettingDialog(@NonNull Activity activity, PageLoader pageLoader) {
         super(activity, R.style.ReadSettingDialog);
         mActivity = activity;
-        this.mPageLoader = mPageLoader;
+        mPageLoader = pageLoader;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.up_read_setting_view);
-        setUpWindow();
-        initData();
-        initWidget();
-        initClick();
-    }
 
-    //设置Dialog显示的位置
-    private void setUpWindow() {
+        //设置Dialog显示的位置
         Window window = getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.gravity = Gravity.BOTTOM;
-        window.setAttributes(lp);
-    }
+        if (window != null) {
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            lp.gravity = Gravity.BOTTOM;
+            window.setAttributes(lp);
+        }
 
-    private void initData() {
+
         mSettingManager = UPSettingManager.getInstance();
 
         isBrightnessAuto = mSettingManager.isBrightnessAuto();
@@ -105,9 +102,8 @@ public class UPReadSettingDialog extends Dialog {
         isTextDefault = mSettingManager.isDefaultTextSize();
         mPageMode = mSettingManager.getPageMode();
         mPageStyle = mSettingManager.getPageStyle();
-    }
 
-    private void initWidget() {
+
         mIvBrightnessMinus = findViewById(R.id.read_setting_iv_brightness_minus);
         mSbBrightness = findViewById(R.id.read_setting_sb_brightness);
         mIvBrightnessPlus = findViewById(R.id.read_setting_iv_brightness_plus);
@@ -122,7 +118,7 @@ public class UPReadSettingDialog extends Dialog {
         mRbSlide = findViewById(R.id.read_setting_rb_slide);
         mRbScroll = findViewById(R.id.read_setting_rb_scroll);
         mRbNone = findViewById(R.id.read_setting_rb_none);
-        mRvBg = findViewById(R.id.read_setting_rv_bg);
+        mBgListView = findViewById(R.id.read_setting_rv_bg);
         mTvMore = findViewById(R.id.read_setting_tv_more);
 
         mSbBrightness.setProgress(mBrightness);
@@ -132,6 +128,8 @@ public class UPReadSettingDialog extends Dialog {
         initPageMode();
         //RecyclerView
         setUpAdapter();
+
+        initClick();
     }
 
     private void setUpAdapter() {
@@ -142,12 +140,18 @@ public class UPReadSettingDialog extends Dialog {
                 , getDrawable(R.color.nb_read_bg_4)
                 , getDrawable(R.color.nb_read_bg_5)};
 
-        mPageStyleAdapter = new PageStyleAdapter();
-        mRvBg.setLayoutManager(new GridLayoutManager(getContext(), 5));
-        mRvBg.setAdapter(mPageStyleAdapter);
-        mPageStyleAdapter.refreshItems(Arrays.asList(drawables));
+        mPageStyleAdapter = new UPPageStyleAdapter(new UPPageStyleAdapter.Callback() {
+            @Override
+            public void onItemClick(View view, int position) {
+                mPageStyleAdapter.setStyle(position);
+                mPageLoader.setPageStyle(PageStyle.values()[position]);
+            }
+        });
+        mBgListView.setLayoutManager(new GridLayoutManager(getContext(), 5));
+        mBgListView.setAdapter(mPageStyleAdapter);
+        mPageStyleAdapter.setData(Arrays.asList(drawables));
 
-        mPageStyleAdapter.setPageStyleChecked(mPageStyle);
+        mPageStyleAdapter.setStyle(mPageStyle.ordinal());
 
     }
 
@@ -299,11 +303,6 @@ public class UPReadSettingDialog extends Dialog {
                     }
                     mPageLoader.setPageMode(pageMode);
                 }
-        );
-
-        //背景的点击事件
-        mPageStyleAdapter.setOnItemClickListener(
-                (view, pos) -> mPageLoader.setPageStyle(PageStyle.values()[pos])
         );
 
         //更多设置
