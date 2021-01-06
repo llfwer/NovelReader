@@ -4,8 +4,6 @@ import android.database.Cursor;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.rowe.book.model.gen.BookChapterBeanDao;
-import com.rowe.book.model.gen.CollBookBeanDao;
 import com.rowe.book.utils.UPMD5Util;
 
 import org.greenrobot.greendao.AbstractDao;
@@ -41,49 +39,7 @@ public class Update2Helper {
     }
 
     public void update(Database db) {
-        updateCollBook(db);
-        updateBookChapter(db);
-    }
 
-    private void updateBookChapter(Database db) {
-        Class<? extends AbstractDao<?, ?>> bookChapterClass = BookChapterBeanDao.class;
-
-        generateTempTables(db, bookChapterClass);
-        deleteOriginalTables(db, bookChapterClass);
-        createOrignalTables(db, bookChapterClass);
-        restoreData(db, bookChapterClass);
-    }
-
-    private void updateCollBook(Database db) {
-        Class<? extends AbstractDao<?, ?>> collBookClass = CollBookBeanDao.class;
-
-        // 遍历查找本地文件，然后修改本地文件的数据
-        DaoConfig daoConfig = new DaoConfig(db, collBookClass);
-        String tableName = daoConfig.tablename;
-
-        Cursor cursor = db.rawQuery("select _ID,IS_LOCAL from " + tableName, null);
-        String id = null;
-        String cover = null;
-        String isLocal = null;
-
-        StringBuilder updateSb = new StringBuilder();
-        while (cursor.moveToNext()) {
-            cover = cursor.getString(0);
-            id = UPMD5Util.strToMd5By16(cover);
-            isLocal = cursor.getString(1);
-
-            //如果是本地文件
-            if (isLocal.equals("1")) {
-                // 数据更新
-                updateSb.append("UPDATE " + tableName + " SET ");
-                updateSb.append("_ID=").append(String.format(QUOTE, id)).append(DIVIDER);
-                updateSb.append("COVER=").append(String.format(QUOTE, cover)).append(" ");
-                updateSb.append("WHERE _ID=").append(String.format(QUOTE,cover)).append(";");
-
-                db.execSQL(updateSb.toString());
-                updateSb.delete(0, updateSb.length());
-            }
-        }
     }
 
     /**
@@ -184,7 +140,7 @@ public class Update2Helper {
     /**
      * 通过反射，删除要更新的表
      */
-    private void deleteOriginalTables(Database db,Class<? extends AbstractDao<?, ?>> bookChapterClass) {
+    private void deleteOriginalTables(Database db, Class<? extends AbstractDao<?, ?>> bookChapterClass) {
         try {
             Method method = bookChapterClass.getMethod("dropTable", Database.class, boolean.class);
             method.invoke(null, db, true);
@@ -200,7 +156,7 @@ public class Update2Helper {
     /**
      * 通过反射，重新创建要更新的表
      */
-    private void createOrignalTables(Database db,Class<? extends AbstractDao<?, ?>> bookChapterClass) {
+    private void createOrignalTables(Database db, Class<? extends AbstractDao<?, ?>> bookChapterClass) {
         try {
             Method method = bookChapterClass.getMethod("createTable", Database.class, boolean.class);
             method.invoke(null, db, false);
@@ -218,7 +174,7 @@ public class Update2Helper {
      *
      * @param db
      */
-    private void restoreData(Database db,Class<? extends AbstractDao<?, ?>> bookChapterClass) {
+    private void restoreData(Database db, Class<? extends AbstractDao<?, ?>> bookChapterClass) {
         DaoConfig daoConfig = new DaoConfig(db, bookChapterClass);
         String tableName = daoConfig.tablename;
         String tempTableName = daoConfig.tablename.concat("_TEMP");

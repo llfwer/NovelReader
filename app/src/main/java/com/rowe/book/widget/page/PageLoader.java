@@ -8,12 +8,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import androidx.core.content.ContextCompat;
 import android.text.TextPaint;
+
+import androidx.core.content.ContextCompat;
 
 import com.rowe.book.book.UPBookData;
 import com.rowe.book.model.bean.BookRecordBean;
-import com.rowe.book.model.bean.CollBookBean;
 import com.rowe.book.model.local.BookRepository;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.Constant;
