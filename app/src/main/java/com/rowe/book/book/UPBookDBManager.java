@@ -199,6 +199,34 @@ public class UPBookDBManager {
         return bookList;
     }
 
+    public void saveChapterList(List<UPBookData.Chapter> chapterList) {
+        if (chapterList == null || chapterList.isEmpty()) return;
+
+        try {
+            final SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            db.beginTransaction();
+
+            ContentValues values = new ContentValues();
+
+            for (UPBookData.Chapter data : chapterList) {
+                if (data == null) continue;
+                values.clear();
+
+                values.put(UPBookDBHelper.ChapterColumns.TITLE, data.title);
+                values.put(UPBookDBHelper.ChapterColumns.BOOK_ID, data.bookId);
+                values.put(UPBookDBHelper.ChapterColumns.START, data.start);
+                values.put(UPBookDBHelper.ChapterColumns.END, data.end);
+
+                db.replace(UPBookDBHelper.TABLE_BOOK, null, values);
+            }
+
+            db.setTransactionSuccessful();
+            db.endTransaction();
+        } catch (Exception e) {
+            //ignore
+        }
+    }
+
     public List<UPBookData.Chapter> getChapterList(String bookId) {
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
         Cursor cursor = null;

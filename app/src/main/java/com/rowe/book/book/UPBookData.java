@@ -31,6 +31,10 @@ public class UPBookData implements Parcelable {
     public String chapterTitle;//当前阅读章节标题
     public boolean hasRead = false;//是否未阅读
 
+    public UPBookData() {
+
+    }
+
     protected UPBookData(Parcel in) {
         id = in.readString();
         name = in.readString();

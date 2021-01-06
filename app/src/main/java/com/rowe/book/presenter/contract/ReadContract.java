@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface ReadContract extends BaseContract{
     interface View extends BaseContract.BaseView {
-        void showCategory(List<BookChapterBean> bookChapterList);
         void finishChapter();
         void errorChapter();
     }

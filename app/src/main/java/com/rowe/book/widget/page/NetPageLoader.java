@@ -1,13 +1,12 @@
 package com.rowe.book.widget.page;
 
 
-import com.rowe.book.model.bean.BookChapterBean;
-import com.rowe.book.model.bean.CollBookBean;
-import com.rowe.book.model.local.BookRepository;
+import com.rowe.book.App;
+import com.rowe.book.book.UPBookDBManager;
+import com.rowe.book.book.UPBookData;
 import com.rowe.book.utils.BookManager;
 import com.rowe.book.utils.Constant;
 import com.rowe.book.utils.FileUtils;
-import com.rowe.book.utils.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,17 +23,17 @@ import java.util.List;
 public class NetPageLoader extends PageLoader {
     private static final String TAG = "PageFactory";
 
-    public NetPageLoader(PageView pageView, CollBookBean collBook) {
-        super(pageView, collBook);
+    public NetPageLoader(PageView pageView, UPBookData bookData) {
+        super(pageView, bookData);
     }
 
-    private List<TxtChapter> convertTxtChapter(List<BookChapterBean> bookChapters) {
+    private List<TxtChapter> convertTxtChapter(List<UPBookData.Chapter> bookChapters) {
         List<TxtChapter> txtChapters = new ArrayList<>(bookChapters.size());
-        for (BookChapterBean bean : bookChapters) {
+        for (UPBookData.Chapter bean : bookChapters) {
             TxtChapter chapter = new TxtChapter();
-            chapter.bookId = bean.getBookId();
-            chapter.title = bean.getTitle();
-            chapter.link = bean.getLink();
+            chapter.bookId = bean.bookId;
+            chapter.title = bean.title;
+            chapter.link = null;
             txtChapters.add(chapter);
         }
         return txtChapters;
@@ -42,10 +41,10 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     public void refreshChapterList() {
-        if (mBookData.getBookChapters() == null) return;
+        if (mBookData.chapterList == null) return;
 
         // 将 BookChapter 转换成当前可用的 Chapter
-        mChapterList = convertTxtChapter(mBookData.getBookChapters());
+        mChapterList = convertTxtChapter(mBookData.chapterList);
         isChapterListPrepare = true;
 
         // 目录加载完成，执行回调操作。
@@ -62,7 +61,7 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
-        File file = new File(Constant.BOOK_CACHE_PATH + mBookData.get_id()
+        File file = new File(Constant.BOOK_CACHE_PATH + mBookData.id
                 + File.separator + chapter.title + FileUtils.SUFFIX_NB);
         if (!file.exists()) return null;
 
@@ -73,7 +72,7 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected boolean hasChapterData(TxtChapter chapter) {
-        return BookManager.isChapterCached(mBookData.get_id(), chapter.title);
+        return BookManager.isChapterCached(mBookData.id, chapter.title);
     }
 
     // 装载上一章节的内容
@@ -212,12 +211,9 @@ public class NetPageLoader extends PageLoader {
         super.saveRecord();
         if (mBookData != null && isChapterListPrepare) {
             //表示当前CollBook已经阅读
-            mBookData.setIsUpdate(false);
-            mBookData.setLastRead(StringUtils.
-                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-            //直接更新
-            BookRepository.getInstance()
-                    .saveCollBook(mBookData);
+            mBookData.hasRead = true;
+            mBookData.readTime = System.currentTimeMillis();
+            UPBookDBManager.getInstance(App.getContext()).saveBook(mBookData);
         }
     }
 }

@@ -14,13 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -33,10 +26,17 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.appbar.AppBarLayout;
 import com.rowe.book.R;
+import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPBookData;
-import com.rowe.book.model.bean.BookChapterBean;
-import com.rowe.book.model.local.BookRepository;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.presenter.ReadPresenter;
 import com.rowe.book.presenter.contract.ReadContract;
@@ -44,7 +44,6 @@ import com.rowe.book.ui.adapter.CategoryAdapter;
 import com.rowe.book.ui.dialog.ReadSettingDialog;
 import com.rowe.book.utils.BrightnessUtils;
 import com.rowe.book.utils.LogUtils;
-import com.rowe.book.utils.RxUtils;
 import com.rowe.book.utils.ScreenUtils;
 import com.rowe.book.utils.StringUtils;
 import com.rowe.book.utils.SystemBarUtils;
@@ -55,11 +54,10 @@ import com.rowe.book.widget.page.TxtChapter;
 import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
-import static androidx.core.view.ViewCompat.LAYER_TYPE_SOFTWARE;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static androidx.core.view.ViewCompat.LAYER_TYPE_SOFTWARE;
 
 public class UPReadActivity extends AppCompatActivity {
     private static final String TAG = "UPReadActivity";
@@ -220,11 +218,6 @@ public class UPReadActivity extends AppCompatActivity {
         mLvCategory = findViewById(R.id.read_iv_category);
 
         mPresenter.attachView(new ReadContract.View() {
-            @Override
-            public void showCategory(List<BookChapterBean> bookChapters) {
-                mPageLoader.getBook().setBookChapters(bookChapters);
-                mPageLoader.refreshChapterList();
-            }
 
             @Override
             public void finishChapter() {
@@ -453,21 +446,10 @@ public class UPReadActivity extends AppCompatActivity {
         mSettingDialog.setOnDismissListener(
                 dialog -> hideSystemBar()
         );// 如果是已经收藏的，那么就从数据库中获取目录
-        Disposable disposable = BookRepository.getInstance()
-                .getBookChaptersInRx(mBookId)
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(
-                        (bookChapterBeen, throwable) -> {
-                            // 设置 CollBook
-                            mPageLoader.getBook().setBookChapters(bookChapterBeen);
-                            // 刷新章节列表
-                            mPageLoader.refreshChapterList();
-                            // 如果是网络小说并被标记更新的，则从网络下载目录
-                            // 忽略
-                            LogUtils.e(throwable);
-                        }
-                );
-        mDisposable.add(disposable);
+
+        mPageLoader.getBook().chapterList = UPBookDBManager.getInstance(this).getChapterList(mBookId);
+        // 刷新章节列表
+        mPageLoader.refreshChapterList();
     }
 
     private void initTopMenu() {
