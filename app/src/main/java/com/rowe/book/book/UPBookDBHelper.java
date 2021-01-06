@@ -36,6 +36,7 @@ public class UPBookDBHelper extends SQLiteOpenHelper {
                 BookColumns.READ + " INTEGER," +
                 BookColumns.CHAPTER + " INTEGER," +
                 BookColumns.CHAPTER_TITLE + " TEXT," +
+                BookColumns.PAGE_INDEX + " INTEGER," +
                 BookColumns.HAS_READ + " INTEGER" +
                 ")");
 
@@ -79,6 +80,8 @@ public class UPBookDBHelper extends SQLiteOpenHelper {
         String CHAPTER = "chapter";
         //当前阅读章节标题
         String CHAPTER_TITLE = "chapter_title";
+        //当前的页码
+        String PAGE_INDEX = "page_index";
         //是否未阅读
         String HAS_READ = "has_read";
     }

@@ -12,9 +12,9 @@ import android.text.TextPaint;
 
 import androidx.core.content.ContextCompat;
 
+import com.rowe.book.App;
+import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPBookData;
-import com.rowe.book.model.bean.BookRecordBean;
-import com.rowe.book.model.local.BookRepository;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.Constant;
 import com.rowe.book.utils.IOUtils;
@@ -88,8 +88,6 @@ public abstract class PageLoader {
     private UPSettingManager mSettingManager;
     // 被遮盖的页，或者认为被取消显示的页
     private TxtPage mCancelPage;
-    // 存储阅读记录类
-    private BookRecordBean mBookRecord;
 
     private Disposable mPreLoadDisp;
 
@@ -552,32 +550,18 @@ public abstract class PageLoader {
             return;
         }
 
-        mBookRecord.setBookId(mBookData.id);
-        mBookRecord.setChapter(mCurChapterPos);
-
+        mBookData.chapter = mCurChapterPos;
         if (mCurPage != null) {
-            mBookRecord.setPagePos(mCurPage.position);
-        } else {
-            mBookRecord.setPagePos(0);
+            mBookData.pageIndex = mCurPage.position;
         }
-
-        //存储到数据库
-        BookRepository.getInstance()
-                .saveBookRecord(mBookRecord);
+        UPBookDBManager.getInstance(App.getContext()).saveBook(mBookData);
     }
 
     /**
      * 初始化书籍
      */
     private void prepareBook() {
-        mBookRecord = BookRepository.getInstance()
-                .getBookRecord(mBookData.id);
-
-        if (mBookRecord == null) {
-            mBookRecord = new BookRecordBean();
-        }
-
-        mCurChapterPos = mBookRecord.getChapter();
+        mCurChapterPos = mBookData.chapter;
         mLastChapterPos = mCurChapterPos;
     }
 
@@ -608,7 +592,7 @@ public abstract class PageLoader {
         if (parseCurChapter()) {
             // 如果章节从未打开
             if (!isChapterOpen) {
-                int position = mBookRecord.getPagePos();
+                int position = mBookData.pageIndex;
 
                 // 防止记录页的页号，大于当前最大页号
                 if (position >= mCurPageList.size()) {

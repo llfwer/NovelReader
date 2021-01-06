@@ -46,6 +46,7 @@ public class UPBookDBManager {
                     UPBookDBHelper.BookColumns.READ,
                     UPBookDBHelper.BookColumns.CHAPTER,
                     UPBookDBHelper.BookColumns.CHAPTER_TITLE,
+                    UPBookDBHelper.BookColumns.PAGE_INDEX,
                     UPBookDBHelper.BookColumns.HAS_READ
             };
 
@@ -65,7 +66,8 @@ public class UPBookDBManager {
                 book.readTime = cursor.getLong(4);
                 book.chapter = cursor.getInt(5);
                 book.chapterTitle = cursor.getString(6);
-                book.hasRead = cursor.getInt(7) == 1;
+                book.pageIndex = cursor.getInt(7);
+                book.hasRead = cursor.getInt(8) == 1;
             }
         } catch (Exception e) {
             //ignore
@@ -92,6 +94,7 @@ public class UPBookDBManager {
             values.put(UPBookDBHelper.BookColumns.READ, data.readTime);
             values.put(UPBookDBHelper.BookColumns.CHAPTER, data.chapter);
             values.put(UPBookDBHelper.BookColumns.CHAPTER_TITLE, data.chapterTitle);
+            values.put(UPBookDBHelper.BookColumns.PAGE_INDEX, data.pageIndex);
             values.put(UPBookDBHelper.BookColumns.HAS_READ, data.hasRead ? 1 : 0);
 
             db.replace(UPBookDBHelper.TABLE_BOOK, null, values);
@@ -120,6 +123,7 @@ public class UPBookDBManager {
                 values.put(UPBookDBHelper.BookColumns.READ, data.readTime);
                 values.put(UPBookDBHelper.BookColumns.CHAPTER, data.chapter);
                 values.put(UPBookDBHelper.BookColumns.CHAPTER_TITLE, data.chapterTitle);
+                values.put(UPBookDBHelper.BookColumns.PAGE_INDEX, data.pageIndex);
                 values.put(UPBookDBHelper.BookColumns.HAS_READ, data.hasRead ? 1 : 0);
 
                 db.replace(UPBookDBHelper.TABLE_BOOK, null, values);
@@ -167,6 +171,7 @@ public class UPBookDBManager {
                     UPBookDBHelper.BookColumns.READ,
                     UPBookDBHelper.BookColumns.CHAPTER,
                     UPBookDBHelper.BookColumns.CHAPTER_TITLE,
+                    UPBookDBHelper.BookColumns.PAGE_INDEX,
                     UPBookDBHelper.BookColumns.HAS_READ
             };
 
@@ -184,7 +189,8 @@ public class UPBookDBManager {
                     data.readTime = cursor.getLong(4);
                     data.chapter = cursor.getInt(5);
                     data.chapterTitle = cursor.getString(6);
-                    data.hasRead = cursor.getInt(7) == 1;
+                    data.pageIndex = cursor.getInt(7);
+                    data.hasRead = cursor.getInt(8) == 1;
 
                     bookList.add(data);
                 } while (cursor.moveToNext());

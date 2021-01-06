@@ -29,6 +29,7 @@ public class UPBookData implements Parcelable {
     public List<Chapter> chapterList;///章节列表
     public int chapter = 0;//当前阅读章节
     public String chapterTitle;//当前阅读章节标题
+    public int pageIndex = 0;//当前的页码
     public boolean hasRead = false;//是否未阅读
 
     public UPBookData() {

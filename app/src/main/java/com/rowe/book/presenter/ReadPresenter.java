@@ -2,8 +2,6 @@ package com.rowe.book.presenter;
 
 
 import com.rowe.book.model.bean.ChapterInfoBean;
-import com.rowe.book.model.local.BookRepository;
-import com.rowe.book.model.remote.RemoteRepository;
 import com.rowe.book.presenter.contract.ReadContract;
 import com.rowe.book.ui.base.RxPresenter;
 import com.rowe.book.utils.LogUtils;
@@ -44,14 +42,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
 
         // 将要下载章节，转换成网络请求。
         for (int i = 0; i < size; ++i) {
-            TxtChapter bookChapter = bookChapters.get(i);
-            // 网络中获取数据
-            Single<ChapterInfoBean> chapterInfoSingle = RemoteRepository.getInstance()
-                    .getChapterInfo(bookChapter.getLink());
 
-            chapterInfos.add(chapterInfoSingle);
-
-            titles.add(bookChapter.getTitle());
         }
 
         Single.concat(chapterInfos)
@@ -70,9 +61,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                             @Override
                             public void onNext(ChapterInfoBean chapterInfoBean) {
                                 //存储数据
-                                BookRepository.getInstance().saveChapterInfo(
-                                        bookId, title, chapterInfoBean.getBody()
-                                );
+                                //
                                 mView.finishChapter();
                                 //将获取到的数据进行存储
                                 title = titles.poll();

@@ -23,12 +23,6 @@ android {
     }
 }
 
-greendao {
-    schemaVersion 3
-    daoPackage 'com.rowe.book.model.gen'
-    targetGenDir 'src/main/java'
-}
-
 repositories {
     maven {
         url 'https://dl.bintray.com/qichuan/maven/'
@@ -55,8 +49,6 @@ dependencies {
     //ImageLoader
     implementation "com.github.bumptech.glide:glide:4.11.0"
     /*implementation "com.github.bumptech.glide:compiler:3.7.0"*/
-    //ORM Database
-    implementation "org.greenrobot:greendao:3.2.2"
 
     // Android Leak Analysis
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:1.5.4"
