@@ -125,7 +125,7 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            IOUtils.close(reader);
+            IOUtil.closeQuietly(reader);
         }
         return sb.toString();
     }
@@ -262,7 +262,7 @@ public class FileUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            IOUtils.close(bis);
+            IOUtil.closeQuietly(bis);
         }
         return charset;
     }

@@ -17,7 +17,7 @@ import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPBookData;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.Constant;
-import com.rowe.book.utils.IOUtils;
+import com.rowe.book.utils.IOUtil;
 import com.rowe.book.utils.RxUtils;
 import com.rowe.book.utils.ScreenUtils;
 import com.rowe.book.utils.StringUtils;
@@ -1314,7 +1314,7 @@ public abstract class PageLoader {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            IOUtils.close(br);
+            IOUtil.closeQuietly(br);
         }
         return pages;
     }

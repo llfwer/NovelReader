@@ -1,13 +1,14 @@
 package com.rowe.book.widget.page;
 
+import android.util.Log;
+
 import com.rowe.book.App;
 import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPBookData;
 import com.rowe.book.model.local.Void;
 import com.rowe.book.utils.Charset;
 import com.rowe.book.utils.FileUtils;
-import com.rowe.book.utils.IOUtils;
-import com.rowe.book.utils.LogUtils;
+import com.rowe.book.utils.IOUtil;
 import com.rowe.book.utils.RxUtils;
 
 import java.io.BufferedReader;
@@ -252,7 +253,7 @@ public class LocalPageLoader extends PageLoader {
         }
 
         mChapterList = chapters;
-        IOUtils.close(bookStream);
+        IOUtil.closeQuietly(bookStream);
 
         System.gc();
         System.runFinalization();
@@ -278,7 +279,7 @@ public class LocalPageLoader extends PageLoader {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            IOUtils.close(bookStream);
+            IOUtil.closeQuietly(bookStream);
         }
 
         return new byte[0];
@@ -408,7 +409,7 @@ public class LocalPageLoader extends PageLoader {
                     @Override
                     public void onError(Throwable e) {
                         chapterError();
-                        LogUtils.d(TAG, "file load error:" + e.toString());
+                        Log.d(TAG, "file load error:" + e.toString());
                     }
                 });
     }

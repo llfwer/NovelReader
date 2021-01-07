@@ -42,9 +42,7 @@ import com.rowe.book.book.UPBookData;
 import com.rowe.book.dialog.UPReadSettingDialog;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.BrightnessUtils;
-import com.rowe.book.utils.LogUtils;
 import com.rowe.book.utils.ScreenUtils;
-import com.rowe.book.utils.StringUtils;
 import com.rowe.book.utils.SystemBarUtils;
 import com.rowe.book.widget.page.PageLoader;
 import com.rowe.book.widget.page.PageView;
@@ -435,11 +433,11 @@ public class UPReadActivity extends AppCompatActivity {
 
     private void toggleNightMode() {
         if (isNightMode) {
-            mTvNightMode.setText(StringUtils.getString(R.string.nb_mode_morning));
+            mTvNightMode.setText(R.string.nb_mode_morning);
             Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_read_menu_morning);
             mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
         } else {
-            mTvNightMode.setText(StringUtils.getString(R.string.nb_mode_night));
+            mTvNightMode.setText(R.string.nb_mode_night);
             Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_read_menu_night);
             mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
         }
@@ -471,7 +469,7 @@ public class UPReadActivity extends AppCompatActivity {
                 }
             }
         } catch (Throwable throwable) {
-            LogUtils.e(TAG, "register mBrightObserver error! " + throwable);
+            Log.e(TAG, "register mBrightObserver error! " + throwable);
         }
     }
 
@@ -485,7 +483,7 @@ public class UPReadActivity extends AppCompatActivity {
                 }
             }
         } catch (Throwable throwable) {
-            LogUtils.e(TAG, "unregister BrightnessObserver error! " + throwable);
+            Log.e(TAG, "unregister BrightnessObserver error! " + throwable);
         }
     }
 

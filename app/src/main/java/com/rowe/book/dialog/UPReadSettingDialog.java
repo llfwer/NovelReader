@@ -152,7 +152,6 @@ public class UPReadSettingDialog extends Dialog {
         mPageStyleAdapter.setData(Arrays.asList(drawables));
 
         mPageStyleAdapter.setStyle(mPageStyle.ordinal());
-
     }
 
     private void initPageMode() {

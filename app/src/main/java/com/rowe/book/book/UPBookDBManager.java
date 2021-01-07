@@ -223,7 +223,7 @@ public class UPBookDBManager {
                 values.put(UPBookDBHelper.ChapterColumns.START, data.start);
                 values.put(UPBookDBHelper.ChapterColumns.END, data.end);
 
-                db.replace(UPBookDBHelper.TABLE_BOOK, null, values);
+                db.replace(UPBookDBHelper.TABLE_CHAPTER, null, values);
             }
 
             db.setTransactionSuccessful();

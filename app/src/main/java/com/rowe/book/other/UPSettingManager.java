@@ -1,7 +1,7 @@
 package com.rowe.book.other;
 
 import com.rowe.book.utils.ScreenUtils;
-import com.rowe.book.utils.SharedPreUtils;
+import com.rowe.book.utils.UPSharedPreUtils;
 import com.rowe.book.widget.page.PageMode;
 import com.rowe.book.widget.page.PageStyle;
 
@@ -21,7 +21,7 @@ public class UPSettingManager {
 
     private static volatile UPSettingManager sInstance;
 
-    private SharedPreUtils mSp;
+    private UPSharedPreUtils mSp;
 
     public static UPSettingManager getInstance() {
         if (sInstance == null) {
@@ -35,7 +35,7 @@ public class UPSettingManager {
     }
 
     private UPSettingManager() {
-        mSp = SharedPreUtils.getInstance();
+        mSp = UPSharedPreUtils.getInstance();
     }
 
     public void setPageStyle(PageStyle pageStyle) {
