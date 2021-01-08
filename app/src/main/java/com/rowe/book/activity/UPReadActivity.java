@@ -42,7 +42,7 @@ import com.rowe.book.book.UPBookData;
 import com.rowe.book.dialog.UPReadSettingDialog;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.BrightnessUtils;
-import com.rowe.book.utils.ScreenUtils;
+import com.rowe.book.utils.UPScreenUtil;
 import com.rowe.book.utils.SystemBarUtils;
 import com.rowe.book.widget.page.PageLoader;
 import com.rowe.book.widget.page.PageView;
@@ -406,7 +406,7 @@ public class UPReadActivity extends AppCompatActivity {
 
     private void initTopMenu() {
         if (Build.VERSION.SDK_INT >= 19) {
-            mAblTopMenu.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, 0);
+            mAblTopMenu.setPadding(0, UPScreenUtil.getStatusBarHeight(), 0, 0);
         }
     }
 
@@ -415,7 +415,7 @@ public class UPReadActivity extends AppCompatActivity {
         if (UPSettingManager.getInstance().isFullScreen()) {
             //还需要设置mBottomMenu的底部高度
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mLlBottomMenu.getLayoutParams();
-            params.bottomMargin = ScreenUtils.getNavigationBarHeight();
+            params.bottomMargin = UPScreenUtil.getNavigationBarHeight();
             mLlBottomMenu.setLayoutParams(params);
         } else {
             //设置mBottomMenu的底部距离

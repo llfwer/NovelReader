@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -27,7 +28,6 @@ import com.rowe.book.activity.UPSettingsActivity;
 import com.rowe.book.adapter.UPPageStyleAdapter;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.BrightnessUtils;
-import com.rowe.book.utils.ScreenUtils;
 import com.rowe.book.widget.page.PageLoader;
 import com.rowe.book.widget.page.PageMode;
 import com.rowe.book.widget.page.PageStyle;
@@ -37,7 +37,6 @@ import java.util.Arrays;
 
 public class UPReadSettingDialog extends Dialog {
     private static final String TAG = "ReadSettingDialog";
-    private static final int DEFAULT_TEXT_SIZE = 16;
 
     private ImageView mIvBrightnessMinus;
     private SeekBar mSbBrightness;
@@ -69,7 +68,6 @@ public class UPReadSettingDialog extends Dialog {
     private int mTextSize;
 
     private boolean isBrightnessAuto;
-    private boolean isTextDefault;
 
 
     public UPReadSettingDialog(@NonNull Activity activity, PageLoader pageLoader) {
@@ -99,7 +97,6 @@ public class UPReadSettingDialog extends Dialog {
         isBrightnessAuto = mSettingManager.isBrightnessAuto();
         mBrightness = mSettingManager.getBrightness();
         mTextSize = mSettingManager.getTextSize();
-        isTextDefault = mSettingManager.isDefaultTextSize();
         mPageMode = mSettingManager.getPageMode();
         mPageStyle = mSettingManager.getPageStyle();
 
@@ -122,9 +119,9 @@ public class UPReadSettingDialog extends Dialog {
         mTvMore = findViewById(R.id.read_setting_tv_more);
 
         mSbBrightness.setProgress(mBrightness);
-        mTvFont.setText(mTextSize + "");
+        mTvFont.setText(String.valueOf(mTextSize));
         mCbBrightnessAuto.setChecked(isBrightnessAuto);
-        mCbFontDefault.setChecked(isTextDefault);
+        mCbFontDefault.setChecked(mTextSize == mSettingManager.getDefaultTextSize());
         initPageMode();
         //RecyclerView
         setUpAdapter();
@@ -229,52 +226,56 @@ public class UPReadSettingDialog extends Dialog {
             }
         });
 
-        mCbBrightnessAuto.setOnCheckedChangeListener(
-                (buttonView, isChecked) -> {
-                    if (isChecked) {
-                        //获取屏幕的亮度
-                        BrightnessUtils.setBrightness(mActivity, BrightnessUtils.getScreenBrightness(mActivity));
-                    } else {
-                        //获取进度条的亮度
-                        BrightnessUtils.setBrightness(mActivity, mSbBrightness.getProgress());
-                    }
-                    UPSettingManager.getInstance().setAutoBrightness(isChecked);
+        mCbBrightnessAuto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    //获取屏幕的亮度
+                    BrightnessUtils.setBrightness(mActivity, BrightnessUtils.getScreenBrightness(mActivity));
+                } else {
+                    //获取进度条的亮度
+                    BrightnessUtils.setBrightness(mActivity, mSbBrightness.getProgress());
                 }
-        );
+                UPSettingManager.getInstance().setAutoBrightness(isChecked);
+            }
+        });
 
         //字体大小调节
-        mTvFontMinus.setOnClickListener(
-                (v) -> {
-                    if (mCbFontDefault.isChecked()) {
-                        mCbFontDefault.setChecked(false);
-                    }
-                    int fontSize = Integer.valueOf(mTvFont.getText().toString()) - 1;
-                    if (fontSize < 0) return;
-                    mTvFont.setText(fontSize + "");
+        mTvFontMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCbFontDefault.isChecked()) {
+                    mCbFontDefault.setChecked(false);
+                }
+                int fontSize = Integer.parseInt(mTvFont.getText().toString()) - 1;
+                if (fontSize < 0) return;
+                mTvFont.setText(String.valueOf(fontSize));
+                mPageLoader.setTextSize(fontSize);
+            }
+        });
+
+        mTvFontPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCbFontDefault.isChecked()) {
+                    mCbFontDefault.setChecked(false);
+                }
+                int fontSize = Integer.parseInt(mTvFont.getText().toString()) + 1;
+                mTvFont.setText(String.valueOf(fontSize));
+                mPageLoader.setTextSize(fontSize);
+            }
+        });
+
+        mCbFontDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    int fontSize = mSettingManager.getDefaultTextSize();
+                    mTvFont.setText(String.valueOf(fontSize));
                     mPageLoader.setTextSize(fontSize);
                 }
-        );
-
-        mTvFontPlus.setOnClickListener(
-                (v) -> {
-                    if (mCbFontDefault.isChecked()) {
-                        mCbFontDefault.setChecked(false);
-                    }
-                    int fontSize = Integer.valueOf(mTvFont.getText().toString()) + 1;
-                    mTvFont.setText(fontSize + "");
-                    mPageLoader.setTextSize(fontSize);
-                }
-        );
-
-        mCbFontDefault.setOnCheckedChangeListener(
-                (buttonView, isChecked) -> {
-                    if (isChecked) {
-                        int fontSize = ScreenUtils.dpToPx(DEFAULT_TEXT_SIZE);
-                        mTvFont.setText(fontSize + "");
-                        mPageLoader.setTextSize(fontSize);
-                    }
-                }
-        );
+            }
+        });
 
         //Page Mode 切换
         mRgPageMode.setOnCheckedChangeListener(

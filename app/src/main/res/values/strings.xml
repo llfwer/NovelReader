@@ -24,7 +24,6 @@
     <string name="up_folder_sub_count">%1$d 项</string>
     <string name="nb.file.add_shelf">加入书架</string>
     <string name="nb.file.add_shelves">加入书架(%1$d)</string>
-    <string name="nb.file.add_succeed">成功添加%1$d本书</string>
 
     <!--BookShelf-->
     <string name="nb.bookshelf.book_not_exist">文件不存在或者内容为空,是否删除?</string>

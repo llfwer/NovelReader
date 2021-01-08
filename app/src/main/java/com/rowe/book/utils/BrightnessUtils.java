@@ -84,7 +84,7 @@ public class BrightnessUtils {
         try{
             WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
             //将 0~255 范围内的数据，转换为 0~1
-            lp.screenBrightness = Float.valueOf(brightness) * (1f / 255f);
+            lp.screenBrightness = (float) brightness * (1f / 255f);
             Log.d(TAG, "lp.screenBrightness == " + lp.screenBrightness);
             activity.getWindow().setAttributes(lp);
         }catch(Exception ex){
