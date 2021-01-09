@@ -4,10 +4,9 @@ import com.rowe.book.App;
 import com.rowe.book.book.UPBook;
 import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPChapter;
-import com.rowe.book.data.UPBookAgent;
+import com.rowe.book.data.UPBookCallback;
+import com.rowe.book.data.UPBookResponse;
 import com.rowe.book.utils.IOUtil;
-import com.rowe.book.utils.UPCharset;
-import com.rowe.book.utils.UPFileUtils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -16,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
-import java.util.List;
 
 /**
  * Created by newbiechen on 17-7-1.
@@ -27,17 +25,9 @@ import java.util.List;
 public class LocalPageLoader extends PageLoader {
     private static final String TAG = "LocalPageLoader";
 
-    //获取书本的文件
-    private File mBookFile;
-    //编码类型
-    private UPCharset mCharset;
-
-    private UPBookAgent mAgent;
-
     public LocalPageLoader(PageView pageView, UPBook bookData) {
         super(pageView, bookData);
         mStatus = STATUS_PARING;
-        mAgent = new UPBookAgent(mContext, bookData);
     }
 
     /**
@@ -49,7 +39,7 @@ public class LocalPageLoader extends PageLoader {
     private byte[] getChapterContent(UPChapter chapter) {
         RandomAccessFile bookStream = null;
         try {
-            bookStream = new RandomAccessFile(mBookFile, "r");
+            bookStream = new RandomAccessFile(mAgent.getFile(), "r");
             bookStream.seek(chapter.start);
             int extent = (int) (chapter.end - chapter.start);
             byte[] content = new byte[extent];
@@ -88,11 +78,9 @@ public class LocalPageLoader extends PageLoader {
     @Override
     public void refreshChapterList() {
         // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
-        mBookFile = new File(mBookData.path);
-        //获取文件编码
-        mCharset = UPFileUtils.getCharset(mBookFile.getAbsolutePath());
+        File file = mAgent.getFile();
 
-        long lastModified = mBookFile.lastModified();
+        long lastModified = file.lastModified();
 
         // 判断文件是否已经加载过，并具有缓存
         if (lastModified == mBookData.modifyTime && mBookData.chapterList != null) {
@@ -111,14 +99,11 @@ public class LocalPageLoader extends PageLoader {
             return;
         }
 
-        mAgent.getChapterList(new UPBookAgent.Callback() {
+        mAgent.getChapterList(new UPBookCallback() {
             @Override
-            public void onResponse(List<UPChapter> chapterList) {
-                if (chapterList == null || chapterList.isEmpty()) {
-                    chapterError();
-                    //Log.d(TAG, "file load error:" + e.toString());
-                } else {
-                    mChapterList = chapterList;
+            public void onResponse(UPBookResponse response) {
+                if (response.isSuccessful()) {
+                    mChapterList = response.getChapterList();
                     isChapterListPrepare = true;
 
                     // 提示目录加载完成
@@ -132,6 +117,9 @@ public class LocalPageLoader extends PageLoader {
 
                     // 加载并显示当前章节
                     openChapter();
+                } else {
+                    chapterError();
+                    //Log.d(TAG, "file load error:" + e.toString());
                 }
             }
         });
@@ -142,7 +130,7 @@ public class LocalPageLoader extends PageLoader {
         //从文件中获取数据
         byte[] content = getChapterContent(chapter);
         ByteArrayInputStream bais = new ByteArrayInputStream(content);
-        BufferedReader br = new BufferedReader(new InputStreamReader(bais, mCharset.getName()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(bais, mAgent.getCharsetName()));
         return br;
     }
 

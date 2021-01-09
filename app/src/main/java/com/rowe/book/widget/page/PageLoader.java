@@ -16,6 +16,7 @@ import com.rowe.book.App;
 import com.rowe.book.book.UPBook;
 import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPChapter;
+import com.rowe.book.data.UPBookAgent;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.Constant;
 import com.rowe.book.utils.IOUtil;
@@ -140,6 +141,8 @@ public abstract class PageLoader {
     //上一章的记录
     private int mLastChapterPos = 0;
 
+    protected UPBookAgent mAgent;
+
     /*****************************init params*******************************/
     public PageLoader(PageView pageView, UPBook bookData) {
         mPageView = pageView;
@@ -152,6 +155,7 @@ public abstract class PageLoader {
             mBookData.chapter = book.chapter;
             mBookData.pageIndex = book.pageIndex;
         }
+        mAgent = new UPBookAgent(mContext, bookData);
 
         // 初始化数据
         initData();

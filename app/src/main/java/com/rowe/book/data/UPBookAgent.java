@@ -37,10 +37,6 @@ public class UPBookAgent {
             "^(\\s{0,4})(\u6b63\u6587)(.{0,20})$",
             "^(.{0,4})(Chapter|chapter)(\\s{0,4})([0-9]{1,4})(.{0,30})$"};
 
-    public interface Callback {
-        void onResponse(List<UPChapter> chapterList);
-    }
-
     private UPBook mData;
     private File mFile;
     private UPCharset mCharset;//编码类型
@@ -62,31 +58,35 @@ public class UPBookAgent {
         mHandler = new Handler(Looper.getMainLooper());
     }
 
+    public File getFile() {
+        return mFile;
+    }
+
+    public String getCharsetName() {
+        return mCharset == null ? null : mCharset.getName();
+    }
+
     /**
      * 未完成的部分:
      * 1. 序章的添加
      * 2. 章节存在的书本的虚拟分章效果
      */
-    public void getChapterList(Callback callback) {
+    public void getChapterList(UPBookCallback callback) {
         if (mData == null) {
-            if (callback != null) {
-                callback.onResponse(null);
-            }
+            callbackOnUIThread(callback, null);
             return;
         }
         // 数据库有则从数据库取
         List<UPChapter> chapterList = mManager.getChapterList(mData.id);
         if (chapterList != null && !chapterList.isEmpty()) {
-            if (callback != null) {
-                callback.onResponse(chapterList);
-            }
+            UPBookResponse response = new UPBookResponse(UPBookResponse.ERR_CODE_SUCCESS);
+            response.setChapterList(chapterList);
+            callbackOnUIThread(callback, response);
             return;
         }
         // 路径异常返回null
         if (mFile == null || !mFile.exists()) {
-            if (callback != null) {
-                callback.onResponse(null);
-            }
+            callbackOnUIThread(callback, null);
             return;
         }
         // 现场解析章节数据
@@ -259,7 +259,9 @@ public class UPBookAgent {
                         }
                     }
 
-                    callbackOnUIThread(callback, chapters);
+                    UPBookResponse response = new UPBookResponse(UPBookResponse.ERR_CODE_SUCCESS);
+                    response.setChapterList(chapters);
+                    callbackOnUIThread(callback, response);
 
                     mManager.saveChapterList(chapters);
 
@@ -274,12 +276,12 @@ public class UPBookAgent {
         });
     }
 
-    private void callbackOnUIThread(Callback callback, List<UPChapter> chapters) {
+    private void callbackOnUIThread(UPBookCallback callback, UPBookResponse response) {
         if (callback != null) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    callback.onResponse(chapters);
+                    callback.onResponse(response == null ? new UPBookResponse() : response);
                 }
             });
         }
