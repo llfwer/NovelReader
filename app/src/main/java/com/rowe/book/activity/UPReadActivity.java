@@ -37,16 +37,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.rowe.book.R;
 import com.rowe.book.adapter.UPCategoryAdapter;
+import com.rowe.book.book.UPBook;
 import com.rowe.book.book.UPBookDBManager;
-import com.rowe.book.book.UPBookData;
+import com.rowe.book.book.UPChapter;
 import com.rowe.book.dialog.UPReadSettingDialog;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.BrightnessUtils;
-import com.rowe.book.utils.UPScreenUtil;
 import com.rowe.book.utils.SystemBarUtils;
+import com.rowe.book.utils.UPScreenUtil;
 import com.rowe.book.widget.page.PageLoader;
 import com.rowe.book.widget.page.PageView;
-import com.rowe.book.widget.page.UPTxtChapter;
 
 import java.util.List;
 
@@ -102,7 +102,7 @@ public class UPReadActivity extends AppCompatActivity {
     private Animation mTopOutAnim;
     private Animation mBottomInAnim;
     private Animation mBottomOutAnim;
-    private UPBookData mBookData;
+    private UPBook mBookData;
     //控制屏幕常亮
     private Handler mHandler = new Handler() {
         @Override
@@ -267,10 +267,7 @@ public class UPReadActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onCategoryFinish(List<UPTxtChapter> chapters) {
-                        for (UPTxtChapter chapter : chapters) {
-                            chapter.setTitle(chapter.getTitle());
-                        }
+                    public void onCategoryFinish(List<UPChapter> chapters) {
                         mCategoryAdapter.setData(chapters);
                     }
 
@@ -446,7 +443,7 @@ public class UPReadActivity extends AppCompatActivity {
     private void setUpAdapter() {
         mCategoryAdapter = new UPCategoryAdapter(new UPCategoryAdapter.Callback() {
             @Override
-            public void onItemClick(View view, UPTxtChapter data, int position) {
+            public void onItemClick(View view, UPChapter data, int position) {
                 mDlSlide.closeDrawer(GravityCompat.START);
                 mPageLoader.skipToChapter(position);
             }

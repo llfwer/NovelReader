@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.rowe.book.R;
 import com.rowe.book.book.UPBookDBManager;
-import com.rowe.book.book.UPBookData;
+import com.rowe.book.book.UPBook;
 import com.rowe.book.utils.UPRouteUtil;
 
 import java.io.File;
@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<UPBookData> mDataList = new ArrayList<>();
+    private List<UPBook> mDataList = new ArrayList<>();
 
-    public void setData(List<UPBookData> list) {
+    public void setData(List<UPBook> list) {
         mDataList.clear();
         if (list != null) {
             mDataList.addAll(list);
@@ -36,7 +36,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    private void removeItem(UPBookData data) {
+    private void removeItem(UPBook data) {
         mDataList.remove(data);
         notifyDataSetChanged();
     }
@@ -67,7 +67,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         private ImageView mIvRedDot;
         private ImageView mIvTop;
 
-        private UPBookData mData;
+        private UPBook mData;
 
         InternalHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,7 +84,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             itemView.setOnLongClickListener(this);
         }
 
-        void bindData(UPBookData data) {
+        void bindData(UPBook data) {
             mData = data;
 
             Context context = itemView.getContext();
@@ -164,7 +164,7 @@ public class UPBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private void deleteBook(Context context, UPBookData book) {
+    private void deleteBook(Context context, UPBook book) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_delete, null);
         CheckBox cb = view.findViewById(R.id.delete_cb_select);
         new AlertDialog.Builder(context)

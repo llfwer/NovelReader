@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +34,10 @@ public class UPBookDBManager {
         mDBHelper = new UPBookDBHelper(context);
     }
 
-    public UPBookData getBook(String bookId) {
+    public UPBook getBook(String bookId) {
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
         Cursor cursor = null;
-        UPBookData book = null;
+        UPBook book = null;
         try {
             String[] columns = {
                     UPBookDBHelper.BookColumns._ID,
@@ -58,7 +59,7 @@ public class UPBookDBManager {
 
             cursor = db.query(UPBookDBHelper.TABLE_BOOK, columns, where, args, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
-                book = new UPBookData();
+                book = new UPBook();
                 book.id = cursor.getString(0);
                 book.name = cursor.getString(1);
                 book.path = cursor.getString(2);
@@ -79,7 +80,7 @@ public class UPBookDBManager {
         return book;
     }
 
-    public void saveBook(UPBookData data) {
+    public void saveBook(UPBook data) {
         if (data == null) return;
 
         try {
@@ -103,7 +104,7 @@ public class UPBookDBManager {
         }
     }
 
-    public void saveBookList(List<UPBookData> bookList) {
+    public void saveBookList(List<UPBook> bookList) {
         if (bookList == null || bookList.isEmpty()) return;
 
         try {
@@ -112,7 +113,7 @@ public class UPBookDBManager {
 
             ContentValues values = new ContentValues();
 
-            for (UPBookData data : bookList) {
+            for (UPBook data : bookList) {
                 if (data == null) continue;
                 values.clear();
 
@@ -136,7 +137,7 @@ public class UPBookDBManager {
         }
     }
 
-    public void deleteBook(UPBookData data) {
+    public void deleteBook(UPBook data) {
         if (data == null) return;
 
         try {
@@ -158,10 +159,10 @@ public class UPBookDBManager {
         }
     }
 
-    public List<UPBookData> getBookList() {
+    public List<UPBook> getBookList() {
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
         Cursor cursor = null;
-        List<UPBookData> bookList = null;
+        List<UPBook> bookList = null;
         try {
             String[] columns = {
                     UPBookDBHelper.BookColumns._ID,
@@ -181,7 +182,7 @@ public class UPBookDBManager {
             if (cursor != null && cursor.moveToFirst()) {
                 bookList = new ArrayList<>(cursor.getCount());
                 do {
-                    UPBookData data = new UPBookData();
+                    UPBook data = new UPBook();
                     data.id = cursor.getString(0);
                     data.name = cursor.getString(1);
                     data.path = cursor.getString(2);
@@ -205,7 +206,7 @@ public class UPBookDBManager {
         return bookList;
     }
 
-    public void saveChapterList(List<UPBookData.Chapter> chapterList) {
+    public void saveChapterList(List<UPChapter> chapterList) {
         if (chapterList == null || chapterList.isEmpty()) return;
 
         try {
@@ -214,7 +215,7 @@ public class UPBookDBManager {
 
             ContentValues values = new ContentValues();
 
-            for (UPBookData.Chapter data : chapterList) {
+            for (UPChapter data : chapterList) {
                 if (data == null) continue;
                 values.clear();
 
@@ -233,10 +234,14 @@ public class UPBookDBManager {
         }
     }
 
-    public List<UPBookData.Chapter> getChapterList(String bookId) {
+    public List<UPChapter> getChapterList(String bookId) {
+        if (TextUtils.isEmpty(bookId)) {
+            return null;
+        }
+
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
         Cursor cursor = null;
-        List<UPBookData.Chapter> chapterList = null;
+        List<UPChapter> chapterList = null;
         try {
             String[] columns = {
                     UPBookDBHelper.ChapterColumns.TITLE,
@@ -255,7 +260,7 @@ public class UPBookDBManager {
             if (cursor != null && cursor.moveToFirst()) {
                 chapterList = new ArrayList<>(cursor.getCount());
                 do {
-                    UPBookData.Chapter data = new UPBookData.Chapter();
+                    UPChapter data = new UPChapter();
                     data.title = cursor.getString(0);
                     data.bookId = cursor.getString(1);
                     data.start = cursor.getLong(2);

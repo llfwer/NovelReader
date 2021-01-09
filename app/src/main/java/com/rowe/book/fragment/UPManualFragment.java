@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rowe.book.R;
 import com.rowe.book.adapter.UPFileAdapter;
-import com.rowe.book.utils.FileUtils;
+import com.rowe.book.utils.UPFileUtils;
 import com.rowe.book.widget.UPEmptyView;
 import com.rowe.book.widget.UPDividerItemDecoration;
 
@@ -197,7 +197,7 @@ public class UPManualFragment extends UPFileBaseFragment implements View.OnClick
              */
             //文件内容为空,或者不以txt为开头
             if (!pathname.isDirectory() &&
-                    (pathname.length() == 0 || !pathname.getName().endsWith(FileUtils.SUFFIX_TXT))) {
+                    (pathname.length() == 0 || !pathname.getName().endsWith(UPFileUtils.SUFFIX_TXT))) {
                 return false;
             }
             return true;

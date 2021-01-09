@@ -15,7 +15,7 @@ import com.rowe.book.App;
 import com.rowe.book.R;
 import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.utils.Constant;
-import com.rowe.book.utils.FileUtils;
+import com.rowe.book.utils.UPFileUtils;
 import com.rowe.book.utils.StringUtils;
 import com.rowe.book.utils.UPMD5Util;
 
@@ -233,7 +233,7 @@ public class UPFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mName.setText(TextUtils.isEmpty(nameText) ? "--" : nameText);
 
             //大小
-            mSize.setText(FileUtils.getFileSize(data.length()));
+            mSize.setText(UPFileUtils.getFileSize(data.length()));
 
             // 日期
             mDate.setText(StringUtils.dateConvert(data.lastModified(), Constant.FORMAT_FILE_DATE));

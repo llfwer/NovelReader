@@ -19,24 +19,24 @@ import java.util.List;
  * chaptersCount : 1660
  * lastChapter : 第1659章 朱长老
  */
-public class UPBookData implements Parcelable {
+public class UPBook implements Parcelable {
     public String id; //书籍id
     public String name;//书名
     public String path;//路径
     public long modifyTime = 0L;//文件修改时间
     public long readTime = 0L;//最新阅读日期
     public int chaptersCount;//总章节数
-    public List<Chapter> chapterList;///章节列表
+    public List<UPChapter> chapterList;///章节列表
     public int chapter = 0;//当前阅读章节
     public String chapterTitle;//当前阅读章节标题
     public int pageIndex = 0;//当前的页码
     public boolean hasRead = false;//是否未阅读
 
-    public UPBookData() {
+    public UPBook() {
 
     }
 
-    protected UPBookData(Parcel in) {
+    protected UPBook(Parcel in) {
         id = in.readString();
         name = in.readString();
         path = in.readString();
@@ -47,15 +47,15 @@ public class UPBookData implements Parcelable {
         hasRead = in.readByte() != 0;
     }
 
-    public static final Creator<UPBookData> CREATOR = new Creator<UPBookData>() {
+    public static final Creator<UPBook> CREATOR = new Creator<UPBook>() {
         @Override
-        public UPBookData createFromParcel(Parcel in) {
-            return new UPBookData(in);
+        public UPBook createFromParcel(Parcel in) {
+            return new UPBook(in);
         }
 
         @Override
-        public UPBookData[] newArray(int size) {
-            return new UPBookData[size];
+        public UPBook[] newArray(int size) {
+            return new UPBook[size];
         }
     };
 
@@ -74,21 +74,5 @@ public class UPBookData implements Parcelable {
         dest.writeInt(chapter);
         dest.writeString(chapterTitle);
         dest.writeByte((byte) (hasRead ? 1 : 0));
-    }
-
-    /**
-     * title : 第一章 他叫白小纯
-     * link : http://read.qidian.com/chapter/rJgN8tJ_cVdRGoWu-UQg7Q2/6jr-buLIUJSaGfXRMrUjdw2
-     * unreadble : false
-     */
-    public static class Chapter {
-        //标题
-        public String title;
-        //所属的书籍
-        public String bookId;
-        //在书籍文件中的起始位置
-        public long start;
-        //在书籍文件中的终止位置
-        public long end;
     }
 }

@@ -20,11 +20,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 
-/**
- * Created by newbiechen on 17-5-11.
- */
-
-public class FileUtils {
+public class UPFileUtils {
     //采用自己的格式去设置文件，防止文件被系统文件查询到
     public static final String SUFFIX_NB = ".nb";
     public static final String SUFFIX_TXT = ".txt";
@@ -203,9 +199,9 @@ public class FileUtils {
     }
 
     //获取文件的编码格式
-    public static Charset getCharset(String fileName) {
+    public static UPCharset getCharset(String fileName) {
         BufferedInputStream bis = null;
-        Charset charset = Charset.GBK;
+        UPCharset charset = UPCharset.GBK;
         byte[] first3Bytes = new byte[3];
         try {
             boolean checked = false;
@@ -217,7 +213,7 @@ public class FileUtils {
             if (first3Bytes[0] == (byte) 0xEF
                     && first3Bytes[1] == (byte) 0xBB
                     && first3Bytes[2] == (byte) 0xBF) {
-                charset = Charset.UTF8;
+                charset = UPCharset.UTF8;
                 checked = true;
             }
             /*
@@ -250,7 +246,7 @@ public class FileUtils {
                         if (0x80 <= read && read <= 0xBF) {
                             read = bis.read();
                             if (0x80 <= read && read <= 0xBF) {
-                                charset = Charset.UTF8;
+                                charset = UPCharset.UTF8;
                                 break;
                             } else
                                 break;

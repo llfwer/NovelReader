@@ -22,7 +22,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.rowe.book.R;
 import com.rowe.book.adapter.UPFileAdapter;
 import com.rowe.book.book.UPBookDBManager;
-import com.rowe.book.book.UPBookData;
+import com.rowe.book.book.UPBook;
 import com.rowe.book.fragment.UPAutomaticFragment;
 import com.rowe.book.fragment.UPBaseFragment;
 import com.rowe.book.fragment.UPFileBaseFragment;
@@ -134,11 +134,11 @@ public class UPFileActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        List<UPBookData> bookList = new ArrayList<>();
+        List<UPBook> bookList = new ArrayList<>();
         for (File file : files) {
             if (file == null || !file.exists()) continue;
             String path = file.getAbsolutePath();
-            UPBookData data = new UPBookData();
+            UPBook data = new UPBook();
             data.id = UPMD5Util.strToMd5By16(path);
             data.name = file.getName().replace(".txt", "");
             data.path = path;

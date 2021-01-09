@@ -10,16 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rowe.book.R;
-import com.rowe.book.widget.page.UPTxtChapter;
+import com.rowe.book.book.UPChapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UPCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<UPTxtChapter> mDataList = new ArrayList<>();
+    private List<UPChapter> mDataList = new ArrayList<>();
 
     public interface Callback {
-        void onItemClick(View view, UPTxtChapter data, int position);
+        void onItemClick(View view, UPChapter data, int position);
     }
 
     private Callback mCallback;
@@ -28,7 +28,7 @@ public class UPCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mCallback = callback;
     }
 
-    public void setData(List<UPTxtChapter> list) {
+    public void setData(List<UPChapter> list) {
         mDataList.clear();
         if (list != null) {
             mDataList.addAll(list);
@@ -43,7 +43,7 @@ public class UPCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyDataSetChanged();
     }
 
-    private void removeItem(UPTxtChapter data) {
+    private void removeItem(UPChapter data) {
         mDataList.remove(data);
         notifyDataSetChanged();
     }
@@ -68,7 +68,7 @@ public class UPCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private class InternalHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitle;
 
-        private UPTxtChapter mData;
+        private UPChapter mData;
         private int mPosition;
 
         InternalHolder(@NonNull View itemView) {
@@ -79,7 +79,7 @@ public class UPCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemView.setOnClickListener(this);
         }
 
-        void bindData(UPTxtChapter data, int position) {
+        void bindData(UPChapter data, int position) {
             mData = data;
             mPosition = position;
 

@@ -13,8 +13,9 @@ import android.text.TextPaint;
 import androidx.core.content.ContextCompat;
 
 import com.rowe.book.App;
+import com.rowe.book.book.UPBook;
 import com.rowe.book.book.UPBookDBManager;
-import com.rowe.book.book.UPBookData;
+import com.rowe.book.book.UPChapter;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.Constant;
 import com.rowe.book.utils.IOUtil;
@@ -56,13 +57,13 @@ public abstract class PageLoader {
     private static final int EXTRA_TITLE_SIZE = 4;
 
     // 当前章节列表
-    protected List<UPTxtChapter> mChapterList;
+    protected List<UPChapter> mChapterList;
     // 书本对象
-    protected UPBookData mBookData;
+    protected UPBook mBookData;
     // 监听器
     protected OnPageChangeListener mPageChangeListener;
 
-    private Context mContext;
+    protected Context mContext;
     // 页面显示类
     private PageView mPageView;
     // 当前显示的页
@@ -140,11 +141,17 @@ public abstract class PageLoader {
     private int mLastChapterPos = 0;
 
     /*****************************init params*******************************/
-    public PageLoader(PageView pageView, UPBookData bookData) {
+    public PageLoader(PageView pageView, UPBook bookData) {
         mPageView = pageView;
         mContext = pageView.getContext();
         mBookData = bookData;
         mChapterList = new ArrayList<>(1);
+
+        UPBook book = UPBookDBManager.getInstance(mContext).getBook(bookData.id);
+        if (book != null){
+            mBookData.chapter = book.chapter;
+            mBookData.pageIndex = book.pageIndex;
+        }
 
         // 初始化数据
         initData();
@@ -501,7 +508,7 @@ public abstract class PageLoader {
      *
      * @return
      */
-    public UPBookData getBook() {
+    public UPBook getBook() {
         return mBookData;
     }
 
@@ -510,7 +517,7 @@ public abstract class PageLoader {
      *
      * @return
      */
-    public List<UPTxtChapter> getChapterCategory() {
+    public List<UPChapter> getChapterCategory() {
         return mChapterList;
     }
 
@@ -662,7 +669,7 @@ public abstract class PageLoader {
      */
     private List<TxtPage> loadPageList(int chapterPos) throws Exception {
         // 获取章节
-        UPTxtChapter chapter = mChapterList.get(chapterPos);
+        UPChapter chapter = mChapterList.get(chapterPos);
         // 判断章节是否存在
         if (!hasChapterData(chapter)) {
             return null;
@@ -687,14 +694,14 @@ public abstract class PageLoader {
      * @param chapter
      * @return
      */
-    protected abstract BufferedReader getChapterReader(UPTxtChapter chapter) throws Exception;
+    protected abstract BufferedReader getChapterReader(UPChapter chapter) throws Exception;
 
     /**
      * 章节数据是否存在
      *
      * @return
      */
-    protected abstract boolean hasChapterData(UPTxtChapter chapter);
+    protected abstract boolean hasChapterData(UPChapter chapter);
 
     /***********************************default method***********************************************/
 
@@ -721,7 +728,7 @@ public abstract class PageLoader {
                 //根据状态不一样，数据不一样
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
-                        canvas.drawText(mChapterList.get(mCurChapterPos).getTitle()
+                        canvas.drawText(mChapterList.get(mCurChapterPos).title
                                 , mMarginWidth, tipTop, mTipPaint);
                     }
                 } else {
@@ -1214,7 +1221,7 @@ public abstract class PageLoader {
      * @param br：章节的文本流
      * @return
      */
-    private List<TxtPage> loadPages(UPTxtChapter chapter, BufferedReader br) {
+    private List<TxtPage> loadPages(UPChapter chapter, BufferedReader br) {
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
         //使用流的方式加载
@@ -1222,7 +1229,7 @@ public abstract class PageLoader {
         int rHeight = mVisibleHeight;
         int titleLinesCount = 0;
         boolean showTitle = true; // 是否展示标题
-        String paragraph = chapter.getTitle();//默认展示标题
+        String paragraph = chapter.title;//默认展示标题
         try {
             while (showTitle || (paragraph = br.readLine()) != null) {
                 // 重置段落
@@ -1249,7 +1256,7 @@ public abstract class PageLoader {
                         // 创建Page
                         TxtPage page = new TxtPage();
                         page.position = pages.size();
-                        page.title = chapter.getTitle();
+                        page.title = chapter.title;
                         page.lines = new ArrayList<>(lines);
                         page.titleLines = titleLinesCount;
                         pages.add(page);
@@ -1302,7 +1309,7 @@ public abstract class PageLoader {
                 //创建Page
                 TxtPage page = new TxtPage();
                 page.position = pages.size();
-                page.title = chapter.getTitle();
+                page.title = chapter.title;
                 page.lines = new ArrayList<>(lines);
                 page.titleLines = titleLinesCount;
                 pages.add(page);
@@ -1406,7 +1413,7 @@ public abstract class PageLoader {
          *
          * @param chapters：返回章节目录
          */
-        void onCategoryFinish(List<UPTxtChapter> chapters);
+        void onCategoryFinish(List<UPChapter> chapters);
 
         /**
          * 作用：章节页码数量改变之后的回调。==> 字体大小的调整，或者是否关闭虚拟按钮功能都会改变页面的数量。

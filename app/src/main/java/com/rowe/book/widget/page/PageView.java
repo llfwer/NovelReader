@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.rowe.book.book.UPBookData;
+import com.rowe.book.book.UPBook;
 import com.rowe.book.widget.animation.CoverPageAnim;
 import com.rowe.book.widget.animation.HorizonPageAnim;
 import com.rowe.book.widget.animation.NonePageAnim;
@@ -339,7 +339,7 @@ public class PageView extends View {
     /**
      * 获取 PageLoader
      */
-    public PageLoader getPageLoader(UPBookData bookData) {
+    public PageLoader getPageLoader(UPBook bookData) {
         // 判是否已经存在
         if (mPageLoader != null) {
             return mPageLoader;
