@@ -50,8 +50,6 @@ import com.rowe.book.widget.page.PageView;
 
 import java.util.List;
 
-import io.reactivex.disposables.CompositeDisposable;
-
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static androidx.core.view.ViewCompat.LAYER_TYPE_SOFTWARE;
@@ -173,7 +171,6 @@ public class UPReadActivity extends AppCompatActivity {
     private boolean isRegistered = false;
 
     private String mBookId;
-    protected CompositeDisposable mDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -611,9 +608,6 @@ public class UPReadActivity extends AppCompatActivity {
 
         mPageLoader.closeBook();
         mPageLoader = null;
-        if (mDisposable != null) {
-            mDisposable.dispose();
-        }
     }
 
     @Override

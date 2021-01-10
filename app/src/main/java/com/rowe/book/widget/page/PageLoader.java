@@ -16,6 +16,7 @@ import com.rowe.book.App;
 import com.rowe.book.book.UPBook;
 import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPChapter;
+import com.rowe.book.book.UPTxtPage;
 import com.rowe.book.data.UPBookAgent;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.Constant;
@@ -68,13 +69,13 @@ public abstract class PageLoader {
     // 页面显示类
     private PageView mPageView;
     // 当前显示的页
-    private TxtPage mCurPage;
+    private UPTxtPage mCurPage;
     // 上一章的页面列表缓存
-    private List<TxtPage> mPrePageList;
+    private List<UPTxtPage> mPrePageList;
     // 当前章节的页面列表
-    private List<TxtPage> mCurPageList;
+    private List<UPTxtPage> mCurPageList;
     // 下一章的页面列表缓存
-    private List<TxtPage> mNextPageList;
+    private List<UPTxtPage> mNextPageList;
 
     // 绘制电池的画笔
     private Paint mBatteryPaint;
@@ -89,7 +90,7 @@ public abstract class PageLoader {
     // 阅读器的配置选项
     private UPSettingManager mSettingManager;
     // 被遮盖的页，或者认为被取消显示的页
-    private TxtPage mCancelPage;
+    private UPTxtPage mCancelPage;
 
     private Disposable mPreLoadDisp;
 
@@ -151,7 +152,7 @@ public abstract class PageLoader {
         mChapterList = new ArrayList<>(1);
 
         UPBook book = UPBookDBManager.getInstance(mContext).getBook(bookData.id);
-        if (book != null){
+        if (book != null) {
             mBookData.chapter = book.chapter;
             mBookData.pageIndex = book.pageIndex;
         }
@@ -254,7 +255,7 @@ public abstract class PageLoader {
         if (parsePrevChapter()) {
             mCurPage = getCurPage(0);
         } else {
-            mCurPage = new TxtPage();
+            mCurPage = new UPTxtPage();
         }
         mPageView.drawCurPage(false);
         return true;
@@ -274,7 +275,7 @@ public abstract class PageLoader {
         if (parseNextChapter()) {
             mCurPage = getCurPage(0);
         } else {
-            mCurPage = new TxtPage();
+            mCurPage = new UPTxtPage();
         }
         mPageView.drawCurPage(false);
         return true;
@@ -617,7 +618,7 @@ public abstract class PageLoader {
                 mCurPage = getCurPage(0);
             }
         } else {
-            mCurPage = new TxtPage();
+            mCurPage = new UPTxtPage();
         }
 
         mPageView.drawCurPage(false);
@@ -671,7 +672,7 @@ public abstract class PageLoader {
      * @param chapterPos:章节序号
      * @return
      */
-    private List<TxtPage> loadPageList(int chapterPos) throws Exception {
+    private List<UPTxtPage> loadPageList(int chapterPos) throws Exception {
         // 获取章节
         UPChapter chapter = mChapterList.get(chapterPos);
         // 判断章节是否存在
@@ -680,7 +681,7 @@ public abstract class PageLoader {
         }
         // 获取章节的文本流
         BufferedReader reader = getChapterReader(chapter);
-        List<TxtPage> chapters = loadPages(chapter, reader);
+        List<UPTxtPage> chapters = loadPages(chapter, reader);
 
         return chapters;
     }
@@ -939,7 +940,7 @@ public abstract class PageLoader {
 
         if (mStatus == STATUS_FINISH) {
             // 先查看是否存在上一页
-            TxtPage prevPage = getPrevPage();
+            UPTxtPage prevPage = getPrevPage();
             if (prevPage != null) {
                 mCancelPage = mCurPage;
                 mCurPage = prevPage;
@@ -956,7 +957,7 @@ public abstract class PageLoader {
         if (parsePrevChapter()) {
             mCurPage = getPrevLastPage();
         } else {
-            mCurPage = new TxtPage();
+            mCurPage = new UPTxtPage();
         }
         mPageView.drawNextPage();
         return true;
@@ -1011,7 +1012,7 @@ public abstract class PageLoader {
 
         if (mStatus == STATUS_FINISH) {
             // 先查看是否存在下一页
-            TxtPage nextPage = getNextPage();
+            UPTxtPage nextPage = getNextPage();
             if (nextPage != null) {
                 mCancelPage = mCurPage;
                 mCurPage = nextPage;
@@ -1029,7 +1030,7 @@ public abstract class PageLoader {
         if (parseNextChapter()) {
             mCurPage = mCurPageList.get(0);
         } else {
-            mCurPage = new TxtPage();
+            mCurPage = new UPTxtPage();
         }
         mPageView.drawNextPage();
         return true;
@@ -1088,7 +1089,7 @@ public abstract class PageLoader {
                     mStatus = STATUS_EMPTY;
 
                     // 添加一个空数据
-                    TxtPage page = new TxtPage();
+                    UPTxtPage page = new UPTxtPage();
                     page.lines = new ArrayList<>(1);
                     mCurPageList.add(page);
                 } else {
@@ -1131,20 +1132,20 @@ public abstract class PageLoader {
         }
 
         //调用异步进行预加载加载
-        Single.create(new SingleOnSubscribe<List<TxtPage>>() {
+        Single.create(new SingleOnSubscribe<List<UPTxtPage>>() {
             @Override
-            public void subscribe(SingleEmitter<List<TxtPage>> e) throws Exception {
+            public void subscribe(SingleEmitter<List<UPTxtPage>> e) throws Exception {
                 e.onSuccess(loadPageList(nextChapter));
             }
         }).compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<List<TxtPage>>() {
+                .subscribe(new SingleObserver<List<UPTxtPage>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         mPreLoadDisp = d;
                     }
 
                     @Override
-                    public void onSuccess(List<TxtPage> pages) {
+                    public void onSuccess(List<UPTxtPage> pages) {
                         mNextPageList = pages;
                     }
 
@@ -1164,7 +1165,7 @@ public abstract class PageLoader {
                 if (parsePrevChapter()) {
                     mCurPage = getPrevLastPage();
                 } else {
-                    mCurPage = new TxtPage();
+                    mCurPage = new UPTxtPage();
                 }
             }
         } else if (mCurPageList == null
@@ -1177,7 +1178,7 @@ public abstract class PageLoader {
                 if (parseNextChapter()) {
                     mCurPage = mCurPageList.get(0);
                 } else {
-                    mCurPage = new TxtPage();
+                    mCurPage = new UPTxtPage();
                 }
             }
         } else {
@@ -1225,9 +1226,9 @@ public abstract class PageLoader {
      * @param br：章节的文本流
      * @return
      */
-    private List<TxtPage> loadPages(UPChapter chapter, BufferedReader br) {
+    private List<UPTxtPage> loadPages(UPChapter chapter, BufferedReader br) {
         //生成的页面
-        List<TxtPage> pages = new ArrayList<>();
+        List<UPTxtPage> pages = new ArrayList<>();
         //使用流的方式加载
         List<String> lines = new ArrayList<>();
         int rHeight = mVisibleHeight;
@@ -1258,7 +1259,7 @@ public abstract class PageLoader {
                     // 一页已经填充满了，创建 TextPage
                     if (rHeight <= 0) {
                         // 创建Page
-                        TxtPage page = new TxtPage();
+                        UPTxtPage page = new UPTxtPage();
                         page.position = pages.size();
                         page.title = chapter.title;
                         page.lines = new ArrayList<>(lines);
@@ -1311,7 +1312,7 @@ public abstract class PageLoader {
 
             if (lines.size() != 0) {
                 //创建Page
-                TxtPage page = new TxtPage();
+                UPTxtPage page = new UPTxtPage();
                 page.position = pages.size();
                 page.title = chapter.title;
                 page.lines = new ArrayList<>(lines);
@@ -1334,7 +1335,7 @@ public abstract class PageLoader {
     /**
      * @return:获取初始显示的页面
      */
-    private TxtPage getCurPage(int pos) {
+    private UPTxtPage getCurPage(int pos) {
         if (mPageChangeListener != null) {
             mPageChangeListener.onPageChange(pos);
         }
@@ -1344,7 +1345,7 @@ public abstract class PageLoader {
     /**
      * @return:获取上一个页面
      */
-    private TxtPage getPrevPage() {
+    private UPTxtPage getPrevPage() {
         int pos = mCurPage.position - 1;
         if (pos < 0) {
             return null;
@@ -1358,7 +1359,7 @@ public abstract class PageLoader {
     /**
      * @return:获取下一的页面
      */
-    private TxtPage getNextPage() {
+    private UPTxtPage getNextPage() {
         int pos = mCurPage.position + 1;
         if (pos >= mCurPageList.size()) {
             return null;
@@ -1372,7 +1373,7 @@ public abstract class PageLoader {
     /**
      * @return:获取上一个章节的最后一页
      */
-    private TxtPage getPrevLastPage() {
+    private UPTxtPage getPrevLastPage() {
         int pos = mCurPageList.size() - 1;
 
         if (mPageChangeListener != null) {
