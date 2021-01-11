@@ -71,11 +71,6 @@ public class LocalPageLoader extends PageLoader {
     }
 
     @Override
-    public void closeBook() {
-        super.closeBook();
-    }
-
-    @Override
     public void refreshChapterList() {
         // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
         File file = mAgent.getFile();
