@@ -1,4 +1,4 @@
-package com.rowe.book.widget.page;
+package com.rowe.book.page;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,22 +9,22 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.rowe.book.animation.CoverPageAnim;
+import com.rowe.book.animation.HorizonPageAnim;
+import com.rowe.book.animation.NonePageAnim;
+import com.rowe.book.animation.ScrollPageAnim;
+import com.rowe.book.animation.SimulationPageAnim;
+import com.rowe.book.animation.SlidePageAnim;
+import com.rowe.book.animation.UPBasePageAnim;
 import com.rowe.book.book.UPBook;
-import com.rowe.book.widget.animation.CoverPageAnim;
-import com.rowe.book.widget.animation.HorizonPageAnim;
-import com.rowe.book.widget.animation.NonePageAnim;
-import com.rowe.book.widget.animation.PageAnimation;
-import com.rowe.book.widget.animation.ScrollPageAnim;
-import com.rowe.book.widget.animation.SimulationPageAnim;
-import com.rowe.book.widget.animation.SlidePageAnim;
+import com.rowe.book.widget.page.PageLoader;
 
 /**
- * Created by Administrator on 2016/8/29 0029.
+ * 2016/8/29 0029.
  * 原作者的GitHub Project Path:(https://github.com/PeachBlossom/treader)
  * 绘制页面显示内容的类
  */
 public class PageView extends View {
-
     private final static String TAG = "BookPageWidget";
 
     private int mViewWidth = 0; // 当前View的宽
@@ -35,16 +35,16 @@ public class PageView extends View {
     private boolean isMove = false;
     // 初始化参数
     private int mBgColor = 0xFFCEC29C;
-    private PageMode mPageMode = PageMode.SIMULATION;
+    private UPPageMode mPageMode = UPPageMode.SIMULATION;
     // 是否允许点击
     private boolean canTouch = true;
     // 唤醒菜单的区域
     private RectF mCenterRect = null;
     private boolean isPrepare;
     // 动画类
-    private PageAnimation mPageAnim;
+    private UPBasePageAnim mPageAnim;
     // 动画监听类
-    private PageAnimation.OnPageChangeListener mPageAnimListener = new PageAnimation.OnPageChangeListener() {
+    private UPBasePageAnim.OnPageChangeListener mPageAnimListener = new UPBasePageAnim.OnPageChangeListener() {
         @Override
         public boolean hasPrev() {
             return PageView.this.hasPrevPage();
@@ -92,7 +92,7 @@ public class PageView extends View {
     }
 
     //设置翻页的模式
-    void setPageMode(PageMode pageMode) {
+    public void setPageMode(UPPageMode pageMode) {
         mPageMode = pageMode;
         //视图未初始化的时候，禁止调用
         if (mViewWidth == 0 || mViewHeight == 0) return;
@@ -134,7 +134,7 @@ public class PageView extends View {
         if (mPageAnim instanceof ScrollPageAnim) {
             return false;
         } else {
-            startPageAnim(PageAnimation.Direction.PRE);
+            startPageAnim(UPBasePageAnim.Direction.PRE);
             return true;
         }
     }
@@ -143,16 +143,16 @@ public class PageView extends View {
         if (mPageAnim instanceof ScrollPageAnim) {
             return false;
         } else {
-            startPageAnim(PageAnimation.Direction.NEXT);
+            startPageAnim(UPBasePageAnim.Direction.NEXT);
             return true;
         }
     }
 
-    private void startPageAnim(PageAnimation.Direction direction) {
+    private void startPageAnim(UPBasePageAnim.Direction direction) {
         if (mTouchListener == null) return;
         //是否正在执行动画
         abortAnimation();
-        if (direction == PageAnimation.Direction.NEXT) {
+        if (direction == UPBasePageAnim.Direction.NEXT) {
             int x = mViewWidth;
             int y = mViewHeight;
             //初始化动画
@@ -345,7 +345,7 @@ public class PageView extends View {
             return mPageLoader;
         }
         // 根据书籍类型，获取具体的加载器
-        mPageLoader = new LocalPageLoader(this, bookData);
+        mPageLoader = new PageLoader(this, bookData);
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {
             // 初始化 PageLoader 的屏幕大小

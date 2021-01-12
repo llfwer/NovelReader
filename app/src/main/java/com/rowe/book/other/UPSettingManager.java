@@ -1,8 +1,8 @@
 package com.rowe.book.other;
 
 import com.rowe.book.utils.UPSharedPreUtils;
-import com.rowe.book.widget.page.PageMode;
-import com.rowe.book.widget.page.PageStyle;
+import com.rowe.book.page.UPPageMode;
+import com.rowe.book.page.UPPageStyle;
 
 /**
  * 阅读器的配置管理
@@ -38,7 +38,7 @@ public class UPSettingManager {
         mSp = UPSharedPreUtils.getInstance();
     }
 
-    public void setPageStyle(PageStyle pageStyle) {
+    public void setPageStyle(UPPageStyle pageStyle) {
         mSp.putInt(SHARED_READ_BG, pageStyle.ordinal());
     }
 
@@ -54,7 +54,7 @@ public class UPSettingManager {
         mSp.putInt(SHARED_READ_TEXT_SIZE, textSize);
     }
 
-    public void setPageMode(PageMode mode) {
+    public void setPageMode(UPPageMode mode) {
         mSp.putInt(SHARED_READ_PAGE_MODE, mode.ordinal());
     }
 
@@ -78,14 +78,14 @@ public class UPSettingManager {
         return mSp.getInt(SHARED_READ_TEXT_SIZE, DEFAULT_TEXT_SIZE);
     }
 
-    public PageMode getPageMode() {
-        int mode = mSp.getInt(SHARED_READ_PAGE_MODE, PageMode.SIMULATION.ordinal());
-        return PageMode.values()[mode];
+    public UPPageMode getPageMode() {
+        int mode = mSp.getInt(SHARED_READ_PAGE_MODE, UPPageMode.SIMULATION.ordinal());
+        return UPPageMode.values()[mode];
     }
 
-    public PageStyle getPageStyle() {
-        int style = mSp.getInt(SHARED_READ_BG, PageStyle.BG_0.ordinal());
-        return PageStyle.values()[style];
+    public UPPageStyle getPageStyle() {
+        int style = mSp.getInt(SHARED_READ_BG, UPPageStyle.BG_0.ordinal());
+        return UPPageStyle.values()[style];
     }
 
     public boolean isNightMode() {

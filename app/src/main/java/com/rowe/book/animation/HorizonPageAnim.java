@@ -1,4 +1,4 @@
-package com.rowe.book.widget.animation;
+package com.rowe.book.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 /**
- * Created by newbiechen on 17-7-24.
  * 横向动画的模板
  */
-
-public abstract class HorizonPageAnim extends PageAnimation{
+public abstract class HorizonPageAnim extends UPBasePageAnim {
     private static final String TAG = "HorizonPageAnim";
 
     protected Bitmap mCurBitmap;
@@ -36,7 +34,7 @@ public abstract class HorizonPageAnim extends PageAnimation{
 
     public HorizonPageAnim(int w, int h, int marginWidth, int marginHeight,
                            View view, OnPageChangeListener listener) {
-        super(w, h, marginWidth, marginHeight, view,listener);
+        super(w, h, marginWidth, marginHeight, view, listener);
         //创建图片
         mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
         mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
@@ -45,7 +43,7 @@ public abstract class HorizonPageAnim extends PageAnimation{
     /**
      * 转换页面，在显示下一章的时候，必须首先调用此方法
      */
-    public void changePage(){
+    public void changePage() {
         Bitmap bitmap = mCurBitmap;
         mCurBitmap = mNextBitmap;
         mNextBitmap = bitmap;
@@ -58,12 +56,12 @@ public abstract class HorizonPageAnim extends PageAnimation{
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //获取点击位置
-        int x = (int)event.getX();
-        int y = (int)event.getY();
+        int x = (int) event.getX();
+        int y = (int) event.getY();
         //设置触摸点
-        setTouchPoint(x,y);
+        setTouchPoint(x, y);
 
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 //移动的点击位置
                 mMoveX = 0;
@@ -79,7 +77,7 @@ public abstract class HorizonPageAnim extends PageAnimation{
                 //取消
                 isCancel = false;
                 //设置起始位置的触摸点
-                setStartPoint(x,y);
+                setStartPoint(x, y);
                 //如果存在动画则取消动画
                 abortAnim();
                 break;
@@ -90,11 +88,11 @@ public abstract class HorizonPageAnim extends PageAnimation{
                     isMove = Math.abs(mStartX - x) > slop || Math.abs(mStartY - y) > slop;
                 }
 
-                if (isMove){
+                if (isMove) {
                     //判断是否是准备移动的状态(将要移动但是还没有移动)
-                    if (mMoveX == 0 && mMoveY ==0) {
+                    if (mMoveX == 0 && mMoveY == 0) {
                         //判断翻得是上一页还是下一页
-                        if (x - mStartX > 0){
+                        if (x - mStartX > 0) {
                             //上一页的参数配置
                             isNext = false;
                             boolean hasPrev = mListener.hasPrev();
@@ -104,7 +102,7 @@ public abstract class HorizonPageAnim extends PageAnimation{
                                 noNext = true;
                                 return true;
                             }
-                        }else{
+                        } else {
                             //进行下一页的配置
                             isNext = true;
                             //判断是否下一页存在
@@ -118,18 +116,18 @@ public abstract class HorizonPageAnim extends PageAnimation{
                                 return true;
                             }
                         }
-                    }else{
+                    } else {
                         //判断是否取消翻页
-                        if (isNext){
-                            if (x - mMoveX > 0){
+                        if (isNext) {
+                            if (x - mMoveX > 0) {
                                 isCancel = true;
-                            }else {
+                            } else {
                                 isCancel = false;
                             }
-                        }else{
-                            if (x - mMoveX < 0){
+                        } else {
+                            if (x - mMoveX < 0) {
                                 isCancel = true;
-                            }else {
+                            } else {
                                 isCancel = false;
                             }
                         }
@@ -142,10 +140,10 @@ public abstract class HorizonPageAnim extends PageAnimation{
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (!isMove){
-                    if (x < mScreenWidth / 2){
+                if (!isMove) {
+                    if (x < mScreenWidth / 2) {
                         isNext = false;
-                    }else{
+                    } else {
                         isNext = true;
                     }
 
@@ -167,7 +165,7 @@ public abstract class HorizonPageAnim extends PageAnimation{
                 }
 
                 // 是否取消翻页
-                if (isCancel){
+                if (isCancel) {
                     mListener.pageCancel();
                 }
 
@@ -186,7 +184,7 @@ public abstract class HorizonPageAnim extends PageAnimation{
         if (isRunning) {
             drawMove(canvas);
         } else {
-            if (isCancel){
+            if (isCancel) {
                 mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
             }
             drawStatic(canvas);
@@ -201,7 +199,7 @@ public abstract class HorizonPageAnim extends PageAnimation{
 
             setTouchPoint(x, y);
 
-            if (mScroller.getFinalX() == x && mScroller.getFinalY() == y){
+            if (mScroller.getFinalX() == x && mScroller.getFinalY() == y) {
                 isRunning = false;
             }
             mView.postInvalidate();
@@ -210,10 +208,10 @@ public abstract class HorizonPageAnim extends PageAnimation{
 
     @Override
     public void abortAnim() {
-        if (!mScroller.isFinished()){
+        if (!mScroller.isFinished()) {
             mScroller.abortAnimation();
             isRunning = false;
-            setTouchPoint(mScroller.getFinalX(),mScroller.getFinalY());
+            setTouchPoint(mScroller.getFinalX(), mScroller.getFinalY());
             mView.postInvalidate();
         }
     }

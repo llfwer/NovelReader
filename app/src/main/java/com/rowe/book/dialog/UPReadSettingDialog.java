@@ -29,8 +29,8 @@ import com.rowe.book.adapter.UPPageStyleAdapter;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.utils.BrightnessUtils;
 import com.rowe.book.widget.page.PageLoader;
-import com.rowe.book.widget.page.PageMode;
-import com.rowe.book.widget.page.PageStyle;
+import com.rowe.book.page.UPPageMode;
+import com.rowe.book.page.UPPageStyle;
 
 import java.util.Arrays;
 
@@ -61,8 +61,8 @@ public class UPReadSettingDialog extends Dialog {
     private PageLoader mPageLoader;
     private Activity mActivity;
 
-    private PageMode mPageMode;
-    private PageStyle mPageStyle;
+    private UPPageMode mPageMode;
+    private UPPageStyle mPageStyle;
 
     private int mBrightness;
     private int mTextSize;
@@ -141,7 +141,7 @@ public class UPReadSettingDialog extends Dialog {
             @Override
             public void onItemClick(View view, int position) {
                 mPageStyleAdapter.setStyle(position);
-                mPageLoader.setPageStyle(PageStyle.values()[position]);
+                mPageLoader.setPageStyle(UPPageStyle.values()[position]);
             }
         });
         mBgListView.setLayoutManager(new GridLayoutManager(getContext(), 5));
@@ -280,25 +280,25 @@ public class UPReadSettingDialog extends Dialog {
         //Page Mode 切换
         mRgPageMode.setOnCheckedChangeListener(
                 (group, checkedId) -> {
-                    PageMode pageMode;
+                    UPPageMode pageMode;
                     switch (checkedId) {
                         case R.id.read_setting_rb_simulation:
-                            pageMode = PageMode.SIMULATION;
+                            pageMode = UPPageMode.SIMULATION;
                             break;
                         case R.id.read_setting_rb_cover:
-                            pageMode = PageMode.COVER;
+                            pageMode = UPPageMode.COVER;
                             break;
                         case R.id.read_setting_rb_slide:
-                            pageMode = PageMode.SLIDE;
+                            pageMode = UPPageMode.SLIDE;
                             break;
                         case R.id.read_setting_rb_scroll:
-                            pageMode = PageMode.SCROLL;
+                            pageMode = UPPageMode.SCROLL;
                             break;
                         case R.id.read_setting_rb_none:
-                            pageMode = PageMode.NONE;
+                            pageMode = UPPageMode.NONE;
                             break;
                         default:
-                            pageMode = PageMode.SIMULATION;
+                            pageMode = UPPageMode.SIMULATION;
                             break;
                     }
                     mPageLoader.setPageMode(pageMode);

@@ -18,26 +18,31 @@ import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPChapter;
 import com.rowe.book.book.UPTxtPage;
 import com.rowe.book.data.UPBookAgent;
+import com.rowe.book.data.UPBookCallback;
+import com.rowe.book.data.UPBookResponse;
 import com.rowe.book.other.UPRunnable;
 import com.rowe.book.other.UPSettingManager;
 import com.rowe.book.other.UPTask;
 import com.rowe.book.other.UPTaskAgent;
+import com.rowe.book.page.PageView;
+import com.rowe.book.page.UPPageMode;
+import com.rowe.book.page.UPPageStyle;
 import com.rowe.book.utils.Constant;
 import com.rowe.book.utils.IOUtil;
 import com.rowe.book.utils.StringUtils;
 import com.rowe.book.utils.UPScreenUtil;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by newbiechen on 17-7-1.
- */
-
-public abstract class PageLoader {
+public class PageLoader {
     private static final String TAG = "PageLoader";
 
     // 当前页面的状态
@@ -102,9 +107,9 @@ public abstract class PageLoader {
     private boolean isFirstOpen = true;
     private boolean isClose;
     // 页面的翻页效果模式
-    private PageMode mPageMode;
+    private UPPageMode mPageMode;
     // 加载器的颜色主题
-    private PageStyle mPageStyle;
+    private UPPageStyle mPageStyle;
     //当前是否是夜间模式
     private boolean isNightMode;
     //书籍绘制区域的宽高
@@ -147,6 +152,7 @@ public abstract class PageLoader {
         mContext = pageView.getContext();
         mBookData = bookData;
         mChapterList = new ArrayList<>(1);
+        mStatus = STATUS_PARING;
 
         UPBook book = UPBookDBManager.getInstance(mContext).getBook(bookData.id);
         if (book != null) {
@@ -415,7 +421,7 @@ public abstract class PageLoader {
 
         if (isNightMode) {
             mBatteryPaint.setColor(Color.WHITE);
-            setPageStyle(PageStyle.NIGHT);
+            setPageStyle(UPPageStyle.NIGHT);
         } else {
             mBatteryPaint.setColor(Color.BLACK);
             setPageStyle(mPageStyle);
@@ -427,13 +433,13 @@ public abstract class PageLoader {
      *
      * @param pageStyle:页面样式
      */
-    public void setPageStyle(PageStyle pageStyle) {
-        if (pageStyle != PageStyle.NIGHT) {
+    public void setPageStyle(UPPageStyle pageStyle) {
+        if (pageStyle != UPPageStyle.NIGHT) {
             mPageStyle = pageStyle;
             mSettingManager.setPageStyle(pageStyle);
         }
 
-        if (isNightMode && pageStyle != PageStyle.NIGHT) {
+        if (isNightMode && pageStyle != UPPageStyle.NIGHT) {
             return;
         }
 
@@ -454,9 +460,9 @@ public abstract class PageLoader {
      * 翻页动画
      *
      * @param pageMode:翻页模式
-     * @see PageMode
+     * @see UPPageMode
      */
-    public void setPageMode(PageMode pageMode) {
+    public void setPageMode(UPPageMode pageMode) {
         mPageMode = pageMode;
 
         mPageView.setPageMode(mPageMode);
@@ -477,8 +483,8 @@ public abstract class PageLoader {
         mMarginHeight = marginHeight;
 
         // 如果是滑动动画，则需要重新创建了
-        if (mPageMode == PageMode.SCROLL) {
-            mPageView.setPageMode(PageMode.SCROLL);
+        if (mPageMode == UPPageMode.SCROLL) {
+            mPageView.setPageMode(UPPageMode.SCROLL);
         }
 
         mPageView.drawCurPage(false);
@@ -556,15 +562,17 @@ public abstract class PageLoader {
      * 保存阅读记录
      */
     public void saveRecord() {
+        if (mBookData == null) return;
 
-        if (mChapterList.isEmpty()) {
-            return;
+        mBookData.readTime = System.currentTimeMillis();
+        if (!mChapterList.isEmpty()) {
+            mBookData.chapter = mCurChapterPos;
+            mBookData.chapterTitle = mChapterList.get(mCurChapterPos).title;
+            if (mCurPage != null) {
+                mBookData.pageIndex = mCurPage.position;
+            }
         }
-
-        mBookData.chapter = mCurChapterPos;
-        if (mCurPage != null) {
-            mBookData.pageIndex = mCurPage.position;
-        }
+        mBookData.hasRead = true;
         UPBookDBManager.getInstance(App.getContext()).saveBook(mBookData);
     }
 
@@ -691,7 +699,81 @@ public abstract class PageLoader {
     /**
      * 刷新章节列表
      */
-    public abstract void refreshChapterList();
+    public void refreshChapterList() {
+        // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
+        File file = mAgent.getFile();
+
+        long lastModified = file.lastModified();
+
+        // 判断文件是否已经加载过，并具有缓存
+        if (lastModified == mBookData.modifyTime && mBookData.chapterList != null) {
+
+            mChapterList = mBookData.chapterList;
+            isChapterListPrepare = true;
+
+            //提示目录加载完成
+            if (mPageChangeListener != null) {
+                mPageChangeListener.onCategoryFinish(mChapterList);
+            }
+
+            // 加载并显示当前章节
+            openChapter();
+
+            return;
+        }
+
+        mAgent.getChapterList(new UPBookCallback() {
+            @Override
+            public void onResponse(UPBookResponse response) {
+                if (response.isSuccessful()) {
+                    mChapterList = response.getChapterList();
+                    isChapterListPrepare = true;
+
+                    // 提示目录加载完成
+                    if (mPageChangeListener != null) {
+                        mPageChangeListener.onCategoryFinish(mChapterList);
+                    }
+
+                    // 存储章节到数据库
+                    mBookData.chapterList = mChapterList;
+                    mBookData.modifyTime = lastModified;
+
+                    // 加载并显示当前章节
+                    openChapter();
+                } else {
+                    chapterError();
+                    //Log.d(TAG, "file load error:" + e.toString());
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 从文件中提取一章的内容
+     *
+     * @param chapter
+     * @return
+     */
+    private byte[] getChapterContent(UPChapter chapter) {
+        RandomAccessFile bookStream = null;
+        try {
+            bookStream = new RandomAccessFile(mAgent.getFile(), "r");
+            bookStream.seek(chapter.start);
+            int extent = (int) (chapter.end - chapter.start);
+            byte[] content = new byte[extent];
+            bookStream.read(content, 0, extent);
+            return content;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtil.closeQuietly(bookStream);
+        }
+
+        return new byte[0];
+    }
 
     /**
      * 获取章节的文本流
@@ -699,18 +781,25 @@ public abstract class PageLoader {
      * @param chapter
      * @return
      */
-    protected abstract BufferedReader getChapterReader(UPChapter chapter) throws Exception;
+    protected BufferedReader getChapterReader(UPChapter chapter) throws Exception {
+        //从文件中获取数据
+        byte[] content = getChapterContent(chapter);
+        ByteArrayInputStream bais = new ByteArrayInputStream(content);
+        return new BufferedReader(new InputStreamReader(bais, mAgent.getCharsetName()));
+    }
 
     /**
      * 章节数据是否存在
      *
      * @return
      */
-    protected abstract boolean hasChapterData(UPChapter chapter);
+    protected boolean hasChapterData(UPChapter chapter) {
+        return true;
+    }
 
     /***********************************default method***********************************************/
 
-    void drawPage(Bitmap bitmap, boolean isUpdate) {
+    public void drawPage(Bitmap bitmap, boolean isUpdate) {
         drawBackground(mPageView.getBgBitmap(), isUpdate);
         if (!isUpdate) {
             drawContent(bitmap);
@@ -806,7 +895,7 @@ public abstract class PageLoader {
     private void drawContent(Bitmap bitmap) {
         Canvas canvas = new Canvas(bitmap);
 
-        if (mPageMode == PageMode.SCROLL) {
+        if (mPageMode == UPPageMode.SCROLL) {
             canvas.drawColor(mBgColor);
         }
         /******绘制内容****/
@@ -845,7 +934,7 @@ public abstract class PageLoader {
         } else {
             float top;
 
-            if (mPageMode == PageMode.SCROLL) {
+            if (mPageMode == UPPageMode.SCROLL) {
                 top = -mTextPaint.getFontMetrics().top;
             } else {
                 top = mMarginHeight - mTextPaint.getFontMetrics().top;
@@ -895,7 +984,7 @@ public abstract class PageLoader {
         }
     }
 
-    void prepareDisplay(int w, int h) {
+    public void prepareDisplay(int w, int h) {
         // 获取PageView的宽高
         mDisplayWidth = w;
         mDisplayHeight = h;
@@ -932,7 +1021,7 @@ public abstract class PageLoader {
      *
      * @return
      */
-    boolean prev() {
+    public boolean prev() {
         // 以下情况禁止翻页
         if (!canTurnPage()) {
             return false;
@@ -1004,7 +1093,7 @@ public abstract class PageLoader {
      *
      * @return:是否允许翻页
      */
-    boolean next() {
+    public boolean next() {
         // 以下情况禁止翻页
         if (!canTurnPage()) {
             return false;
@@ -1152,7 +1241,7 @@ public abstract class PageLoader {
     }
 
     // 取消翻页
-    void pageCancel() {
+    public void pageCancel() {
         if (mCurPage.position == 0 && mCurChapterPos > mLastChapterPos) { // 加载到下一章取消了
             if (mPrePageList != null) {
                 cancelNextChapter();

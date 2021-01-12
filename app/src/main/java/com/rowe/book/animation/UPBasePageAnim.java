@@ -1,4 +1,4 @@
-package com.rowe.book.widget.animation;
+package com.rowe.book.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,11 +8,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
 /**
- * Created by newbiechen on 17-7-24.
  * 翻页动画抽象类
  */
-
-public abstract class PageAnimation {
+public abstract class UPBasePageAnim {
     //正在使用的View
     protected View mView;
     //滑动装置
@@ -43,11 +41,11 @@ public abstract class PageAnimation {
     protected float mLastX;
     protected float mLastY;
 
-    public PageAnimation(int w, int h,View view,OnPageChangeListener listener){
-        this(w, h, 0, 0, view,listener);
+    public UPBasePageAnim(int w, int h, View view, OnPageChangeListener listener) {
+        this(w, h, 0, 0, view, listener);
     }
 
-    public PageAnimation(int w, int h, int marginWidth, int marginHeight, View view,OnPageChangeListener listener){
+    public UPBasePageAnim(int w, int h, int marginWidth, int marginHeight, View view, OnPageChangeListener listener) {
         mScreenWidth = w;
         mScreenHeight = h;
 
@@ -63,7 +61,7 @@ public abstract class PageAnimation {
         mScroller = new Scroller(mView.getContext(), new LinearInterpolator());
     }
 
-    public void setStartPoint(float x,float y){
+    public void setStartPoint(float x, float y) {
         mStartX = x;
         mStartY = y;
 
@@ -71,7 +69,7 @@ public abstract class PageAnimation {
         mLastY = mStartY;
     }
 
-    public void setTouchPoint(float x,float y){
+    public void setTouchPoint(float x, float y) {
         mLastX = mTouchX;
         mLastY = mTouchY;
 
@@ -79,40 +77,38 @@ public abstract class PageAnimation {
         mTouchY = y;
     }
 
-    public boolean isRunning(){
+    public boolean isRunning() {
         return isRunning;
     }
 
     /**
      * 开启翻页动画
      */
-    public void startAnim(){
-        if (isRunning){
-            return;
+    public void startAnim() {
+        if (!isRunning) {
+            isRunning = true;
         }
-        isRunning = true;
     }
 
-    public void setDirection(Direction direction){
+    public void setDirection(Direction direction) {
         mDirection = direction;
     }
 
-    public Direction getDirection(){
+    public Direction getDirection() {
         return mDirection;
     }
 
-    public void clear(){
+    public void clear() {
         mView = null;
     }
+
     /**
      * 点击事件的处理
-     * @param event
      */
     public abstract boolean onTouchEvent(MotionEvent event);
 
     /**
      * 绘制图形
-     * @param canvas
      */
     public abstract void draw(Canvas canvas);
 
@@ -129,7 +125,6 @@ public abstract class PageAnimation {
 
     /**
      * 获取背景板
-     * @return
      */
     public abstract Bitmap getBgBitmap();
 
@@ -139,7 +134,7 @@ public abstract class PageAnimation {
     public abstract Bitmap getNextBitmap();
 
     public enum Direction {
-        NONE(true),NEXT(true), PRE(true), UP(false), DOWN(false);
+        NONE(true), NEXT(true), PRE(true), UP(false), DOWN(false);
 
         public final boolean isHorizontal;
 
@@ -150,8 +145,9 @@ public abstract class PageAnimation {
 
     public interface OnPageChangeListener {
         boolean hasPrev();
+
         boolean hasNext();
+
         void pageCancel();
     }
-
 }

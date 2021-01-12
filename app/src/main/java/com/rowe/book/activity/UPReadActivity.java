@@ -46,7 +46,7 @@ import com.rowe.book.utils.BrightnessUtils;
 import com.rowe.book.utils.SystemBarUtils;
 import com.rowe.book.utils.UPScreenUtil;
 import com.rowe.book.widget.page.PageLoader;
-import com.rowe.book.widget.page.PageView;
+import com.rowe.book.page.PageView;
 
 import java.util.List;
 

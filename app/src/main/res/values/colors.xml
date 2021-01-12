@@ -50,9 +50,6 @@
     <color name="nb.read.font_3">#92918C</color>
     <color name="nb.read.font_4">#383429</color>
     <color name="nb.read.font_5">#627176</color>
-    
-    <color name="nb.read.bg.night">#000000</color>
-    <color name="nb.read.font_night">#99ffffff</color>
 
     <!-- 品牌色 -->
     <color name="up_common_brand_color">#F71828</color>
@@ -117,4 +114,7 @@
 
     <color name="up_read_menu_bg_color">#191919</color>
     <color name="up_read_menu_text_color">#CBCBCB</color>
+
+    <color name="up_read_bg_night_color">#000000</color>
+    <color name="up_read_font_night_color">#99ffffff</color>
 </resources>

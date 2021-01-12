@@ -1,4 +1,4 @@
-package com.rowe.book.widget.animation;
+package com.rowe.book.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,7 +21,7 @@ import java.util.Iterator;
  * 2. 滑动卡顿的问题。原因:由于绘制的数据过多造成的卡顿问题。 (主要是文字绘制需要的时长比较多) 解决办法：做文字缓冲
  * 3. 弱网环境下，显示的问题
  */
-public class ScrollPageAnim extends PageAnimation {
+public class ScrollPageAnim extends UPBasePageAnim {
     private static final String TAG = "ScrollAnimation";
     // 滑动追踪的时间
     private static final int VELOCITY_DURATION = 1000;

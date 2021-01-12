@@ -1,4 +1,4 @@
-package com.rowe.book.widget.animation;
+package com.rowe.book.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
