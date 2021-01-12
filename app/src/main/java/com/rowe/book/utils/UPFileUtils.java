@@ -16,10 +16,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
-
 public class UPFileUtils {
     //采用自己的格式去设置文件，防止文件被系统文件查询到
     public static final String SUFFIX_NB = ".nb";
@@ -183,19 +179,6 @@ public class UPFileUtils {
             txtFiles.addAll(getTxtFiles(dir.getPath(), layer + 1));
         }
         return txtFiles;
-    }
-
-    //由于遍历比较耗时
-    public static Single<List<File>> getSDTxtFile() {
-        //外部存储卡路径
-        String rootPath = Environment.getExternalStorageDirectory().getPath();
-        return Single.create(new SingleOnSubscribe<List<File>>() {
-            @Override
-            public void subscribe(SingleEmitter<List<File>> e) throws Exception {
-                List<File> files = getTxtFiles(rootPath, 0);
-                e.onSuccess(files);
-            }
-        });
     }
 
     //获取文件的编码格式

@@ -18,10 +18,12 @@ import com.rowe.book.book.UPBookDBManager;
 import com.rowe.book.book.UPChapter;
 import com.rowe.book.book.UPTxtPage;
 import com.rowe.book.data.UPBookAgent;
+import com.rowe.book.other.UPRunnable;
 import com.rowe.book.other.UPSettingManager;
+import com.rowe.book.other.UPTask;
+import com.rowe.book.other.UPTaskAgent;
 import com.rowe.book.utils.Constant;
 import com.rowe.book.utils.IOUtil;
-import com.rowe.book.utils.RxUtils;
 import com.rowe.book.utils.StringUtils;
 import com.rowe.book.utils.UPScreenUtil;
 
@@ -30,12 +32,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleObserver;
-import io.reactivex.SingleOnSubscribe;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by newbiechen on 17-7-1.
@@ -92,7 +88,8 @@ public abstract class PageLoader {
     // 被遮盖的页，或者认为被取消显示的页
     private UPTxtPage mCancelPage;
 
-    private Disposable mPreLoadDisp;
+    private UPTaskAgent<List<UPTxtPage>> mTaskAgent;
+    private UPTask<List<UPTxtPage>> mTask;
 
     /*****************params**************************/
     // 当前的状态
@@ -157,6 +154,7 @@ public abstract class PageLoader {
             mBookData.pageIndex = book.pageIndex;
         }
         mAgent = new UPBookAgent(mContext, bookData);
+        mTaskAgent = new UPTaskAgent<>();
 
         // 初始化数据
         initData();
@@ -293,8 +291,9 @@ public abstract class PageLoader {
         // 将上一章的缓存设置为null
         mPrePageList = null;
         // 如果当前下一章缓存正在执行，则取消
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp.dispose();
+        if (mTask != null) {
+            mTaskAgent.cancel(mTask);
+            mTask = null;
         }
         // 将下一章缓存设置为null
         mNextPageList = null;
@@ -637,8 +636,9 @@ public abstract class PageLoader {
         isChapterListPrepare = false;
         isClose = true;
 
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp.dispose();
+        if (mTask != null) {
+            mTaskAgent.cancel(mTask);
+            mTask = null;
         }
 
         clearList(mChapterList);
@@ -1127,33 +1127,28 @@ public abstract class PageLoader {
         }
 
         //如果之前正在加载则取消
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp.dispose();
+        if (mTask != null) {
+            mTaskAgent.cancel(mTask);
+            mTask = null;
         }
 
         //调用异步进行预加载加载
-        Single.create(new SingleOnSubscribe<List<UPTxtPage>>() {
+        mTask = mTaskAgent.enqueue(new UPRunnable<List<UPTxtPage>>() {
             @Override
-            public void subscribe(SingleEmitter<List<UPTxtPage>> e) throws Exception {
-                e.onSuccess(loadPageList(nextChapter));
+            public List<UPTxtPage> onWork() throws Exception {
+                return loadPageList(nextChapter);
             }
-        }).compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<List<UPTxtPage>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        mPreLoadDisp = d;
-                    }
 
-                    @Override
-                    public void onSuccess(List<UPTxtPage> pages) {
-                        mNextPageList = pages;
-                    }
+            @Override
+            public void onResult(List<UPTxtPage> data) {
+                mNextPageList = data;
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        //无视错误
-                    }
-                });
+            @Override
+            public void onError(Exception e) {
+                //无视错误
+            }
+        });
     }
 
     // 取消翻页

@@ -7,7 +7,7 @@ import android.os.Message;
 
 import androidx.annotation.NonNull;
 
-public class UPTaskAgent {
+public class UPTaskAgent<T> {
 
     private HandlerThread mThread;
     private Handler mWorkHandler;
@@ -20,9 +20,14 @@ public class UPTaskAgent {
         mWorkHandler = new Handler(mThread.getLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
-                UPTask task = (UPTask) msg.obj;
-                if (task != null) {
-                    task.onWork();
+                UPTask<T> task = (UPTask<T>) msg.obj;
+                if (task != null && !task.isCanceled()) {
+                    UPRunnable<T> runnable = task.getRunnable();
+                    try {
+                        task.setResult(runnable.onWork());
+                    } catch (Exception e) {
+                        task.setException(e);
+                    }
                     mMainHandler.obtainMessage(task.hashCode(), task).sendToTarget();
                 }
                 return true;
@@ -31,9 +36,14 @@ public class UPTaskAgent {
         mMainHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
-                UPTask task = (UPTask) msg.obj;
-                if (task != null) {
-                    task.onResult();
+                UPTask<T> task = (UPTask<T>) msg.obj;
+                if (task != null && !task.isCanceled()) {
+                    UPRunnable<T> runnable = task.getRunnable();
+                    if (task.isSuccessful()) {
+                        runnable.onResult(task.getResult());
+                    } else {
+                        runnable.onError(task.getException());
+                    }
                 }
                 return true;
             }
@@ -44,12 +54,19 @@ public class UPTaskAgent {
         mThread.quitSafely();
     }
 
-    public void execute(UPTask task) {
-        mWorkHandler.obtainMessage(task.hashCode(), task).sendToTarget();
+    public UPTask<T> enqueue(UPRunnable<T> runnable) {
+        if (runnable != null) {
+            UPTask<T> task = new UPTask<T>(runnable);
+            mWorkHandler.obtainMessage(task.hashCode(), task).sendToTarget();
+            return task;
+        }
+        return null;
     }
 
-    public void cancel(UPTask task) {
+    public void cancel(UPTask<T> task) {
         if (task != null) {
+            task.setCanceled(true);
+
             int what = task.hashCode();
 
             mWorkHandler.removeMessages(what);
