@@ -45,7 +45,7 @@
     <!--Toolbar-->
     <style name="Theme.ToolBar.Menu" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <!-- 设置-弹窗的背景-颜色-->
-        <item name="android:colorBackground">@color/nb.theme.background</item>
+        <item name="android:colorBackground">@color/white</item>
         <!-- 字体的颜色-->
         <item name="android:textColor">@color/nb.text.default</item>
         <!-- 字体大小-->
