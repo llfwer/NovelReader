@@ -1,9 +1,10 @@
 package com.rowe.book.book;
 
 /**
- * title : 第一章 他叫白小纯
- * link : http://read.qidian.com/chapter/rJgN8tJ_cVdRGoWu-UQg7Q2/6jr-buLIUJSaGfXRMrUjdw2
- * unreadble : false
+ * title : 序章
+ * bookId : 3994b87b2f565b91
+ * start : 0
+ * end : 475
  */
 public class UPChapter {
     //标题

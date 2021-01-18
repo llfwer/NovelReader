@@ -6,18 +6,17 @@ import android.os.Parcelable;
 import java.util.List;
 
 /**
- * _id : 53663ae356bdc93e49004474
- * title : 逍遥派
- * author : 白马出淤泥
- * shortIntro : 金庸武侠中有不少的神秘高手，书中或提起名字，或不曾提起，总之他们要么留下了绝世秘笈，要么就名震武林。 独孤九剑的创始者，独孤求败，他真的只创出九剑吗？ 残本葵花...
- * cover : /cover/149273897447137
- * hasCp : true
- * latelyFollower : 60213
- * retentionRatio : 22.87
- * updated : 2017-05-07T18:24:34.720Z
- * <p>
- * chaptersCount : 1660
- * lastChapter : 第1659章 朱长老
+ * id : 3994b87b2f565b91
+ * name : 《再活一万次》（校对版全本）作者：兰帝魅晨
+ * path : /storage/emulated/0/EBook/《再活一万次》（校对版全本）作者：兰帝魅晨.txt
+ * modifyTime : 1609832200000
+ * readTime : 1610445585328
+ * chaptersCount : --
+ * chapterList : --
+ * chapter : 22
+ * chapterTitle : 第二十二章 非人
+ * pageIndex : 0
+ * hasRead : true
  */
 public class UPBook implements Parcelable {
     public String id; //书籍id
@@ -44,6 +43,7 @@ public class UPBook implements Parcelable {
         readTime = in.readLong();
         chapter = in.readInt();
         chapterTitle = in.readString();
+        pageIndex = in.readInt();
         hasRead = in.readByte() != 0;
     }
 
@@ -73,6 +73,7 @@ public class UPBook implements Parcelable {
         dest.writeLong(readTime);
         dest.writeInt(chapter);
         dest.writeString(chapterTitle);
+        dest.writeInt(pageIndex);
         dest.writeByte((byte) (hasRead ? 1 : 0));
     }
 }

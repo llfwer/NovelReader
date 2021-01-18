@@ -1138,7 +1138,7 @@ public class PageLoader {
         dealLoadPageList(mCurChapterPos);
         // 预加载下一页面
         preLoadNextChapter();
-        return mCurPageList != null ? true : false;
+        return mCurPageList != null;
     }
 
     /**
